@@ -206,6 +206,13 @@ input { font-family: inherit; }
   white-space: nowrap;
   pointer-events: none;
 }
+.territory-label.hover-only {
+  opacity: 0;
+  transition: opacity .12s ease;
+}
+.territory-label.hover-only.is-visible {
+  opacity: 1;
+}
 .territory-label-inner {
   display: inline-flex; align-items: center; gap: 6px;
   padding: 4px 9px;

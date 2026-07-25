@@ -366,12 +366,18 @@ function renderMap() {
     els.territoriesLayer.appendChild(path);
     territoryShapes.push({ el: path, loops: t.outlineLoops });
 
+    const alwaysLabel = t.name === 'Спавн';
     const label = document.createElement('div');
-    label.className = 'territory-label';
+    label.className = alwaysLabel ? 'territory-label' : 'territory-label hover-only';
     label.dataset.id = t.id;
     label.innerHTML = `<span class="territory-label-inner" style="--stroke:${t.stroke}"><span class="territory-label-dot" style="--stroke:${t.stroke}"></span>${t.name}</span>`;
     els.screenOverlay.appendChild(label);
     overlayAnchors.push({ el: label, x: t.labelX, z: t.labelZ });
+
+    if (!alwaysLabel) {
+      path.addEventListener('pointerenter', () => label.classList.add('is-visible'));
+      path.addEventListener('pointerleave', () => label.classList.remove('is-visible'));
+    }
   });
 
   const axisX = document.createElement('div');
