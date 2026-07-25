@@ -3,24 +3,16 @@ const WORLD_NAME = 'Верхний мир';
 // Игровые координаты 0,0 на картинке смещены от геометрического центра карты.
 const ORIGIN_OFFSET_X = 50, ORIGIN_OFFSET_Z = 50;
 
-// Территория задаётся двумя противоположными углами (region: x1,z1 - x2,z2),
-// в любом порядке — какой угол ни укажи первым, неважно.
-// Субрегион — доп. кусок той же территории (например, пристройка сбоку),
-// задаётся так же двумя точками; всегда должен примыкать к основному
-// региону, но эту проверку делает сервер, здесь она не нужна.
-const DATA = [
-  { id: 'spawn', name: 'Спавн', kind: 'Спавн', owner: 'Администрация', stroke: '#6FF8A8',
-    region: { x1: -100, z1: -100, x2: 100, z2: 100 },
-    subregions: [
-      { x1: 100, z1: -40, x2: 140, z2: 40 }
-    ],
-    about: '',
-    residents: [['В.В.Путин', 'админ']] }
-];
+// Территория задаётся списком регионов (region.json: regions[].firstPoint /
+// secondPoint), каждый — два противоположных угла в любом порядке. Территория
+// может состоять из нескольких регионов сразу (например, кусок сбоку) —
+// все они рисуются как один слитный контур через unionOutline().
+const ROLE_LABELS = { owner: 'Владелец', sherif: 'Шериф', resident: 'Житель' };
 
-function rgba(hex, a) {
-  const n = parseInt(hex.slice(1), 16);
-  return `rgba(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}, ${a})`;
+function hashHue(str) {
+  let h = 0;
+  for (let i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) >>> 0;
+  return h % 360;
 }
 
 function pctX(v) { return ((v + ORIGIN_OFFSET_X + WORLD / 2) / WORLD * 100).toFixed(3) + '%'; }
@@ -114,24 +106,45 @@ function simplifyLoop(points) {
   return out.length >= 3 ? out : points;
 }
 
-const territories = DATA.map(t => {
-  const r = rectWorld(t.region);
-  const centerX = Math.round((r.minX + r.maxX) / 2);
-  const centerZ = Math.round((r.minZ + r.maxZ) / 2);
-  const subregions = t.subregions || [];
-  const outlineLoops = unionOutline([t.region, ...subregions].map(rectPixels));
+function buildTerritory(raw, index) {
+  const rects = raw.regions.map(reg => ({
+    x1: reg.firstPoint.x, z1: reg.firstPoint.z,
+    x2: reg.secondPoint.x, z2: reg.secondPoint.z
+  }));
+  const bbox = rects.map(rectWorld).reduce((acc, w) => ({
+    minX: Math.min(acc.minX, w.minX), maxX: Math.max(acc.maxX, w.maxX),
+    minZ: Math.min(acc.minZ, w.minZ), maxZ: Math.max(acc.maxZ, w.maxZ)
+  }), { minX: Infinity, maxX: -Infinity, minZ: Infinity, maxZ: -Infinity });
+
+  const centerX = Math.round((bbox.minX + bbox.maxX) / 2);
+  const centerZ = Math.round((bbox.minZ + bbox.maxZ) / 2);
+  const owner = raw.residents.find(r => r.status === 'owner') || raw.residents[0];
+  const hue = hashHue(raw.name || String(index));
+  const stroke = `hsl(${hue} 78% 68%)`;
+
   return {
-    ...t,
-    outlineLoops,
-    labelX: xPix(centerX), labelZ: zPix(r.minZ),
-    fill: rgba(t.stroke, 0.18),
+    id: 't' + index,
+    name: raw.name || 'Без названия',
+    kind: 'Территория',
+    owner: owner ? owner.name : '—',
+    stroke,
+    about: raw.description || '',
+    outlineLoops: unionOutline(rects.map(rectPixels)),
+    labelX: xPix(centerX), labelZ: zPix(bbox.minZ),
+    fill: `hsl(${hue} 78% 68% / 0.18)`,
     centerX, centerZ,
-    coords: `X ${r.minX} … ${r.maxX}   ·   Z ${r.minZ} … ${r.maxZ}`,
+    coords: `X ${bbox.minX} … ${bbox.maxX}   ·   Z ${bbox.minZ} … ${bbox.maxZ}`,
     short: `${centerX} / ${centerZ}`,
-    area: `${r.maxX - r.minX}×${r.maxZ - r.minZ}`,
-    residentsDetailed: t.residents.map(([name, role]) => ({ name, role, initial: name[0].toUpperCase() }))
+    area: `${bbox.maxX - bbox.minX}×${bbox.maxZ - bbox.minZ}`,
+    residentsDetailed: raw.residents.map(r => ({
+      name: r.name,
+      role: ROLE_LABELS[r.status] || r.status,
+      initial: (r.name || '?')[0].toUpperCase()
+    }))
   };
-});
+}
+
+let territories = [];
 
 const els = {
   worldName: document.getElementById('worldName'),
@@ -338,38 +351,45 @@ els.resetBtn.addEventListener('click', fit);
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
-territories.forEach(t => {
-  const path = document.createElementNS(SVG_NS, 'path');
-  path.setAttribute('class', 'territory');
-  path.style.fill = t.fill;
-  path.style.stroke = t.stroke;
-  path.dataset.id = t.id;
-  els.territoriesLayer.appendChild(path);
-  territoryShapes.push({ el: path, loops: t.outlineLoops });
+function renderMap() {
+  els.territoriesLayer.innerHTML = '';
+  els.screenOverlay.innerHTML = '';
+  territoryShapes.length = 0;
+  overlayAnchors.length = 0;
 
-  const label = document.createElement('div');
-  label.className = 'territory-label';
-  label.dataset.id = t.id;
-  label.innerHTML = `<span class="territory-label-inner" style="--stroke:${t.stroke}"><span class="territory-label-dot" style="--stroke:${t.stroke}"></span>${t.name}</span>`;
-  els.screenOverlay.appendChild(label);
-  overlayAnchors.push({ el: label, x: t.labelX, z: t.labelZ });
-});
+  territories.forEach(t => {
+    const path = document.createElementNS(SVG_NS, 'path');
+    path.setAttribute('class', 'territory');
+    path.style.fill = t.fill;
+    path.style.stroke = t.stroke;
+    path.dataset.id = t.id;
+    els.territoriesLayer.appendChild(path);
+    territoryShapes.push({ el: path, loops: t.outlineLoops });
 
-const axisX = document.createElement('div');
-axisX.className = 'axis-line axis-x';
-axisX.style.top = pctZ(0);
-els.stage.appendChild(axisX);
+    const label = document.createElement('div');
+    label.className = 'territory-label';
+    label.dataset.id = t.id;
+    label.innerHTML = `<span class="territory-label-inner" style="--stroke:${t.stroke}"><span class="territory-label-dot" style="--stroke:${t.stroke}"></span>${t.name}</span>`;
+    els.screenOverlay.appendChild(label);
+    overlayAnchors.push({ el: label, x: t.labelX, z: t.labelZ });
+  });
 
-const axisZ = document.createElement('div');
-axisZ.className = 'axis-line axis-z';
-axisZ.style.left = pctX(0);
-els.stage.appendChild(axisZ);
+  const axisX = document.createElement('div');
+  axisX.className = 'axis-line axis-x';
+  axisX.style.top = pctZ(0);
+  els.stage.appendChild(axisX);
 
-const originMarker = document.createElement('div');
-originMarker.className = 'origin-marker';
-originMarker.innerHTML = '<span class="origin-marker-ring"></span><span class="origin-marker-dot"></span>';
-els.screenOverlay.appendChild(originMarker);
-overlayAnchors.push({ el: originMarker, x: xPix(0), z: zPix(0) });
+  const axisZ = document.createElement('div');
+  axisZ.className = 'axis-line axis-z';
+  axisZ.style.left = pctX(0);
+  els.stage.appendChild(axisZ);
+
+  const originMarker = document.createElement('div');
+  originMarker.className = 'origin-marker';
+  originMarker.innerHTML = '<span class="origin-marker-ring"></span><span class="origin-marker-dot"></span>';
+  els.screenOverlay.appendChild(originMarker);
+  overlayAnchors.push({ el: originMarker, x: xPix(0), z: zPix(0) });
+}
 
 /* ---------- selection / detail sheet ---------- */
 
@@ -468,5 +488,19 @@ function ping(msg) {
 
 /* ---------- init ---------- */
 
-fit();
-renderSheets();
+fetch('region.json?v=1')
+  .then(res => {
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    return res.json();
+  })
+  .then(raw => { territories = raw.map(buildTerritory); })
+  .catch(err => {
+    console.error('Не удалось загрузить region.json', err);
+    territories = [];
+    ping('Не удалось загрузить территории');
+  })
+  .finally(() => {
+    renderMap();
+    fit();
+    renderSheets();
+  });

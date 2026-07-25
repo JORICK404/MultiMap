@@ -1,0 +1,5529 @@
+[
+  {
+    "name": "Спавн",
+    "description": "",
+    "residents": [
+      {
+        "name": "MrPoison7621",
+        "id": "-42949672945",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 100,
+          "z": 100
+        },
+        "secondPoint": {
+          "x": -100,
+          "z": -100
+        }
+      }
+    ]
+  },
+  {
+    "name": "База Генерала Блейка(запретка)",
+    "description": "Соблюдай правила города",
+    "residents": [
+      {
+        "name": "GeneralBlakeYT",
+        "id": "-51539604472",
+        "status": "owner"
+      },
+      {
+        "name": "BlakeIHLoL",
+        "id": "-51539604614",
+        "status": "sherif"
+      },
+      {
+        "name": "SteffGoty",
+        "id": "-90194249978",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -925,
+          "z": -723
+        },
+        "secondPoint": {
+          "x": -764,
+          "z": -575
+        }
+      }
+    ]
+  },
+  {
+    "name": "Замок Фиби",
+    "description": "кыш кыш отюда",
+    "residents": [
+      {
+        "name": "F1b1i",
+        "id": "-51539604576",
+        "status": "owner"
+      },
+      {
+        "name": "Toriotin",
+        "id": "-68719405332",
+        "status": "resident"
+      },
+      {
+        "name": "Dim1ne",
+        "id": "-94489252761",
+        "status": "resident"
+      },
+      {
+        "name": "LuckySRider",
+        "id": "-326417501525",
+        "status": "sherif"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -1100,
+          "z": -962
+        },
+        "secondPoint": {
+          "x": -1071,
+          "z": -931
+        }
+      }
+    ]
+  },
+  {
+    "name": "ЗАПРЕТКА СИНЕЙ ФЕДЕРАЦИИ",
+    "description": "treicout",
+    "residents": [
+      {
+        "name": "M1TToX",
+        "id": "-51539604774",
+        "status": "owner"
+      },
+      {
+        "name": "GeneralBlakeYT",
+        "id": "-51539604472",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -978,
+          "z": -697
+        },
+        "secondPoint": {
+          "x": -1087,
+          "z": -800
+        }
+      }
+    ]
+  },
+  {
+    "name": "Село Сказачное",
+    "description": "",
+    "residents": [
+      {
+        "name": "Zairon8853",
+        "id": "-51539604756",
+        "status": "owner"
+      },
+      {
+        "name": "Stickblin",
+        "id": "-64424505463",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -962,
+          "z": 816
+        },
+        "secondPoint": {
+          "x": -832,
+          "z": 959
+        }
+      }
+    ]
+  },
+  {
+    "name": "ЗАПРЕТКА!!!!",
+    "description": "",
+    "residents": [
+      {
+        "name": "treicout",
+        "id": "-51539604709",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 260,
+          "z": -1285
+        },
+        "secondPoint": {
+          "x": 212,
+          "z": -1228
+        }
+      }
+    ]
+  },
+  {
+    "name": "Аванпост Илюхи (запретка)",
+    "description": "",
+    "residents": [
+      {
+        "name": "IllushaSVO",
+        "id": "-51539604771",
+        "status": "owner"
+      },
+      {
+        "name": "Chiftan3",
+        "id": "-64424475393",
+        "status": "resident"
+      },
+      {
+        "name": "MeGaS228",
+        "id": "-51539604736",
+        "status": "resident"
+      },
+      {
+        "name": "F3d0rGG",
+        "id": "-55834574819",
+        "status": "resident"
+      },
+      {
+        "name": "zeqvest",
+        "id": "-137438909942",
+        "status": "resident"
+      },
+      {
+        "name": "Vanya103847",
+        "id": "-773094097876",
+        "status": "resident"
+      },
+      {
+        "name": "MNR3580",
+        "id": "-85899331110",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -604,
+          "z": 340
+        },
+        "secondPoint": {
+          "x": -640,
+          "z": 299
+        }
+      }
+    ]
+  },
+  {
+    "name": "Хатка михана",
+    "description": "",
+    "residents": [
+      {
+        "name": "IMih4nI",
+        "id": "-30064771071",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -384,
+          "z": -313
+        },
+        "secondPoint": {
+          "x": -330,
+          "z": -371
+        }
+      }
+    ]
+  },
+  {
+    "name": "эла",
+    "description": "",
+    "residents": [
+      {
+        "name": "Ulqiorra 48624",
+        "id": "-51539604725",
+        "status": "owner"
+      },
+      {
+        "name": "January9187",
+        "id": "-55834574484",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 309,
+          "z": 935
+        },
+        "secondPoint": {
+          "x": 370,
+          "z": 838
+        }
+      }
+    ]
+  },
+  {
+    "name": "земли СКВИКА",
+    "description": "",
+    "residents": [
+      {
+        "name": "skwiiiiik",
+        "id": "-60129540843",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -982,
+          "z": 346
+        },
+        "secondPoint": {
+          "x": -1010,
+          "z": 378
+        }
+      }
+    ]
+  },
+  {
+    "name": "ЗАПРЕТКА RoreXDD",
+    "description": "скоро здесь будет круто",
+    "residents": [
+      {
+        "name": "RoreXDD",
+        "id": "-51539603895",
+        "status": "owner"
+      },
+      {
+        "name": "IllushaSVO",
+        "id": "-51539604771",
+        "status": "resident"
+      },
+      {
+        "name": "ERR0Rminer",
+        "id": "-51539604704",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -978,
+          "z": 602
+        },
+        "secondPoint": {
+          "x": -711,
+          "z": 561
+        }
+      },
+      {
+        "firstPoint": {
+          "x": -711,
+          "z": 561
+        },
+        "secondPoint": {
+          "x": -971,
+          "z": 603
+        }
+      },
+      {
+        "firstPoint": {
+          "x": -972,
+          "z": 601
+        },
+        "secondPoint": {
+          "x": -844,
+          "z": 538
+        }
+      },
+      {
+        "firstPoint": {
+          "x": -845,
+          "z": 538
+        },
+        "secondPoint": {
+          "x": -973,
+          "z": 663
+        }
+      },
+      {
+        "firstPoint": {
+          "x": -973,
+          "z": 663
+        },
+        "secondPoint": {
+          "x": -1080,
+          "z": 567
+        }
+      }
+    ]
+  },
+  {
+    "name": "Сен-Кверто (СФ)",
+    "description": "",
+    "residents": [
+      {
+        "name": "treicout",
+        "id": "-51539604709",
+        "status": "owner"
+      },
+      {
+        "name": "MeGaS228",
+        "id": "-51539604736",
+        "status": "resident"
+      },
+      {
+        "name": "MMCOBA",
+        "id": "-68719411943",
+        "status": "resident"
+      },
+      {
+        "name": "pupunya8319",
+        "id": "-94489230671",
+        "status": "resident"
+      },
+      {
+        "name": "Sans20071878",
+        "id": "-51539604798",
+        "status": "resident"
+      },
+      {
+        "name": "RoreXDD",
+        "id": "-51539603895",
+        "status": "resident"
+      },
+      {
+        "name": "zeqvest",
+        "id": "-137438909942",
+        "status": "resident"
+      },
+      {
+        "name": "Mrxkartowka",
+        "id": "-94489245998",
+        "status": "resident"
+      },
+      {
+        "name": "MrSidorovich",
+        "id": "-68719466667",
+        "status": "resident"
+      },
+      {
+        "name": "Kezess5244",
+        "id": "-51539604583",
+        "status": "resident"
+      },
+      {
+        "name": "SerFloodi",
+        "id": "-55834574315",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 891,
+          "z": -25
+        },
+        "secondPoint": {
+          "x": 710,
+          "z": 166
+        }
+      }
+    ]
+  },
+  {
+    "name": "Под замлю лучше не соваться ",
+    "description": "Временная мера",
+    "residents": [
+      {
+        "name": "January9187",
+        "id": "-55834574484",
+        "status": "owner"
+      },
+      {
+        "name": "Qruuuuui",
+        "id": "-51539604421",
+        "status": "resident"
+      },
+      {
+        "name": "The Shadow4611",
+        "id": "-51539604722",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 64,
+          "z": -148
+        },
+        "secondPoint": {
+          "x": 130,
+          "z": -270
+        }
+      }
+    ]
+  },
+  {
+    "name": "Фантока",
+    "description": "",
+    "residents": [
+      {
+        "name": "WryFANTOM2020",
+        "id": "-51539604573",
+        "status": "owner"
+      },
+      {
+        "name": "mar0ka1",
+        "id": "-51539604610",
+        "status": "sherif"
+      },
+      {
+        "name": "warsik7416",
+        "id": "-55834574845",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 1187,
+          "z": 643
+        },
+        "secondPoint": {
+          "x": 1105,
+          "z": 708
+        }
+      }
+    ]
+  },
+  {
+    "name": "Территорию ХефтиКорна",
+    "description": "",
+    "residents": [
+      {
+        "name": "TrimPiano754094",
+        "id": "-64424509330",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -1061,
+          "z": 1581
+        },
+        "secondPoint": {
+          "x": -1016,
+          "z": 1599
+        }
+      }
+    ]
+  },
+  {
+    "name": "Город Альфредо и Вортекс",
+    "description": "",
+    "residents": [
+      {
+        "name": "TrimPiano754094",
+        "id": "-64424509330",
+        "status": "owner"
+      },
+      {
+        "name": "VortexTV7622",
+        "id": "-64424494372",
+        "status": "resident"
+      },
+      {
+        "name": "Ulqiorra 48624",
+        "id": "-51539604725",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -542,
+          "z": -417
+        },
+        "secondPoint": {
+          "x": -670,
+          "z": -545
+        }
+      },
+      {
+        "firstPoint": {
+          "x": -670,
+          "z": -545
+        },
+        "secondPoint": {
+          "x": -702,
+          "z": -417
+        }
+      }
+    ]
+  },
+  {
+    "name": "Княжество Кишевское",
+    "description": "",
+    "residents": [
+      {
+        "name": "Unicorn6669179",
+        "id": "-51539604005",
+        "status": "owner"
+      },
+      {
+        "name": "Chabupel2356",
+        "id": "-300647640699",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -1266,
+          "z": 1643
+        },
+        "secondPoint": {
+          "x": -1126,
+          "z": 1494
+        }
+      },
+      {
+        "firstPoint": {
+          "x": -1127,
+          "z": 1495
+        },
+        "secondPoint": {
+          "x": -1124,
+          "z": 1492
+        }
+      }
+    ]
+  },
+  {
+    "name": "ЗАПРЕТКА",
+    "description": "ЗАПРЕТКА",
+    "residents": [
+      {
+        "name": "Qruuuuui",
+        "id": "-51539604421",
+        "status": "owner"
+      },
+      {
+        "name": "The Shadow4611",
+        "id": "-51539604722",
+        "status": "resident"
+      },
+      {
+        "name": "January9187",
+        "id": "-55834574484",
+        "status": "resident"
+      },
+      {
+        "name": "Katok732290816",
+        "id": "-68719427818",
+        "status": "resident"
+      },
+      {
+        "name": "R0b0Pigg",
+        "id": "-64424503676",
+        "status": "resident"
+      },
+      {
+        "name": "Beta6678422",
+        "id": "-51539604757",
+        "status": "resident"
+      },
+      {
+        "name": "Wertomero",
+        "id": "-51539604606",
+        "status": "resident"
+      },
+      {
+        "name": "Ulqiorra 48624",
+        "id": "-51539604725",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -1290,
+          "z": 1715
+        },
+        "secondPoint": {
+          "x": -1383,
+          "z": 1820
+        }
+      }
+    ]
+  },
+  {
+    "name": "zapretka sheda",
+    "description": "",
+    "residents": [
+      {
+        "name": "The Shadow4611",
+        "id": "-51539604722",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 50,
+          "z": -839
+        },
+        "secondPoint": {
+          "x": 67,
+          "z": -757
+        }
+      },
+      {
+        "firstPoint": {
+          "x": 66,
+          "z": -779
+        },
+        "secondPoint": {
+          "x": 68,
+          "z": -752
+        }
+      },
+      {
+        "firstPoint": {
+          "x": 66,
+          "z": -758
+        },
+        "secondPoint": {
+          "x": 42,
+          "z": -769
+        }
+      },
+      {
+        "firstPoint": {
+          "x": 47,
+          "z": -758
+        },
+        "secondPoint": {
+          "x": 69,
+          "z": -752
+        }
+      },
+      {
+        "firstPoint": {
+          "x": 44,
+          "z": -767
+        },
+        "secondPoint": {
+          "x": 68,
+          "z": -780
+        }
+      },
+      {
+        "firstPoint": {
+          "x": 67,
+          "z": -825
+        },
+        "secondPoint": {
+          "x": 126,
+          "z": -839
+        }
+      },
+      {
+        "firstPoint": {
+          "x": 79,
+          "z": -839
+        },
+        "secondPoint": {
+          "x": 49,
+          "z": -869
+        }
+      }
+    ]
+  },
+  {
+    "name": "Эльдорадо",
+    "description": "",
+    "residents": [
+      {
+        "name": "JORICK404",
+        "id": "-12884901887",
+        "status": "owner"
+      },
+      {
+        "name": "MrPoison7621",
+        "id": "-42949672945",
+        "status": "sherif"
+      },
+      {
+        "name": "NarkomaP",
+        "id": "-219043293940",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 1320,
+          "z": -749
+        },
+        "secondPoint": {
+          "x": 1476,
+          "z": -895
+        }
+      },
+      {
+        "firstPoint": {
+          "x": 1321,
+          "z": -895
+        },
+        "secondPoint": {
+          "x": 1500,
+          "z": -1004
+        }
+      }
+    ]
+  },
+  {
+    "name": "Voxelor",
+    "description": "Принадлежит пусси султанам",
+    "residents": [
+      {
+        "name": "CounterBoard",
+        "id": "-68719399727",
+        "status": "owner"
+      },
+      {
+        "name": "Gironimo2975",
+        "id": "-51539604743",
+        "status": "sherif"
+      },
+      {
+        "name": "PuceApp1e",
+        "id": "-60129541237",
+        "status": "sherif"
+      },
+      {
+        "name": "Bumer9075",
+        "id": "-81604348904",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 882,
+          "z": -1146
+        },
+        "secondPoint": {
+          "x": 1058,
+          "z": -1288
+        }
+      },
+      {
+        "firstPoint": {
+          "x": 914,
+          "z": -1270
+        },
+        "secondPoint": {
+          "x": 1059,
+          "z": -1232
+        }
+      }
+    ]
+  },
+  {
+    "name": "запретка нахой",
+    "description": "бебе",
+    "residents": [
+      {
+        "name": "treicout",
+        "id": "-51539604709",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 1998,
+          "z": -393
+        },
+        "secondPoint": {
+          "x": 1933,
+          "z": -310
+        }
+      }
+    ]
+  },
+  {
+    "name": "сквик",
+    "description": "",
+    "residents": [
+      {
+        "name": "skwiiiiik",
+        "id": "-60129540843",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -1401,
+          "z": -1566
+        },
+        "secondPoint": {
+          "x": -1530,
+          "z": -1699
+        }
+      }
+    ]
+  },
+  {
+    "name": "ЗАПРЕТКА ***",
+    "description": "ЗАПРЕТКА ***",
+    "residents": [
+      {
+        "name": "Qruuuuui",
+        "id": "-51539604421",
+        "status": "owner"
+      },
+      {
+        "name": "R0b0Pigg",
+        "id": "-64424503676",
+        "status": "resident"
+      },
+      {
+        "name": "The Shadow4611",
+        "id": "-51539604722",
+        "status": "resident"
+      },
+      {
+        "name": "January9187",
+        "id": "-55834574484",
+        "status": "resident"
+      },
+      {
+        "name": "Katok732290816",
+        "id": "-68719427818",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 605,
+          "z": 1545
+        },
+        "secondPoint": {
+          "x": 565,
+          "z": 1508
+        }
+      },
+      {
+        "firstPoint": {
+          "x": 605,
+          "z": 1545
+        },
+        "secondPoint": {
+          "x": 625,
+          "z": 1566
+        }
+      },
+      {
+        "firstPoint": {
+          "x": 605,
+          "z": 1545
+        },
+        "secondPoint": {
+          "x": 556,
+          "z": 1560
+        }
+      }
+    ]
+  },
+  {
+    "name": "сквикк",
+    "description": "",
+    "residents": [
+      {
+        "name": "skwiiiiik",
+        "id": "-60129540843",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -1458,
+          "z": -1816
+        },
+        "secondPoint": {
+          "x": -1332,
+          "z": -1933
+        }
+      }
+    ]
+  },
+  {
+    "name": "сквикики",
+    "description": "",
+    "residents": [
+      {
+        "name": "skwiiiiik",
+        "id": "-60129540843",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -1838,
+          "z": -1611
+        },
+        "secondPoint": {
+          "x": -1675,
+          "z": -1444
+        }
+      }
+    ]
+  },
+  {
+    "name": "Запретка",
+    "description": "",
+    "residents": [
+      {
+        "name": "Mavrgenius",
+        "id": "-51539604787",
+        "status": "owner"
+      },
+      {
+        "name": "WhiteZeus147",
+        "id": "-51539604609",
+        "status": "sherif"
+      },
+      {
+        "name": "NaItvInGx",
+        "id": "-51539604758",
+        "status": "resident"
+      },
+      {
+        "name": "Chiftan3",
+        "id": "-64424475393",
+        "status": "resident"
+      },
+      {
+        "name": "IllushaSVO",
+        "id": "-51539604771",
+        "status": "resident"
+      },
+      {
+        "name": "MNR3580",
+        "id": "-85899331110",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -1920,
+          "z": 387
+        },
+        "secondPoint": {
+          "x": -1868,
+          "z": 334
+        }
+      }
+    ]
+  },
+  {
+    "name": "галям",
+    "description": "",
+    "residents": [
+      {
+        "name": "Mavrgenius",
+        "id": "-51539604787",
+        "status": "owner"
+      },
+      {
+        "name": "WhiteZeus147",
+        "id": "-51539604609",
+        "status": "sherif"
+      },
+      {
+        "name": "NaItvInGx",
+        "id": "-51539604758",
+        "status": "resident"
+      },
+      {
+        "name": "MeGaS228",
+        "id": "-51539604736",
+        "status": "sherif"
+      },
+      {
+        "name": "Pahandra",
+        "id": "-64424488471",
+        "status": "resident"
+      },
+      {
+        "name": "Lynokos",
+        "id": "-51539604770",
+        "status": "resident"
+      },
+      {
+        "name": "Chiftan3",
+        "id": "-64424475393",
+        "status": "resident"
+      },
+      {
+        "name": "IllushaSVO",
+        "id": "-51539604771",
+        "status": "resident"
+      },
+      {
+        "name": "F3d0rGG",
+        "id": "-55834574819",
+        "status": "resident"
+      },
+      {
+        "name": "MNR3580",
+        "id": "-85899331110",
+        "status": "resident"
+      },
+      {
+        "name": "LowerBison3161",
+        "id": "-210453375216",
+        "status": "resident"
+      },
+      {
+        "name": "Vanya103847",
+        "id": "-773094097876",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -1936,
+          "z": 229
+        },
+        "secondPoint": {
+          "x": -2000,
+          "z": 148
+        }
+      },
+      {
+        "firstPoint": {
+          "x": -1996,
+          "z": 226
+        },
+        "secondPoint": {
+          "x": -1929,
+          "z": 203
+        }
+      },
+      {
+        "firstPoint": {
+          "x": -1999,
+          "z": 229
+        },
+        "secondPoint": {
+          "x": -1916,
+          "z": 124
+        }
+      }
+    ]
+  },
+  {
+    "name": "Территория January ",
+    "description": "",
+    "residents": [
+      {
+        "name": "January9187",
+        "id": "-55834574484",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 116,
+          "z": 477
+        },
+        "secondPoint": {
+          "x": 145,
+          "z": 437
+        }
+      }
+    ]
+  },
+  {
+    "name": "Логово Дракона ",
+    "description": "",
+    "residents": [
+      {
+        "name": "DrakoReRe",
+        "id": "-68719451360",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 1024,
+          "z": 781
+        },
+        "secondPoint": {
+          "x": 934,
+          "z": 839
+        }
+      }
+    ]
+  },
+  {
+    "name": "дагестан Zapretka",
+    "description": "",
+    "residents": [
+      {
+        "name": "SampBuilders",
+        "id": "-51539604799",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -880,
+          "z": 1694
+        },
+        "secondPoint": {
+          "x": -1012,
+          "z": 1780
+        }
+      }
+    ]
+  },
+  {
+    "name": "Аванпост Хефтикорна",
+    "description": "",
+    "residents": [
+      {
+        "name": "TrimPiano754094",
+        "id": "-64424509330",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 528,
+          "z": -1807
+        },
+        "secondPoint": {
+          "x": 543,
+          "z": -1823
+        }
+      },
+      {
+        "firstPoint": {
+          "x": 528,
+          "z": -1807
+        },
+        "secondPoint": {
+          "x": 563,
+          "z": -1849
+        }
+      },
+      {
+        "firstPoint": {
+          "x": 563,
+          "z": -1849
+        },
+        "secondPoint": {
+          "x": 503,
+          "z": -1790
+        }
+      }
+    ]
+  },
+  {
+    "name": "Аванпост ФИБИ",
+    "description": "АВАНПОСТ ФИБИ",
+    "residents": [
+      {
+        "name": "F1b1i",
+        "id": "-51539604576",
+        "status": "owner"
+      },
+      {
+        "name": "LuckySRider",
+        "id": "-326417501525",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -826,
+          "z": -2000
+        },
+        "secondPoint": {
+          "x": -867,
+          "z": -1989
+        }
+      }
+    ]
+  },
+  {
+    "name": "База MrRedBack ",
+    "description": "Запретка",
+    "residents": [
+      {
+        "name": "MrRedBack",
+        "id": "-64424509070",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 352,
+          "z": -165
+        },
+        "secondPoint": {
+          "x": 470,
+          "z": -10
+        }
+      }
+    ]
+  },
+  {
+    "name": " ДЕРБЕНТ | АДМАГ |",
+    "description": "АДМАГ ОСМАНСКАЯ ИМПЕРИЯ",
+    "residents": [
+      {
+        "name": "Segamavrod7",
+        "id": "-73014402458",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -744,
+          "z": 1624
+        },
+        "secondPoint": {
+          "x": -918,
+          "z": 1481
+        }
+      }
+    ]
+  },
+  {
+    "name": "ЗАПРЕТКА АДМАГА",
+    "description": "",
+    "residents": [
+      {
+        "name": "Myarf",
+        "id": "-51539604712",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 117,
+          "z": 234
+        },
+        "secondPoint": {
+          "x": 58,
+          "z": 293
+        }
+      }
+    ]
+  },
+  {
+    "name": "храм ежа ",
+    "description": "",
+    "residents": [
+      {
+        "name": "Ezhik6742",
+        "id": "-51539604776",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 1278,
+          "z": -1946
+        },
+        "secondPoint": {
+          "x": 1206,
+          "z": -1849
+        }
+      }
+    ]
+  },
+  {
+    "name": "спавнер адмага",
+    "description": "",
+    "residents": [
+      {
+        "name": "Zairon8853",
+        "id": "-51539604756",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -426,
+          "z": 1261
+        },
+        "secondPoint": {
+          "x": -454,
+          "z": 1291
+        }
+      }
+    ]
+  },
+  {
+    "name": "Заводы Алхимика(Запретка)",
+    "description": "",
+    "residents": [
+      {
+        "name": "Kezess5244",
+        "id": "-51539604583",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 159,
+          "z": 1746
+        },
+        "secondPoint": {
+          "x": 58,
+          "z": 1650
+        }
+      }
+    ]
+  },
+  {
+    "name": "Zapretka",
+    "description": "//reg",
+    "residents": [
+      {
+        "name": "SampBuilders",
+        "id": "-51539604799",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -1013,
+          "z": 1684
+        },
+        "secondPoint": {
+          "x": -1142,
+          "z": 1812
+        }
+      }
+    ]
+  },
+  {
+    "name": "Заводы Алхимика (2 Запретка)",
+    "description": "",
+    "residents": [
+      {
+        "name": "Kezess5244",
+        "id": "-51539604583",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 239,
+          "z": 1508
+        },
+        "secondPoint": {
+          "x": 111,
+          "z": 1608
+        }
+      }
+    ]
+  },
+  {
+    "name": "Заводы Алхимика (3 Запретка)",
+    "description": "",
+    "residents": [
+      {
+        "name": "Kezess5244",
+        "id": "-51539604583",
+        "status": "owner"
+      },
+      {
+        "name": "warsik7416",
+        "id": "-55834574845",
+        "status": "resident"
+      },
+      {
+        "name": "Qruuuuui",
+        "id": "-51539604421",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 160,
+          "z": 1745
+        },
+        "secondPoint": {
+          "x": 284,
+          "z": 1617
+        }
+      }
+    ]
+  },
+  {
+    "name": "жители посчитаны украдешь ебну",
+    "description": "",
+    "residents": [
+      {
+        "name": "Ezhik6742",
+        "id": "-51539604776",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -1991,
+          "z": 886
+        },
+        "secondPoint": {
+          "x": -2000,
+          "z": 852
+        }
+      }
+    ]
+  },
+  {
+    "name": "ZAPRETKA",
+    "description": "ll",
+    "residents": [
+      {
+        "name": "SampBuilders",
+        "id": "-51539604799",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -1027,
+          "z": 1836
+        },
+        "secondPoint": {
+          "x": -900,
+          "z": 1813
+        }
+      }
+    ]
+  },
+  {
+    "name": "Zaapret",
+    "description": "ээ",
+    "residents": [
+      {
+        "name": "SampBuilders",
+        "id": "-51539604799",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -849,
+          "z": 1736
+        },
+        "secondPoint": {
+          "x": -875,
+          "z": 1845
+        }
+      }
+    ]
+  },
+  {
+    "name": "Дагестанищ",
+    "description": "описание",
+    "residents": [
+      {
+        "name": "SampBuilders",
+        "id": "-51539604799",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -825,
+          "z": 1849
+        },
+        "secondPoint": {
+          "x": -945,
+          "z": 1976
+        }
+      }
+    ]
+  },
+  {
+    "name": "Dагестан",
+    "description": "",
+    "residents": [
+      {
+        "name": "SampBuilders",
+        "id": "-51539604799",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -946,
+          "z": 1979
+        },
+        "secondPoint": {
+          "x": -1067,
+          "z": 1852
+        }
+      }
+    ]
+  },
+  {
+    "name": "Дагестанская республика",
+    "description": "",
+    "residents": [
+      {
+        "name": "SampBuilders",
+        "id": "-51539604799",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -1069,
+          "z": 1852
+        },
+        "secondPoint": {
+          "x": -1161,
+          "z": 1944
+        }
+      }
+    ]
+  },
+  {
+    "name": "Запрет Дагестан",
+    "description": "",
+    "residents": [
+      {
+        "name": "SampBuilders",
+        "id": "-51539604799",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -1145,
+          "z": 1844
+        },
+        "secondPoint": {
+          "x": -1199,
+          "z": 1731
+        }
+      }
+    ]
+  },
+  {
+    "name": "Дагестан №6",
+    "description": "",
+    "residents": [
+      {
+        "name": "SampBuilders",
+        "id": "-51539604799",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -842,
+          "z": 1816
+        },
+        "secondPoint": {
+          "x": -815,
+          "z": 1848
+        }
+      }
+    ]
+  },
+  {
+    "name": "База Рэдсворда",
+    "description": "",
+    "residents": [
+      {
+        "name": "Redsword1227",
+        "id": "-64424506996",
+        "status": "owner"
+      },
+      {
+        "name": "MrRedBack",
+        "id": "-64424509070",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 412,
+          "z": 27
+        },
+        "secondPoint": {
+          "x": 478,
+          "z": 93
+        }
+      }
+    ]
+  },
+  {
+    "name": "мейсвард",
+    "description": "",
+    "residents": [
+      {
+        "name": "warsik7416",
+        "id": "-55834574845",
+        "status": "owner"
+      },
+      {
+        "name": "Maks0ns",
+        "id": "-64424488543",
+        "status": "resident"
+      },
+      {
+        "name": "Fortochka5738",
+        "id": "-115964095035",
+        "status": "resident"
+      },
+      {
+        "name": "MrPlex813",
+        "id": "-51539604715",
+        "status": "resident"
+      },
+      {
+        "name": "TrimPiano754094",
+        "id": "-64424509330",
+        "status": "resident"
+      },
+      {
+        "name": "Kezess5244",
+        "id": "-51539604583",
+        "status": "resident"
+      },
+      {
+        "name": "WryFANTOM2020",
+        "id": "-51539604573",
+        "status": "resident"
+      },
+      {
+        "name": "NthCrowd8623",
+        "id": "-816043760380",
+        "status": "resident"
+      },
+      {
+        "name": "Unicorn6669179",
+        "id": "-51539604005",
+        "status": "resident"
+      },
+      {
+        "name": "F3d0rGG",
+        "id": "-55834574819",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 1841,
+          "z": 1500
+        },
+        "secondPoint": {
+          "x": 1999,
+          "z": 1270
+        }
+      },
+      {
+        "firstPoint": {
+          "x": 1999,
+          "z": 1270
+        },
+        "secondPoint": {
+          "x": 1930,
+          "z": 1241
+        }
+      }
+    ]
+  },
+  {
+    "name": "запретка сф",
+    "description": "",
+    "residents": [
+      {
+        "name": "Mavrgenius",
+        "id": "-51539604787",
+        "status": "owner"
+      },
+      {
+        "name": "treicout",
+        "id": "-51539604709",
+        "status": "sherif"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 716,
+          "z": -1494
+        },
+        "secondPoint": {
+          "x": 807,
+          "z": -1559
+        }
+      }
+    ]
+  },
+  {
+    "name": "ЖЕЛАЕМЫЙ УЧАСТОК СКВИКА",
+    "description": "",
+    "residents": [
+      {
+        "name": "skwiiiiik",
+        "id": "-60129540843",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -953,
+          "z": -103
+        },
+        "secondPoint": {
+          "x": -1069,
+          "z": -184
+        }
+      }
+    ]
+  },
+  {
+    "name": "запретка Voxelor",
+    "description": "посторонним смерть",
+    "residents": [
+      {
+        "name": "Gironimo2975",
+        "id": "-51539604743",
+        "status": "owner"
+      },
+      {
+        "name": "CounterBoard",
+        "id": "-68719399727",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 107,
+          "z": -1402
+        },
+        "secondPoint": {
+          "x": -14,
+          "z": -1541
+        }
+      }
+    ]
+  },
+  {
+    "name": "Отвесный приют",
+    "description": "",
+    "residents": [
+      {
+        "name": "EvolvingCode",
+        "id": "-73014377809",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -164,
+          "z": 200
+        },
+        "secondPoint": {
+          "x": -252,
+          "z": 344
+        }
+      }
+    ]
+  },
+  {
+    "name": "Забытый некрополь",
+    "description": "",
+    "residents": [
+      {
+        "name": "EvolvingCode",
+        "id": "-73014377809",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -450,
+          "z": 310
+        },
+        "secondPoint": {
+          "x": -319,
+          "z": 161
+        }
+      },
+      {
+        "firstPoint": {
+          "x": -450,
+          "z": 308
+        },
+        "secondPoint": {
+          "x": -532,
+          "z": 134
+        }
+      },
+      {
+        "firstPoint": {
+          "x": -356,
+          "z": 197
+        },
+        "secondPoint": {
+          "x": -246,
+          "z": 151
+        }
+      }
+    ]
+  },
+  {
+    "name": "Фермы от Беты(ФТК)",
+    "description": "Фермы",
+    "residents": [
+      {
+        "name": "Beta6678422",
+        "id": "-51539604757",
+        "status": "owner"
+      },
+      {
+        "name": "January9187",
+        "id": "-55834574484",
+        "status": "sherif"
+      },
+      {
+        "name": "The Shadow4611",
+        "id": "-51539604722",
+        "status": "resident"
+      },
+      {
+        "name": "R0b0Pigg",
+        "id": "-64424503676",
+        "status": "resident"
+      },
+      {
+        "name": "Wertomero",
+        "id": "-51539604606",
+        "status": "resident"
+      },
+      {
+        "name": "MystiHoytel",
+        "id": "-68719440035",
+        "status": "resident"
+      },
+      {
+        "name": "Ulqiorra 48624",
+        "id": "-51539604725",
+        "status": "resident"
+      },
+      {
+        "name": "Katok732290816",
+        "id": "-68719427818",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 667,
+          "z": -1612
+        },
+        "secondPoint": {
+          "x": 617,
+          "z": -1559
+        }
+      }
+    ]
+  },
+  {
+    "name": "Сектор 3",
+    "description": "",
+    "residents": [
+      {
+        "name": "WryFANTOM2020",
+        "id": "-51539604573",
+        "status": "owner"
+      },
+      {
+        "name": "mar0ka1",
+        "id": "-51539604610",
+        "status": "sherif"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 420,
+          "z": 148
+        },
+        "secondPoint": {
+          "x": 531,
+          "z": 311
+        }
+      },
+      {
+        "firstPoint": {
+          "x": 531,
+          "z": 311
+        },
+        "secondPoint": {
+          "x": 419,
+          "z": 148
+        }
+      },
+      {
+        "firstPoint": {
+          "x": 420,
+          "z": 148
+        },
+        "secondPoint": {
+          "x": 413,
+          "z": 148
+        }
+      },
+      {
+        "firstPoint": {
+          "x": 419,
+          "z": 148
+        },
+        "secondPoint": {
+          "x": 387,
+          "z": 264
+        }
+      },
+      {
+        "firstPoint": {
+          "x": 419,
+          "z": 310
+        },
+        "secondPoint": {
+          "x": 385,
+          "z": 248
+        }
+      }
+    ]
+  },
+  {
+    "name": "Лаборатория. \"Green Mountain\"",
+    "description": "Лаборатория принадлежит компании О.С.А.",
+    "residents": [
+      {
+        "name": "NightNickson",
+        "id": "-51539602760",
+        "status": "owner"
+      },
+      {
+        "name": "Mrxkartowka",
+        "id": "-94489245998",
+        "status": "resident"
+      },
+      {
+        "name": "Andgello227",
+        "id": "-51539603522",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -128,
+          "z": 36
+        },
+        "secondPoint": {
+          "x": -111,
+          "z": 16
+        }
+      }
+    ]
+  },
+  {
+    "name": "Годгоррат южный",
+    "description": "Город золота радости",
+    "residents": [
+      {
+        "name": "Lynokos",
+        "id": "-51539604770",
+        "status": "owner"
+      },
+      {
+        "name": "CosyCar2191",
+        "id": "-390842022081",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 1917,
+          "z": 374
+        },
+        "secondPoint": {
+          "x": 1789,
+          "z": 483
+        }
+      }
+    ]
+  },
+  {
+    "name": "база в горе ",
+    "description": "живут 4 горных человека",
+    "residents": [
+      {
+        "name": "knigt21028203",
+        "id": "-51539604703",
+        "status": "owner"
+      },
+      {
+        "name": "Kiril1YT",
+        "id": "-64424498158",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -248,
+          "z": -142
+        },
+        "secondPoint": {
+          "x": -216,
+          "z": -108
+        }
+      }
+    ]
+  },
+  {
+    "name": "Эквестрийские фермы",
+    "description": "Уютные фермы по которым мирно прогуливаются и работают единороги, пегасы и земные пони. ",
+    "residents": [
+      {
+        "name": "Fortochka5738",
+        "id": "-115964095035",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -1181,
+          "z": -1232
+        },
+        "secondPoint": {
+          "x": -1061,
+          "z": -1123
+        }
+      }
+    ]
+  },
+  {
+    "name": "туннель ",
+    "description": "туннель ведёт в базу в горе ",
+    "residents": [
+      {
+        "name": "knigt21028203",
+        "id": "-51539604703",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -259,
+          "z": -126
+        },
+        "secondPoint": {
+          "x": -398,
+          "z": -127
+        }
+      }
+    ]
+  },
+  {
+    "name": "Башня магическая сахур ",
+    "description": "",
+    "residents": [
+      {
+        "name": "Sitrus029",
+        "id": "-141733909059",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -193,
+          "z": -13
+        },
+        "secondPoint": {
+          "x": -179,
+          "z": -27
+        }
+      }
+    ]
+  },
+  {
+    "name": "Зону Хефти",
+    "description": "",
+    "residents": [
+      {
+        "name": "TrimPiano754094",
+        "id": "-64424509330",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -532,
+          "z": -420
+        },
+        "secondPoint": {
+          "x": -507,
+          "z": -447
+        }
+      }
+    ]
+  },
+  {
+    "name": "кафе у ивана",
+    "description": "",
+    "residents": [
+      {
+        "name": "Ivan Zaykevik",
+        "id": "-73014354009",
+        "status": "owner"
+      },
+      {
+        "name": "FiftyBongo7874",
+        "id": "-283467809725",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 1186,
+          "z": -48
+        },
+        "secondPoint": {
+          "x": 1235,
+          "z": 3
+        }
+      }
+    ]
+  },
+  {
+    "name": "Тихая Гавань",
+    "description": "",
+    "residents": [
+      {
+        "name": "krew5649",
+        "id": "-51539604732",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -1056,
+          "z": -73
+        },
+        "secondPoint": {
+          "x": -1112,
+          "z": -5
+        }
+      }
+    ]
+  },
+  {
+    "name": "ФЕРМЫ ФТК",
+    "description": "ZAPRETKA",
+    "residents": [
+      {
+        "name": "January9187",
+        "id": "-55834574484",
+        "status": "owner"
+      },
+      {
+        "name": "Beta6678422",
+        "id": "-51539604757",
+        "status": "sherif"
+      },
+      {
+        "name": "Ulqiorra 48624",
+        "id": "-51539604725",
+        "status": "resident"
+      },
+      {
+        "name": "Ezhik6742",
+        "id": "-51539604776",
+        "status": "resident"
+      },
+      {
+        "name": "Wertomero",
+        "id": "-51539604606",
+        "status": "resident"
+      },
+      {
+        "name": "Katok732290816",
+        "id": "-68719427818",
+        "status": "resident"
+      },
+      {
+        "name": "Qruuuuui",
+        "id": "-51539604421",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 808,
+          "z": -1917
+        },
+        "secondPoint": {
+          "x": 663,
+          "z": -1784
+        }
+      }
+    ]
+  },
+  {
+    "name": "Джунгли фиби",
+    "description": "",
+    "residents": [
+      {
+        "name": "Toriotin",
+        "id": "-68719405332",
+        "status": "owner"
+      },
+      {
+        "name": "F1b1i",
+        "id": "-51539604576",
+        "status": "sherif"
+      },
+      {
+        "name": "Movdig",
+        "id": "-708669591401",
+        "status": "resident"
+      },
+      {
+        "name": "kinzz2448",
+        "id": "-880468293078",
+        "status": "resident"
+      },
+      {
+        "name": "LuckySRider",
+        "id": "-326417501525",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -1084,
+          "z": -1458
+        },
+        "secondPoint": {
+          "x": -1119,
+          "z": -1492
+        }
+      }
+    ]
+  },
+  {
+    "name": "Рынок ТЦФ",
+    "description": "Офицальный рынок от Организации ФТК",
+    "residents": [
+      {
+        "name": "Beta6678422",
+        "id": "-51539604757",
+        "status": "owner"
+      },
+      {
+        "name": "Wertomero",
+        "id": "-51539604606",
+        "status": "resident"
+      },
+      {
+        "name": "January9187",
+        "id": "-55834574484",
+        "status": "resident"
+      },
+      {
+        "name": "The Shadow4611",
+        "id": "-51539604722",
+        "status": "resident"
+      },
+      {
+        "name": "Ulqiorra 48624",
+        "id": "-51539604725",
+        "status": "resident"
+      },
+      {
+        "name": "MNE2KLET",
+        "id": "-51539604168",
+        "status": "resident"
+      },
+      {
+        "name": "Ezhik6742",
+        "id": "-51539604776",
+        "status": "resident"
+      },
+      {
+        "name": "MystiHoytel",
+        "id": "-68719440035",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -253,
+          "z": 150
+        },
+        "secondPoint": {
+          "x": -381,
+          "z": 80
+        }
+      }
+    ]
+  },
+  {
+    "name": "Мост мира",
+    "description": "добро пожаловать",
+    "residents": [
+      {
+        "name": "SampBuilders",
+        "id": "-51539604799",
+        "status": "owner"
+      },
+      {
+        "name": "Segamavrod7",
+        "id": "-73014402458",
+        "status": "sherif"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -859,
+          "z": 1735
+        },
+        "secondPoint": {
+          "x": -850,
+          "z": 1625
+        }
+      }
+    ]
+  },
+  {
+    "name": "Дом MMCOBA",
+    "description": "",
+    "residents": [
+      {
+        "name": "MMCOBA",
+        "id": "-68719411943",
+        "status": "owner"
+      },
+      {
+        "name": "pupunya8319",
+        "id": "-94489230671",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 1067,
+          "z": -54
+        },
+        "secondPoint": {
+          "x": 1097,
+          "z": -89
+        }
+      }
+    ]
+  },
+  {
+    "name": "Владение MrBacon",
+    "description": "строительство",
+    "residents": [
+      {
+        "name": "MrBacon6335",
+        "id": "-141733908201",
+        "status": "owner"
+      },
+      {
+        "name": "KeriNoNeKira",
+        "id": "-279172873678",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -1681,
+          "z": 1871
+        },
+        "secondPoint": {
+          "x": -1809,
+          "z": 1782
+        }
+      }
+    ]
+  },
+  {
+    "name": "Нью Лондон",
+    "description": "",
+    "residents": [
+      {
+        "name": "IMih4nI",
+        "id": "-30064771071",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 700,
+          "z": 1342
+        },
+        "secondPoint": {
+          "x": 880,
+          "z": 1555
+        }
+      }
+    ]
+  },
+  {
+    "name": "Опааааа",
+    "description": "",
+    "residents": [
+      {
+        "name": "Qruuuuui",
+        "id": "-51539604421",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -1426,
+          "z": 1895
+        },
+        "secondPoint": {
+          "x": -1464,
+          "z": 1949
+        }
+      }
+    ]
+  },
+  {
+    "name": "территория фтк(черепахи)",
+    "description": "",
+    "residents": [
+      {
+        "name": "Wertomero",
+        "id": "-51539604606",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -1517,
+          "z": 1545
+        },
+        "secondPoint": {
+          "x": -1501,
+          "z": 1525
+        }
+      }
+    ]
+  },
+  {
+    "name": "Королевство Битландия владением MrBacon6335",
+    "description": "строится",
+    "residents": [
+      {
+        "name": "MrBacon6335",
+        "id": "-141733908201",
+        "status": "owner"
+      },
+      {
+        "name": "KeriNoNeKira",
+        "id": "-279172873678",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -1677,
+          "z": 1887
+        },
+        "secondPoint": {
+          "x": -1576,
+          "z": 1807
+        }
+      }
+    ]
+  },
+  {
+    "name": "Галям",
+    "description": "",
+    "residents": [
+      {
+        "name": "WhiteZeus147",
+        "id": "-51539604609",
+        "status": "owner"
+      },
+      {
+        "name": "MeGaS228",
+        "id": "-51539604736",
+        "status": "resident"
+      },
+      {
+        "name": "Mavrgenius",
+        "id": "-51539604787",
+        "status": "resident"
+      },
+      {
+        "name": "Chiftan3",
+        "id": "-64424475393",
+        "status": "resident"
+      },
+      {
+        "name": "MNR3580",
+        "id": "-85899331110",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -1832,
+          "z": 121
+        },
+        "secondPoint": {
+          "x": -1915,
+          "z": 199
+        }
+      }
+    ]
+  },
+  {
+    "name": "Спавнер Мухи (Запретка)",
+    "description": "",
+    "residents": [
+      {
+        "name": "Kezess5244",
+        "id": "-51539604583",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 1922,
+          "z": 1564
+        },
+        "secondPoint": {
+          "x": 1903,
+          "z": 1551
+        }
+      }
+    ]
+  },
+  {
+    "name": "Спавнер Мухи (Запретка Скелетов) ",
+    "description": "",
+    "residents": [
+      {
+        "name": "Kezess5244",
+        "id": "-51539604583",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 1910,
+          "z": 1526
+        },
+        "secondPoint": {
+          "x": 1892,
+          "z": 1540
+        }
+      }
+    ]
+  },
+  {
+    "name": "фтк жители",
+    "description": "",
+    "residents": [
+      {
+        "name": "Wertomero",
+        "id": "-51539604606",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -903,
+          "z": 1444
+        },
+        "secondPoint": {
+          "x": -916,
+          "z": 1463
+        }
+      }
+    ]
+  },
+  {
+    "name": "ферма мейсварда",
+    "description": "",
+    "residents": [
+      {
+        "name": "warsik7416",
+        "id": "-55834574845",
+        "status": "owner"
+      },
+      {
+        "name": "Maks0ns",
+        "id": "-64424488543",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 1937,
+          "z": 1531
+        },
+        "secondPoint": {
+          "x": 1920,
+          "z": 1510
+        }
+      }
+    ]
+  },
+  {
+    "name": "ZAPRETKA ФТК",
+    "description": "",
+    "residents": [
+      {
+        "name": "January9187",
+        "id": "-55834574484",
+        "status": "owner"
+      },
+      {
+        "name": "Beta6678422",
+        "id": "-51539604757",
+        "status": "sherif"
+      },
+      {
+        "name": "Ezhik6742",
+        "id": "-51539604776",
+        "status": "resident"
+      },
+      {
+        "name": "Katok732290816",
+        "id": "-68719427818",
+        "status": "resident"
+      },
+      {
+        "name": "Wertomero",
+        "id": "-51539604606",
+        "status": "resident"
+      },
+      {
+        "name": "The Shadow4611",
+        "id": "-51539604722",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -1431,
+          "z": 1717
+        },
+        "secondPoint": {
+          "x": -1465,
+          "z": 1756
+        }
+      }
+    ]
+  },
+  {
+    "name": "ЗОНА ПРОМА ФТК",
+    "description": "",
+    "residents": [
+      {
+        "name": "Wertomero",
+        "id": "-51539604606",
+        "status": "owner"
+      },
+      {
+        "name": "Ulqiorra 48624",
+        "id": "-51539604725",
+        "status": "resident"
+      },
+      {
+        "name": "January9187",
+        "id": "-55834574484",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -1347,
+          "z": 1676
+        },
+        "secondPoint": {
+          "x": -1272,
+          "z": 1561
+        }
+      }
+    ]
+  },
+  {
+    "name": "Дом Finago",
+    "description": "",
+    "residents": [
+      {
+        "name": "Finago6364",
+        "id": "-42949669103",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -563,
+          "z": -1230
+        },
+        "secondPoint": {
+          "x": -690,
+          "z": -1112
+        }
+      }
+    ]
+  },
+  {
+    "name": "LowerBIson3161",
+    "description": "неизвестный объект \"Бурмалда\"",
+    "residents": [
+      {
+        "name": "LowerBison3161",
+        "id": "-210453375216",
+        "status": "owner"
+      },
+      {
+        "name": "Mavrgenius",
+        "id": "-51539604787",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -1989,
+          "z": 469
+        },
+        "secondPoint": {
+          "x": -1833,
+          "z": 660
+        }
+      }
+    ]
+  },
+  {
+    "name": "голубой шампур",
+    "description": "гей бар голубой шампур",
+    "residents": [
+      {
+        "name": "Chiftan3",
+        "id": "-64424475393",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -1915,
+          "z": 89
+        },
+        "secondPoint": {
+          "x": -2000,
+          "z": -17
+        }
+      }
+    ]
+  },
+  {
+    "name": "Порт Эпсилон",
+    "description": "База игрока Beta6678422",
+    "residents": [
+      {
+        "name": "Beta6678422",
+        "id": "-51539604757",
+        "status": "owner"
+      },
+      {
+        "name": "Wertomero",
+        "id": "-51539604606",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -379,
+          "z": 555
+        },
+        "secondPoint": {
+          "x": -273,
+          "z": 658
+        }
+      }
+    ]
+  },
+  {
+    "name": "Милиссион",
+    "description": "",
+    "residents": [
+      {
+        "name": "DoomFarm9091",
+        "id": "-219043308304",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -1146,
+          "z": 604
+        },
+        "secondPoint": {
+          "x": -1384,
+          "z": 858
+        }
+      }
+    ]
+  },
+  {
+    "name": "лес Лады",
+    "description": "",
+    "residents": [
+      {
+        "name": "Ladatopik",
+        "id": "-197568494102",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -1071,
+          "z": 113
+        },
+        "secondPoint": {
+          "x": -1015,
+          "z": 57
+        }
+      }
+    ]
+  },
+  {
+    "name": "Домик Жабочки",
+    "description": "",
+    "residents": [
+      {
+        "name": "MaraBella1388",
+        "id": "-85899301708",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -1468,
+          "z": 1644
+        },
+        "secondPoint": {
+          "x": -1533,
+          "z": 1760
+        }
+      }
+    ]
+  },
+  {
+    "name": "Tkoparrots и Doctor484474",
+    "description": "",
+    "residents": [
+      {
+        "name": "Doctor484474",
+        "id": "-197568421002",
+        "status": "owner"
+      },
+      {
+        "name": "TKoParrots",
+        "id": "-188978543204",
+        "status": "sherif"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 12,
+          "z": 1112
+        },
+        "secondPoint": {
+          "x": -52,
+          "z": 1086
+        }
+      },
+      {
+        "firstPoint": {
+          "x": -52,
+          "z": 1086
+        },
+        "secondPoint": {
+          "x": -51,
+          "z": 1084
+        }
+      },
+      {
+        "firstPoint": {
+          "x": -51,
+          "z": 1084
+        },
+        "secondPoint": {
+          "x": -75,
+          "z": 1108
+        }
+      }
+    ]
+  },
+  {
+    "name": "территория игроков TKoParrots и Doctor484474",
+    "description": "",
+    "residents": [
+      {
+        "name": "Doctor484474",
+        "id": "-197568421002",
+        "status": "owner"
+      },
+      {
+        "name": "TKoParrots",
+        "id": "-188978543204",
+        "status": "sherif"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -51,
+          "z": 1083
+        },
+        "secondPoint": {
+          "x": -76,
+          "z": 1064
+        }
+      }
+    ]
+  },
+  {
+    "name": "Фермы Илюхи",
+    "description": "",
+    "residents": [
+      {
+        "name": "IllushaSVO",
+        "id": "-51539604771",
+        "status": "owner"
+      },
+      {
+        "name": "MeGaS228",
+        "id": "-51539604736",
+        "status": "resident"
+      },
+      {
+        "name": "Mavrgenius",
+        "id": "-51539604787",
+        "status": "resident"
+      },
+      {
+        "name": "F3d0rGG",
+        "id": "-55834574819",
+        "status": "resident"
+      },
+      {
+        "name": "Vanya103847",
+        "id": "-773094097876",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 30,
+          "z": 570
+        },
+        "secondPoint": {
+          "x": -43,
+          "z": 641
+        }
+      }
+    ]
+  },
+  {
+    "name": "",
+    "description": "",
+    "residents": [
+      {
+        "name": "NikitaLegend893",
+        "id": "-51539604577",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -1982,
+          "z": 1751
+        },
+        "secondPoint": {
+          "x": -1996,
+          "z": 1767
+        }
+      }
+    ]
+  },
+  {
+    "name": "ФЕРМА ОСКОЛКОВ",
+    "description": "",
+    "residents": [
+      {
+        "name": "Wertomero",
+        "id": "-51539604606",
+        "status": "owner"
+      },
+      {
+        "name": "Ulqiorra 48624",
+        "id": "-51539604725",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -1395,
+          "z": 1436
+        },
+        "secondPoint": {
+          "x": -1410,
+          "z": 1451
+        }
+      }
+    ]
+  },
+  {
+    "name": "WiBi4ka ",
+    "description": "",
+    "residents": [
+      {
+        "name": "WiBi4ka",
+        "id": "-90194308281",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -703,
+          "z": 724
+        },
+        "secondPoint": {
+          "x": -685,
+          "z": 704
+        }
+      }
+    ]
+  },
+  {
+    "name": "Потеряевка",
+    "description": "",
+    "residents": [
+      {
+        "name": "Joyboy862",
+        "id": "-326417487894",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -252,
+          "z": 123
+        },
+        "secondPoint": {
+          "x": -232,
+          "z": 133
+        }
+      },
+      {
+        "firstPoint": {
+          "x": -235,
+          "z": 128
+        },
+        "secondPoint": {
+          "x": -217,
+          "z": 147
+        }
+      }
+    ]
+  },
+  {
+    "name": "  Спавнер рс сгущёнка",
+    "description": "",
+    "residents": [
+      {
+        "name": "Tears556",
+        "id": "-94489232556",
+        "status": "owner"
+      },
+      {
+        "name": "IllushaSVO",
+        "id": "-51539604771",
+        "status": "resident"
+      },
+      {
+        "name": "MNR3580",
+        "id": "-85899331110",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -488,
+          "z": -459
+        },
+        "secondPoint": {
+          "x": -508,
+          "z": -475
+        }
+      }
+    ]
+  },
+  {
+    "name": "Годгоррат Юго-западный",
+    "description": "город золота и праздности",
+    "residents": [
+      {
+        "name": "Lynokos",
+        "id": "-51539604770",
+        "status": "owner"
+      },
+      {
+        "name": "CosyCar2191",
+        "id": "-390842022081",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 1916,
+          "z": 373
+        },
+        "secondPoint": {
+          "x": 1789,
+          "z": 245
+        }
+      }
+    ]
+  },
+  {
+    "name": "спавнер генерала блейка",
+    "description": "запретка",
+    "residents": [
+      {
+        "name": "BlakeIHLoL",
+        "id": "-51539604614",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -926,
+          "z": -674
+        },
+        "secondPoint": {
+          "x": -943,
+          "z": -625
+        }
+      }
+    ]
+  },
+  {
+    "name": "Годгоррат юго-восточный",
+    "description": "Город золота и празности",
+    "residents": [
+      {
+        "name": "Lynokos",
+        "id": "-51539604770",
+        "status": "owner"
+      },
+      {
+        "name": "CosyCar2191",
+        "id": "-390842022081",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 1917,
+          "z": 484
+        },
+        "secondPoint": {
+          "x": 1789,
+          "z": 612
+        }
+      }
+    ]
+  },
+  {
+    "name": "ферма мейсвард",
+    "description": "",
+    "residents": [
+      {
+        "name": "warsik7416",
+        "id": "-55834574845",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 1913,
+          "z": 1753
+        },
+        "secondPoint": {
+          "x": 1978,
+          "z": 1680
+        }
+      }
+    ]
+  },
+  {
+    "name": "???",
+    "description": "",
+    "residents": [
+      {
+        "name": "TrimPiano754094",
+        "id": "-64424509330",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 1633,
+          "z": 1233
+        },
+        "secondPoint": {
+          "x": 1545,
+          "z": 1334
+        }
+      }
+    ]
+  },
+  {
+    "name": "Ферма Рэдсворда 1",
+    "description": "",
+    "residents": [
+      {
+        "name": "Redsword1227",
+        "id": "-64424506996",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 413,
+          "z": 147
+        },
+        "secondPoint": {
+          "x": 465,
+          "z": 99
+        }
+      }
+    ]
+  },
+  {
+    "name": "Годгоррат Западный",
+    "description": "Город золота и праздности",
+    "residents": [
+      {
+        "name": "Lynokos",
+        "id": "-51539604770",
+        "status": "owner"
+      },
+      {
+        "name": "CosyCar2191",
+        "id": "-390842022081",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 1788,
+          "z": 245
+        },
+        "secondPoint": {
+          "x": 1660,
+          "z": 373
+        }
+      }
+    ]
+  },
+  {
+    "name": "Великий Галямъ Спавнер",
+    "description": "",
+    "residents": [
+      {
+        "name": "IllushaSVO",
+        "id": "-51539604771",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -1680,
+          "z": 837
+        },
+        "secondPoint": {
+          "x": -1710,
+          "z": 820
+        }
+      }
+    ]
+  },
+  {
+    "name": "Заброшенная Лаборатория",
+    "description": "Тут когда-то что-то было...",
+    "residents": [
+      {
+        "name": "SerFloodi",
+        "id": "-55834574315",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 1422,
+          "z": -184
+        },
+        "secondPoint": {
+          "x": 1339,
+          "z": -56
+        }
+      }
+    ]
+  },
+  {
+    "name": "МИДГАРД ",
+    "description": "",
+    "residents": [
+      {
+        "name": "FiftyBongo7874",
+        "id": "-283467809725",
+        "status": "owner"
+      },
+      {
+        "name": "Sigmac228",
+        "id": "-343597370638",
+        "status": "sherif"
+      },
+      {
+        "name": "ZixWix",
+        "id": "-1292785151497",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 1524,
+          "z": 31
+        },
+        "secondPoint": {
+          "x": 1671,
+          "z": -97
+        }
+      }
+    ]
+  },
+  {
+    "name": "база эл тяна",
+    "description": "",
+    "residents": [
+      {
+        "name": "Ulqiorra 48624",
+        "id": "-51539604725",
+        "status": "owner"
+      },
+      {
+        "name": "Beta6678422",
+        "id": "-51539604757",
+        "status": "resident"
+      },
+      {
+        "name": "egoist2534",
+        "id": "-824633696315",
+        "status": "resident"
+      },
+      {
+        "name": "Ezhik6742",
+        "id": "-51539604776",
+        "status": "resident"
+      },
+      {
+        "name": "Wertomero",
+        "id": "-51539604606",
+        "status": "resident"
+      },
+      {
+        "name": "SpeedSilver3672",
+        "id": "-919122965146",
+        "status": "resident"
+      },
+      {
+        "name": "Yamineis",
+        "id": "-68719398553",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 1683,
+          "z": 125
+        },
+        "secondPoint": {
+          "x": 1555,
+          "z": 210
+        }
+      }
+    ]
+  },
+  {
+    "name": "Полотно Галям (Лега)",
+    "description": "",
+    "residents": [
+      {
+        "name": "IllushaSVO",
+        "id": "-51539604771",
+        "status": "owner"
+      },
+      {
+        "name": "Mavrgenius",
+        "id": "-51539604787",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 64,
+          "z": 831
+        },
+        "secondPoint": {
+          "x": 191,
+          "z": 704
+        }
+      }
+    ]
+  },
+  {
+    "name": "Ив",
+    "description": "",
+    "residents": [
+      {
+        "name": "January9187",
+        "id": "-55834574484",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -838,
+          "z": 1097
+        },
+        "secondPoint": {
+          "x": -980,
+          "z": 1269
+        }
+      }
+    ]
+  },
+  {
+    "name": "остров игрока Goust6986",
+    "description": "можете остаться здесь если вам угрожает опасность, буду рад помочь если нужно ",
+    "residents": [
+      {
+        "name": "Goust6986",
+        "id": "-695784693399",
+        "status": "owner"
+      },
+      {
+        "name": "mazatug6672",
+        "id": "-996432394756",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -1314,
+          "z": -1371
+        },
+        "secondPoint": {
+          "x": -1429,
+          "z": -1196
+        }
+      }
+    ]
+  },
+  {
+    "name": "Годгоррат центральный",
+    "description": "Город золота и праздности",
+    "residents": [
+      {
+        "name": "Lynokos",
+        "id": "-51539604770",
+        "status": "owner"
+      },
+      {
+        "name": "CosyCar2191",
+        "id": "-390842022081",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 1788,
+          "z": 374
+        },
+        "secondPoint": {
+          "x": 1660,
+          "z": 502
+        }
+      }
+    ]
+  },
+  {
+    "name": "моя территория ",
+    "description": "",
+    "residents": [
+      {
+        "name": "Nikita4569012",
+        "id": "-700079662071",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -373,
+          "z": -243
+        },
+        "secondPoint": {
+          "x": -408,
+          "z": -214
+        }
+      }
+    ]
+  },
+  {
+    "name": "ФЕРМА ПШЕНИЦЫ ",
+    "description": "",
+    "residents": [
+      {
+        "name": "Wertomero",
+        "id": "-51539604606",
+        "status": "owner"
+      },
+      {
+        "name": "Beta6678422",
+        "id": "-51539604757",
+        "status": "resident"
+      },
+      {
+        "name": "CosyCar2191",
+        "id": "-390842022081",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -1368,
+          "z": 1703
+        },
+        "secondPoint": {
+          "x": -1390,
+          "z": 1681
+        }
+      },
+      {
+        "firstPoint": {
+          "x": -1390,
+          "z": 1681
+        },
+        "secondPoint": {
+          "x": -1371,
+          "z": 1664
+        }
+      },
+      {
+        "firstPoint": {
+          "x": -1371,
+          "z": 1664
+        },
+        "secondPoint": {
+          "x": -1368,
+          "z": 1680
+        }
+      }
+    ]
+  },
+  {
+    "name": "болото Goust6986",
+    "description": "",
+    "residents": [
+      {
+        "name": "Goust6986",
+        "id": "-695784693399",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -1463,
+          "z": -1835
+        },
+        "secondPoint": {
+          "x": -1515,
+          "z": -1868
+        }
+      }
+    ]
+  },
+  {
+    "name": "ФЕРМА РЕЙДОВ ( ЗАПРЕТКА )",
+    "description": "",
+    "residents": [
+      {
+        "name": "MMCOBA",
+        "id": "-68719411943",
+        "status": "owner"
+      },
+      {
+        "name": "pupunya8319",
+        "id": "-94489230671",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 880,
+          "z": 400
+        },
+        "secondPoint": {
+          "x": 862,
+          "z": 383
+        }
+      }
+    ]
+  },
+  {
+    "name": "Дача MrSecFel'a",
+    "description": "",
+    "residents": [
+      {
+        "name": "MrSecFel",
+        "id": "-51539604602",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -1675,
+          "z": 1680
+        },
+        "secondPoint": {
+          "x": -1634,
+          "z": 1642
+        }
+      }
+    ]
+  },
+  {
+    "name": "привет",
+    "description": "",
+    "residents": [
+      {
+        "name": "Flipflop999h",
+        "id": "-326417488354",
+        "status": "owner"
+      },
+      {
+        "name": "Movdig",
+        "id": "-708669591401",
+        "status": "sherif"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -1132,
+          "z": -1745
+        },
+        "secondPoint": {
+          "x": -1105,
+          "z": -1724
+        }
+      }
+    ]
+  },
+  {
+    "name": "территория Wertomero ",
+    "description": "",
+    "residents": [
+      {
+        "name": "Wertomero",
+        "id": "-51539604606",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -294,
+          "z": 1140
+        },
+        "secondPoint": {
+          "x": -310,
+          "z": 1157
+        }
+      }
+    ]
+  },
+  {
+    "name": "Пампаи",
+    "description": "ВЕЛИКАЯ СТЕНА ПАМПАИ",
+    "residents": [
+      {
+        "name": "SeLamoonRed",
+        "id": "-356482261241",
+        "status": "owner"
+      },
+      {
+        "name": "FanTik3151",
+        "id": "-335007427668",
+        "status": "resident"
+      },
+      {
+        "name": "NikitaSkynet",
+        "id": "-356482258845",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -1353,
+          "z": -1667
+        },
+        "secondPoint": {
+          "x": -1397,
+          "z": -1612
+        }
+      },
+      {
+        "firstPoint": {
+          "x": -1396,
+          "z": -1612
+        },
+        "secondPoint": {
+          "x": -1295,
+          "z": -1499
+        }
+      }
+    ]
+  },
+  {
+    "name": "спавнер зомби",
+    "description": "",
+    "residents": [
+      {
+        "name": "MNR3580",
+        "id": "-85899331110",
+        "status": "owner"
+      },
+      {
+        "name": "Tears556",
+        "id": "-94489232556",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 1595,
+          "z": -1860
+        },
+        "secondPoint": {
+          "x": 1607,
+          "z": -1881
+        }
+      }
+    ]
+  },
+  {
+    "name": "Годгоррат восточный",
+    "description": "город золота и празности",
+    "residents": [
+      {
+        "name": "Lynokos",
+        "id": "-51539604770",
+        "status": "owner"
+      },
+      {
+        "name": "CosyCar2191",
+        "id": "-390842022081",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 1788,
+          "z": 611
+        },
+        "secondPoint": {
+          "x": 1660,
+          "z": 503
+        }
+      }
+    ]
+  },
+  {
+    "name": "Годгоррат северо-западный",
+    "description": "город золота и праздности",
+    "residents": [
+      {
+        "name": "Lynokos",
+        "id": "-51539604770",
+        "status": "owner"
+      },
+      {
+        "name": "CosyCar2191",
+        "id": "-390842022081",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 1659,
+          "z": 245
+        },
+        "secondPoint": {
+          "x": 1531,
+          "z": 373
+        }
+      }
+    ]
+  },
+  {
+    "name": "Годгоррат Северный",
+    "description": "Город золота и праздности",
+    "residents": [
+      {
+        "name": "Lynokos",
+        "id": "-51539604770",
+        "status": "owner"
+      },
+      {
+        "name": "CosyCar2191",
+        "id": "-390842022081",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 1659,
+          "z": 374
+        },
+        "secondPoint": {
+          "x": 1531,
+          "z": 502
+        }
+      }
+    ]
+  },
+  {
+    "name": "Годгоррат северо-восточный",
+    "description": "Город золота и праздников",
+    "residents": [
+      {
+        "name": "Lynokos",
+        "id": "-51539604770",
+        "status": "owner"
+      },
+      {
+        "name": "CosyCar2191",
+        "id": "-390842022081",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 1659,
+          "z": 503
+        },
+        "secondPoint": {
+          "x": 1531,
+          "z": 631
+        }
+      }
+    ]
+  },
+  {
+    "name": "ZAPRETKA",
+    "description": "ZAPRETKA",
+    "residents": [
+      {
+        "name": "Qruuuuui",
+        "id": "-51539604421",
+        "status": "owner"
+      },
+      {
+        "name": "January9187",
+        "id": "-55834574484",
+        "status": "sherif"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 504,
+          "z": 1723
+        },
+        "secondPoint": {
+          "x": 532,
+          "z": 1703
+        }
+      }
+    ]
+  },
+  {
+    "name": "ПОШЕЛ НАХУЙ ЭТО ЗАПРЕТКА",
+    "description": "",
+    "residents": [
+      {
+        "name": "Qruuuuui",
+        "id": "-51539604421",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 502,
+          "z": 1684
+        },
+        "secondPoint": {
+          "x": 431,
+          "z": 1735
+        }
+      }
+    ]
+  },
+  {
+    "name": "Верховья Лихолесья",
+    "description": "начало (хотелось бы) чего-то великого",
+    "residents": [
+      {
+        "name": "Lopet5608",
+        "id": "-68719460113",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -1704,
+          "z": 854
+        },
+        "secondPoint": {
+          "x": -1618,
+          "z": 925
+        }
+      }
+    ]
+  },
+  {
+    "name": "Hollymamory",
+    "description": "",
+    "residents": [
+      {
+        "name": "Hollymamory",
+        "id": "-730144425226",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -1546,
+          "z": -1042
+        },
+        "secondPoint": {
+          "x": -1418,
+          "z": -1146
+        }
+      }
+    ]
+  },
+  {
+    "name": "ЗАПРЕТКА CUB",
+    "description": "",
+    "residents": [
+      {
+        "name": "Myarf",
+        "id": "-51539604712",
+        "status": "owner"
+      },
+      {
+        "name": "CosyCar2191",
+        "id": "-390842022081",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 590,
+          "z": 1076
+        },
+        "secondPoint": {
+          "x": 666,
+          "z": 1004
+        }
+      }
+    ]
+  },
+  {
+    "name": "Королевство васим ",
+    "description": "смотреть можно трогать нельзя ",
+    "residents": [
+      {
+        "name": "Vasya20901",
+        "id": "-51539602562",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 1902,
+          "z": -1267
+        },
+        "secondPoint": {
+          "x": 1797,
+          "z": -1343
+        }
+      }
+    ]
+  },
+  {
+    "name": "остров",
+    "description": "",
+    "residents": [
+      {
+        "name": "NarkomaP",
+        "id": "-219043293940",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 1270,
+          "z": -715
+        },
+        "secondPoint": {
+          "x": 1346,
+          "z": -599
+        }
+      }
+    ]
+  },
+  {
+    "name": "Ферма спрутов Фантоки",
+    "description": "",
+    "residents": [
+      {
+        "name": "mar0ka1",
+        "id": "-51539604610",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 1152,
+          "z": 491
+        },
+        "secondPoint": {
+          "x": 1119,
+          "z": 453
+        }
+      }
+    ]
+  },
+  {
+    "name": "Izolyatsiya",
+    "description": "",
+    "residents": [
+      {
+        "name": "Yamineis",
+        "id": "-68719398553",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 1454,
+          "z": 845
+        },
+        "secondPoint": {
+          "x": 1360,
+          "z": 934
+        }
+      }
+    ]
+  },
+  {
+    "name": "Данж Беты",
+    "description": "Клутое описание",
+    "residents": [
+      {
+        "name": "Beta6678422",
+        "id": "-51539604757",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -381,
+          "z": 647
+        },
+        "secondPoint": {
+          "x": -483,
+          "z": 744
+        }
+      }
+    ]
+  },
+  {
+    "name": "Болото 1",
+    "description": "",
+    "residents": [
+      {
+        "name": "Toriotin",
+        "id": "-68719405332",
+        "status": "owner"
+      },
+      {
+        "name": "kinzz2448",
+        "id": "-880468293078",
+        "status": "sherif"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -1796,
+          "z": -1795
+        },
+        "secondPoint": {
+          "x": -1872,
+          "z": -1883
+        }
+      }
+    ]
+  },
+  {
+    "name": "Болото 2",
+    "description": "",
+    "residents": [
+      {
+        "name": "Toriotin",
+        "id": "-68719405332",
+        "status": "owner"
+      },
+      {
+        "name": "kinzz2448",
+        "id": "-880468293078",
+        "status": "sherif"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -1873,
+          "z": -1882
+        },
+        "secondPoint": {
+          "x": -1997,
+          "z": -1755
+        }
+      }
+    ]
+  },
+  {
+    "name": "Болото 3",
+    "description": "",
+    "residents": [
+      {
+        "name": "Toriotin",
+        "id": "-68719405332",
+        "status": "owner"
+      },
+      {
+        "name": "kinzz2448",
+        "id": "-880468293078",
+        "status": "sherif"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -1999,
+          "z": -1883
+        },
+        "secondPoint": {
+          "x": -1873,
+          "z": -2000
+        }
+      }
+    ]
+  },
+  {
+    "name": "Болото 4",
+    "description": "",
+    "residents": [
+      {
+        "name": "Toriotin",
+        "id": "-68719405332",
+        "status": "owner"
+      },
+      {
+        "name": "kinzz2448",
+        "id": "-880468293078",
+        "status": "sherif"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -1872,
+          "z": -2000
+        },
+        "secondPoint": {
+          "x": -1744,
+          "z": -1884
+        }
+      }
+    ]
+  },
+  {
+    "name": " Voxelor",
+    "description": "Западная часть великого города Voxelor",
+    "residents": [
+      {
+        "name": "PuceApp1e",
+        "id": "-60129541237",
+        "status": "owner"
+      },
+      {
+        "name": "CounterBoard",
+        "id": "-68719399727",
+        "status": "sherif"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 1063,
+          "z": -1228
+        },
+        "secondPoint": {
+          "x": 1224,
+          "z": -1359
+        }
+      }
+    ]
+  },
+  {
+    "name": "Ферма Рэдсворда 2",
+    "description": "",
+    "residents": [
+      {
+        "name": "Redsword1227",
+        "id": "-64424506996",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 471,
+          "z": 95
+        },
+        "secondPoint": {
+          "x": 487,
+          "z": 109
+        }
+      }
+    ]
+  },
+  {
+    "name": "ЗАПРЕТКА CAMPFIRE ",
+    "description": "",
+    "residents": [
+      {
+        "name": "BOBER22288800",
+        "id": "-73014444011",
+        "status": "owner"
+      },
+      {
+        "name": "MNR3580",
+        "id": "-85899331110",
+        "status": "resident"
+      },
+      {
+        "name": "Vasya20901",
+        "id": "-51539602562",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 1259,
+          "z": 62
+        },
+        "secondPoint": {
+          "x": 1361,
+          "z": 256
+        }
+      }
+    ]
+  },
+  {
+    "name": "адмаг",
+    "description": "",
+    "residents": [
+      {
+        "name": "Toriotin",
+        "id": "-68719405332",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -1578,
+          "z": -1615
+        },
+        "secondPoint": {
+          "x": -1665,
+          "z": -1525
+        }
+      }
+    ]
+  },
+  {
+    "name": "запретка CAMPFIRE 3",
+    "description": "нельзя входить ",
+    "residents": [
+      {
+        "name": "BOBER22288800",
+        "id": "-73014444011",
+        "status": "owner"
+      },
+      {
+        "name": "Vasya20901",
+        "id": "-51539602562",
+        "status": "resident"
+      },
+      {
+        "name": "MNR3580",
+        "id": "-85899331110",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 1813,
+          "z": -679
+        },
+        "secondPoint": {
+          "x": 1792,
+          "z": -707
+        }
+      }
+    ]
+  },
+  {
+    "name": "запретка СЕЛА ЛОХ 2",
+    "description": "",
+    "residents": [
+      {
+        "name": "BOBER22288800",
+        "id": "-73014444011",
+        "status": "owner"
+      },
+      {
+        "name": "Vasya20901",
+        "id": "-51539602562",
+        "status": "resident"
+      },
+      {
+        "name": "MNR3580",
+        "id": "-85899331110",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 1920,
+          "z": -1380
+        },
+        "secondPoint": {
+          "x": 1950,
+          "z": -1357
+        }
+      }
+    ]
+  },
+  {
+    "name": "временная база",
+    "description": "",
+    "residents": [
+      {
+        "name": "Kaveelon",
+        "id": "-751619264246",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -146,
+          "z": -21
+        },
+        "secondPoint": {
+          "x": -127,
+          "z": -9
+        }
+      }
+    ]
+  },
+  {
+    "name": "Запретка Милкиса",
+    "description": "",
+    "residents": [
+      {
+        "name": "SayoriSuduzki",
+        "id": "-841813566844",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -765,
+          "z": 999
+        },
+        "secondPoint": {
+          "x": -642,
+          "z": 899
+        }
+      }
+    ]
+  },
+  {
+    "name": "Стимтаун",
+    "description": "",
+    "residents": [
+      {
+        "name": "Redsword1227",
+        "id": "-64424506996",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -847,
+          "z": 814
+        },
+        "secondPoint": {
+          "x": -719,
+          "z": 693
+        }
+      }
+    ]
+  },
+  {
+    "name": "MNR",
+    "description": "",
+    "residents": [
+      {
+        "name": "MNR3580",
+        "id": "-85899331110",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 1831,
+          "z": -1939
+        },
+        "secondPoint": {
+          "x": 1747,
+          "z": -2000
+        }
+      }
+    ]
+  },
+  {
+    "name": "кряжастан",
+    "description": "",
+    "residents": [
+      {
+        "name": "vasvanych",
+        "id": "-51539604775",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -101,
+          "z": 63
+        },
+        "secondPoint": {
+          "x": -146,
+          "z": 116
+        }
+      }
+    ]
+  },
+  {
+    "name": "CUB",
+    "description": "",
+    "residents": [
+      {
+        "name": "Myarf",
+        "id": "-51539604712",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 1023,
+          "z": 1764
+        },
+        "secondPoint": {
+          "x": 1151,
+          "z": 1636
+        }
+      },
+      {
+        "firstPoint": {
+          "x": 1151,
+          "z": 1636
+        },
+        "secondPoint": {
+          "x": 1279,
+          "z": 1764
+        }
+      },
+      {
+        "firstPoint": {
+          "x": 1279,
+          "z": 1710
+        },
+        "secondPoint": {
+          "x": 1151,
+          "z": 1582
+        }
+      }
+    ]
+  },
+  {
+    "name": "ИМПЕРИЯ ВЕЛЬХЕЙМ",
+    "description": "город",
+    "residents": [
+      {
+        "name": "Naisgot3233",
+        "id": "-300647660892",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 649,
+          "z": 1272
+        },
+        "secondPoint": {
+          "x": 521,
+          "z": 1382
+        }
+      },
+      {
+        "firstPoint": {
+          "x": 523,
+          "z": 1318
+        },
+        "secondPoint": {
+          "x": 490,
+          "z": 1382
+        }
+      },
+      {
+        "firstPoint": {
+          "x": 490,
+          "z": 1318
+        },
+        "secondPoint": {
+          "x": 520,
+          "z": 1278
+        }
+      }
+    ]
+  },
+  {
+    "name": "запретка!!!!!!!!!!",
+    "description": "",
+    "residents": [
+      {
+        "name": "R0b0Pigg",
+        "id": "-64424503676",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -453,
+          "z": 574
+        },
+        "secondPoint": {
+          "x": -381,
+          "z": 500
+        }
+      }
+    ]
+  },
+  {
+    "name": "Кафешка CosyCar",
+    "description": "",
+    "residents": [
+      {
+        "name": "CosyCar2191",
+        "id": "-390842022081",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 274,
+          "z": 38
+        },
+        "secondPoint": {
+          "x": 300,
+          "z": 80
+        }
+      }
+    ]
+  },
+  {
+    "name": "спавнер скилетов",
+    "description": "",
+    "residents": [
+      {
+        "name": "MNR3580",
+        "id": "-85899331110",
+        "status": "owner"
+      },
+      {
+        "name": "BOBER22288800",
+        "id": "-73014444011",
+        "status": "resident"
+      },
+      {
+        "name": "Vasya20901",
+        "id": "-51539602562",
+        "status": "resident"
+      },
+      {
+        "name": "Tears556",
+        "id": "-94489232556",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 1766,
+          "z": -1469
+        },
+        "secondPoint": {
+          "x": 1731,
+          "z": -1495
+        }
+      }
+    ]
+  },
+  {
+    "name": "Секретная территория",
+    "description": "",
+    "residents": [
+      {
+        "name": "MMCOBA",
+        "id": "-68719411943",
+        "status": "owner"
+      },
+      {
+        "name": "striker567423",
+        "id": "-1116691475893",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 954,
+          "z": 65
+        },
+        "secondPoint": {
+          "x": 1142,
+          "z": 192
+        }
+      }
+    ]
+  },
+  {
+    "name": "Металург - Область Галяма",
+    "description": "Галям",
+    "residents": [
+      {
+        "name": "WhiteZeus147",
+        "id": "-51539604609",
+        "status": "owner"
+      },
+      {
+        "name": "Mavrgenius",
+        "id": "-51539604787",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -1845,
+          "z": -26
+        },
+        "secondPoint": {
+          "x": -1954,
+          "z": -153
+        }
+      }
+    ]
+  },
+  {
+    "name": "speed",
+    "description": "",
+    "residents": [
+      {
+        "name": "SpeedSilver3672",
+        "id": "-919122965146",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 1681,
+          "z": 69
+        },
+        "secondPoint": {
+          "x": 1729,
+          "z": 124
+        }
+      },
+      {
+        "firstPoint": {
+          "x": 1729,
+          "z": 124
+        },
+        "secondPoint": {
+          "x": 1680,
+          "z": 66
+        }
+      }
+    ]
+  },
+  {
+    "name": "Мейсвард",
+    "description": "",
+    "residents": [
+      {
+        "name": "NthCrowd8623",
+        "id": "-816043760380",
+        "status": "owner"
+      },
+      {
+        "name": "MrSidorovich",
+        "id": "-68719466667",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 1813,
+          "z": 1373
+        },
+        "secondPoint": {
+          "x": 1840,
+          "z": 1364
+        }
+      }
+    ]
+  },
+  {
+    "name": "запретка CAMPFIRE 4",
+    "description": "",
+    "residents": [
+      {
+        "name": "BOBER22288800",
+        "id": "-73014444011",
+        "status": "owner"
+      },
+      {
+        "name": "MNR3580",
+        "id": "-85899331110",
+        "status": "resident"
+      },
+      {
+        "name": "Vasya20901",
+        "id": "-51539602562",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 1951,
+          "z": -672
+        },
+        "secondPoint": {
+          "x": 1903,
+          "z": -720
+        }
+      }
+    ]
+  },
+  {
+    "name": "Поместье MrSecFel'a",
+    "description": "",
+    "residents": [
+      {
+        "name": "MrSecFel",
+        "id": "-51539604602",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -1709,
+          "z": 1693
+        },
+        "secondPoint": {
+          "x": -1749,
+          "z": 1746
+        }
+      }
+    ]
+  },
+  {
+    "name": "место под ферму",
+    "description": "",
+    "residents": [
+      {
+        "name": "Lynokos",
+        "id": "-51539604770",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 1964,
+          "z": 352
+        },
+        "secondPoint": {
+          "x": 1942,
+          "z": 336
+        }
+      }
+    ]
+  },
+  {
+    "name": "Сектор",
+    "description": "",
+    "residents": [
+      {
+        "name": "mar0ka1",
+        "id": "-51539604610",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -1409,
+          "z": 15
+        },
+        "secondPoint": {
+          "x": -1260,
+          "z": 135
+        }
+      },
+      {
+        "firstPoint": {
+          "x": -1409,
+          "z": 15
+        },
+        "secondPoint": {
+          "x": -1559,
+          "z": 135
+        }
+      },
+      {
+        "firstPoint": {
+          "x": -1409,
+          "z": 15
+        },
+        "secondPoint": {
+          "x": -1559,
+          "z": -164
+        }
+      },
+      {
+        "firstPoint": {
+          "x": -1409,
+          "z": 15
+        },
+        "secondPoint": {
+          "x": -1262,
+          "z": -162
+        }
+      }
+    ]
+  },
+  {
+    "name": "МАГАЗИН МИДГАРД",
+    "description": "",
+    "residents": [
+      {
+        "name": "FiftyBongo7874",
+        "id": "-283467809725",
+        "status": "owner"
+      },
+      {
+        "name": "Sigmac228",
+        "id": "-343597370638",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 117,
+          "z": 9
+        },
+        "secondPoint": {
+          "x": 136,
+          "z": -9
+        }
+      }
+    ]
+  },
+  {
+    "name": "порт Лжац",
+    "description": "Лжац портовый городок",
+    "residents": [
+      {
+        "name": "ProKarToshe4ka",
+        "id": "-816043775694",
+        "status": "owner"
+      },
+      {
+        "name": "Unicorn6669179",
+        "id": "-51539604005",
+        "status": "sherif"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -1700,
+          "z": -892
+        },
+        "secondPoint": {
+          "x": -1473,
+          "z": -698
+        }
+      }
+    ]
+  },
+  {
+    "name": "Фaнтока",
+    "description": "",
+    "residents": [
+      {
+        "name": "WryFANTOM2020",
+        "id": "-51539604573",
+        "status": "owner"
+      },
+      {
+        "name": "mar0ka1",
+        "id": "-51539604610",
+        "status": "sherif"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 1855,
+          "z": 1855
+        },
+        "secondPoint": {
+          "x": 1983,
+          "z": 1991
+        }
+      }
+    ]
+  },
+  {
+    "name": "село искра",
+    "description": "",
+    "residents": [
+      {
+        "name": "Vasya20901",
+        "id": "-51539602562",
+        "status": "owner"
+      },
+      {
+        "name": "BOBER22288800",
+        "id": "-73014444011",
+        "status": "resident"
+      },
+      {
+        "name": "MNR3580",
+        "id": "-85899331110",
+        "status": "resident"
+      },
+      {
+        "name": "Tears556",
+        "id": "-94489232556",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 1472,
+          "z": -1168
+        },
+        "secondPoint": {
+          "x": 1680,
+          "z": -1412
+        }
+      }
+    ]
+  },
+  {
+    "name": "BOBERLAND ",
+    "description": "",
+    "residents": [
+      {
+        "name": "BOBER22288800",
+        "id": "-73014444011",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 1504,
+          "z": -1636
+        },
+        "secondPoint": {
+          "x": 1610,
+          "z": -1474
+        }
+      }
+    ]
+  },
+  {
+    "name": "Остров в финском заливе",
+    "description": "деф",
+    "residents": [
+      {
+        "name": "mazatug6672",
+        "id": "-996432394756",
+        "status": "owner"
+      },
+      {
+        "name": "Goust6986",
+        "id": "-695784693399",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -1308,
+          "z": -1230
+        },
+        "secondPoint": {
+          "x": -1259,
+          "z": -1291
+        }
+      },
+      {
+        "firstPoint": {
+          "x": -1259,
+          "z": -1291
+        },
+        "secondPoint": {
+          "x": -1312,
+          "z": -1208
+        }
+      }
+    ]
+  },
+  {
+    "name": "спавнер скелетов",
+    "description": "",
+    "residents": [
+      {
+        "name": "Wertomero",
+        "id": "-51539604606",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 1698,
+          "z": -8
+        },
+        "secondPoint": {
+          "x": 1715,
+          "z": 12
+        }
+      }
+    ]
+  },
+  {
+    "name": "лаборатория Green Mountain ",
+    "description": "изучение аномалий",
+    "residents": [
+      {
+        "name": "Andgello227",
+        "id": "-51539603522",
+        "status": "owner"
+      },
+      {
+        "name": "MrPlex813",
+        "id": "-51539604715",
+        "status": "resident"
+      },
+      {
+        "name": "NightNickson",
+        "id": "-51539602760",
+        "status": "sherif"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -404,
+          "z": 90
+        },
+        "secondPoint": {
+          "x": -422,
+          "z": 109
+        }
+      }
+    ]
+  },
+  {
+    "name": "Талассире",
+    "description": "",
+    "residents": [
+      {
+        "name": "MrPlex813",
+        "id": "-51539604715",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 1759,
+          "z": 946
+        },
+        "secondPoint": {
+          "x": 1896,
+          "z": 855
+        }
+      }
+    ]
+  },
+  {
+    "name": "запретка CAMPFIRE 2",
+    "description": "",
+    "residents": [
+      {
+        "name": "BOBER22288800",
+        "id": "-73014444011",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 1778,
+          "z": -806
+        },
+        "secondPoint": {
+          "x": 1757,
+          "z": -822
+        }
+      }
+    ]
+  },
+  {
+    "name": "село: ЛОХ",
+    "description": "ремастер",
+    "residents": [
+      {
+        "name": "F3d0rGG",
+        "id": "-55834574819",
+        "status": "owner"
+      },
+      {
+        "name": "BOBER22288800",
+        "id": "-73014444011",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 1957,
+          "z": -683
+        },
+        "secondPoint": {
+          "x": 2000,
+          "z": -750
+        }
+      }
+    ]
+  },
+  {
+    "name": "Горы Kaveelon",
+    "description": "",
+    "residents": [
+      {
+        "name": "Kaveelon",
+        "id": "-751619264246",
+        "status": "owner"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": -1061,
+          "z": 1115
+        },
+        "secondPoint": {
+          "x": -991,
+          "z": 1044
+        }
+      },
+      {
+        "firstPoint": {
+          "x": -991,
+          "z": 1044
+        },
+        "secondPoint": {
+          "x": -1148,
+          "z": 1146
+        }
+      },
+      {
+        "firstPoint": {
+          "x": -1146,
+          "z": 1146
+        },
+        "secondPoint": {
+          "x": -992,
+          "z": 1006
+        }
+      }
+    ]
+  },
+  {
+    "name": "вяхутор ежик и мисти",
+    "description": "ежик и мисти",
+    "residents": [
+      {
+        "name": "Ezhik6742",
+        "id": "-51539604776",
+        "status": "owner"
+      },
+      {
+        "name": "Ulqiorra 48624",
+        "id": "-51539604725",
+        "status": "resident"
+      }
+    ],
+    "regions": [
+      {
+        "firstPoint": {
+          "x": 1989,
+          "z": -112
+        },
+        "secondPoint": {
+          "x": 1861,
+          "z": 5
+        }
+      }
+    ]
+  }
+]
