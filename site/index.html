@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Карта сервера — Multi Punk</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#F3F3F8">
+<link rel="icon" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Manrope:wght@500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=18">
+</head>
+<body>
+<div class="app">
+
+  <header class="topbar">
+    <img class="logo" src="assets/logo.svg" alt="MULTI PUNK">
+    <div class="divider"></div>
+    <div class="title-block">
+      <span class="title">Карта MP SMP 02</span>
+      <span class="subtitle" id="worldName">Верхний мир</span>
+    </div>
+    <div class="spacer"></div>
+    <button class="btn-list" id="toggleListBtn" type="button">
+      <span class="dot"></span>
+      Территории
+    </button>
+  </header>
+
+  <div class="viewport" id="viewport">
+    <div class="stage" id="stage">
+      <div class="map-frame" id="mapFrame" role="presentation"></div>
+      <div class="map-img" id="mapImg" role="img" aria-label="Карта мира"></div>
+      <div class="grid-overlay" id="gridOverlay" hidden></div>
+    </div>
+    <svg class="territories" id="territories" xmlns="http://www.w3.org/2000/svg"></svg>
+    <div class="screen-overlay" id="screenOverlay"></div>
+
+    <div class="zoom-controls">
+      <button id="zoomInBtn" type="button" aria-label="Приблизить">+</button>
+      <button id="zoomOutBtn" type="button" aria-label="Отдалить">−</button>
+      <button id="resetBtn" type="button" aria-label="Показать весь мир">весь<br>мир</button>
+    </div>
+
+    <div class="hud">
+      <span id="zoomLabel">100%</span>
+      <span class="sep">|</span>
+      <span id="coordLabel">X 0 · Z 0</span>
+    </div>
+  </div>
+
+  <div class="sheet-backdrop" id="sheetBackdrop" hidden></div>
+
+  <div class="sheet detail-sheet" id="detailSheet" hidden>
+    <div class="sheet-card">
+      <div class="detail-head">
+        <div class="detail-head-text">
+          <span class="kind-badge" id="detailKind"></span>
+          <h2 id="detailName"></h2>
+          <span class="coords-mono" id="detailCoords"></span>
+        </div>
+        <button class="close-btn" id="detailCloseBtn" type="button" aria-label="Закрыть">✕</button>
+      </div>
+
+      <div class="detail-body">
+        <div class="owner-row">
+          <img class="owner-avatar" src="assets/avatar.png" alt="">
+          <div class="owner-text">
+            <span class="label-caps">Владелец</span>
+            <span class="owner-name" id="detailOwner"></span>
+          </div>
+          <div class="spacer"></div>
+          <span class="area-mono" id="detailArea"></span>
+        </div>
+
+        <p class="about-text" id="detailAbout"></p>
+
+        <div class="residents-head">
+          <span class="label-caps">Жители</span>
+          <span class="count-badge" id="detailCount"></span>
+        </div>
+
+        <div class="residents-list" id="detailResidents"></div>
+
+        <button class="copy-btn" id="copyCoordsBtn" type="button">Скопировать /tp координаты</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="sheet list-sheet" id="listSheet" hidden>
+    <div class="sheet-card">
+      <div class="list-head">
+        <h2>Все территории</h2>
+        <button class="close-btn" id="listCloseBtn" type="button" aria-label="Закрыть">✕</button>
+      </div>
+      <div class="search-wrap">
+        <input id="searchInput" placeholder="Поиск по названию или владельцу" autocomplete="off">
+      </div>
+      <div class="territory-list" id="territoryList"></div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" hidden></div>
+</div>
+<script src="app.js?v=10"></script>
+</body>
+</html>

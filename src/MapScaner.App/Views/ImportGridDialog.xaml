@@ -1,0 +1,44 @@
+<Window x:Class="MapScaner.App.Views.ImportGridDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Import existing map image"
+        WindowStartupLocation="CenterOwner"
+        SizeToContent="WidthAndHeight"
+        ResizeMode="NoResize"
+        ShowInTaskbar="False">
+    <StackPanel Margin="16" Width="340">
+        <TextBlock x:Name="ImageInfoText" Margin="0,0,0,8" TextWrapping="Wrap"/>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="8"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock Text="Rows:" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0" Margin="0,0,8,0"/>
+            <TextBox x:Name="RowsBox" Grid.Row="0" Grid.Column="1" TextChanged="Field_TextChanged"/>
+            <TextBlock Text="Columns:" VerticalAlignment="Center" Grid.Row="2" Grid.Column="0" Margin="0,0,8,0"/>
+            <TextBox x:Name="ColsBox" Grid.Row="2" Grid.Column="1" TextChanged="Field_TextChanged"/>
+        </Grid>
+        <TextBlock x:Name="TileSizeText" Margin="0,10,0,0" TextWrapping="Wrap" FontWeight="Bold"/>
+        <Grid Margin="0,10,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Edge trim per tile (px):" VerticalAlignment="Center" Grid.Column="0" Margin="0,0,8,0"/>
+            <TextBox x:Name="EdgeTrimBox" Grid.Column="1" Text="0" TextChanged="Field_TextChanged"/>
+        </Grid>
+        <TextBlock TextWrapping="Wrap" Margin="0,4,0,0" FontSize="11" Foreground="Gray"
+                   Text="If thin seam lines are visible where tiles meet, try trimming 1-3px — this shaves a faint blended border off each tile edge before re-stitching."/>
+        <CheckBox x:Name="DiscardRemainderCheckBox" Content="I understand, discard remainder pixels"
+                  Margin="0,8,0,0" Visibility="Collapsed" Checked="Field_Checked" Unchecked="Field_Checked"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">
+            <Button Content="Cancel" Width="80" Margin="0,0,8,0" Click="Cancel_Click" IsCancel="True"/>
+            <Button x:Name="ContinueButton" Content="Continue" Width="90" Click="Continue_Click" IsDefault="True"/>
+        </StackPanel>
+    </StackPanel>
+</Window>

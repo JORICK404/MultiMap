@@ -1,0 +1,12 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "endstone-region-bridge"
+version = "0.2.0"
+description = "Test plugin: logs region:territory_reply scriptevent messages to console"
+requires-python = ">=3.10"
+
+[project.entry-points."endstone"]
+region-bridge = "endstone_region_bridge:RegionBridge"

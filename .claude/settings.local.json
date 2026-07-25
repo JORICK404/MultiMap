@@ -1,0 +1,47 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dotnet new *)",
+      "Bash(dotnet sln *)",
+      "Bash(dotnet add *)",
+      "Bash(dotnet build *)",
+      "Bash(dotnet run *)",
+      "Bash(tasklist)",
+      "Bash(jobs)",
+      "Bash(cd \"/c/Users/Joker/AppData/Local/Temp/claude/c--Users-Joker-Documents-GitHub-MapScaner/e5d15e1f-f312-48c9-b786-b2bfe056b995/scratchpad/TestHarness\" && dotnet run 2>&1 | tail -150)",
+      "Read(//c/Users/Joker/AppData/Local/Temp/claude/c--Users-Joker-Documents-GitHub-MapScaner/e5d15e1f-f312-48c9-b786-b2bfe056b995/scratchpad/TestHarness/**)",
+      "Bash(dotnet publish *)",
+      "Bash(\"/c/Users/Joker/Documents/GitHub/MapScaner/src/MapScaner.App/bin/Release/net9.0-windows/win-x64/publish/MapScaner.App.exe\")",
+      "Bash(taskkill //F //IM MapScaner.App.exe)",
+      "Bash(rm -rf \"/c/Users/Joker/AppData/Local/Temp/claude/c--Users-Joker-Documents-GitHub-MapScaner/e5d15e1f-f312-48c9-b786-b2bfe056b995/scratchpad/TestHarness\" *)",
+      "Bash(mkdir -p \"/c/Users/Joker/AppData/Local/Temp/claude/c--Users-Joker-Documents-GitHub-MapScaner/e5d15e1f-f312-48c9-b786-b2bfe056b995/scratchpad/DetectorTest2\")",
+      "Bash(node -e \"console.log\\(process.version\\)\")",
+      "Bash(node -e ' *)",
+      "Bash(mkdir -p \"/c/Users/Joker/AppData/Local/Temp/claude/c--Users-Joker-Documents-GitHub-MapScaner/8a880cb7-c7a8-4be1-a927-3cc134f0f119/scratchpad/assets\")",
+      "Bash(ls -la \"/c/Users/Joker/AppData/Local/Temp/claude/c--Users-Joker-Documents-GitHub-MapScaner/8a880cb7-c7a8-4be1-a927-3cc134f0f119/scratchpad/assets/\")",
+      "Read(//c/Users/Joker/AppData/Local/Temp/claude/c--Users-Joker-Documents-GitHub-MapScaner/8a880cb7-c7a8-4be1-a927-3cc134f0f119/scratchpad/assets//**)",
+      "Bash(cp \"/c/Users/Joker/AppData/Local/Temp/claude/c--Users-Joker-Documents-GitHub-MapScaner/8a880cb7-c7a8-4be1-a927-3cc134f0f119/scratchpad/assets/6891279a-87a1-40cd-b01d-f2bc1d4aaf8d.png\" \"c:/Users/Joker/Documents/GitHub/MapScaner/site/assets/logo.png\")",
+      "Bash(cp \"/c/Users/Joker/AppData/Local/Temp/claude/c--Users-Joker-Documents-GitHub-MapScaner/8a880cb7-c7a8-4be1-a927-3cc134f0f119/scratchpad/assets/bf54b9df-cfcf-4cfb-a5b0-2812aa79e2d0.png\" \"c:/Users/Joker/Documents/GitHub/MapScaner/site/assets/map.png\")",
+      "Bash(cp \"/c/Users/Joker/AppData/Local/Temp/claude/c--Users-Joker-Documents-GitHub-MapScaner/8a880cb7-c7a8-4be1-a927-3cc134f0f119/scratchpad/assets/b10f738d-434a-4542-a791-3113d749e249.png\" \"c:/Users/Joker/Documents/GitHub/MapScaner/site/assets/avatar.png\")",
+      "Bash(node --check \"c:/Users/Joker/Documents/GitHub/MapScaner/site/app.js\")",
+      "WebFetch(domain:github.com)",
+      "Bash(gh api *)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:api.github.com)",
+      "Bash(python3 -m py_compile \"c:/Users/Joker/Documents/GitHub/MapScaner/endstone-plugin/src/region_bridge/plugin.py\" \"c:/Users/Joker/Documents/GitHub/MapScaner/endstone-plugin/src/region_bridge/__init__.py\")",
+      "Bash(python -m py_compile \"c:/Users/Joker/Documents/GitHub/MapScaner/endstone-plugin/src/region_bridge/plugin.py\" \"c:/Users/Joker/Documents/GitHub/MapScaner/endstone-plugin/src/region_bridge/__init__.py\")",
+      "Bash(echo \"exit: $?\")",
+      "Bash(python -c \"import zipfile; z=zipfile.ZipFile\\('dist/endstone_region_bridge-0.1.0-py3-none-any.whl'\\); print\\('\\\\n'.join\\(z.namelist\\(\\)\\)\\)\")",
+      "Bash(xargs -r rm -rf)",
+      "WebFetch(domain:endstone.dev)",
+      "Bash(rm -rf dist build)",
+      "Bash(python -m build)",
+      "Bash(find / -maxdepth 6 -iname \"endstone*.exe\" -o -iname \"bedrock_server.exe\" 2>/dev/null | head -20)",
+      "Read(//c//**)"
+    ],
+    "additionalDirectories": [
+      "C:\\Users\\Joker\\AppData\\Local\\Temp\\claude\\c--Users-Joker-Documents-GitHub-MapScaner\\e5d15e1f-f312-48c9-b786-b2bfe056b995\\scratchpad\\TestHarness",
+      "C:\\Users\\Joker\\AppData\\Local\\Temp\\claude\\c--Users-Joker-Documents-GitHub-MapScaner\\e5d15e1f-f312-48c9-b786-b2bfe056b995\\scratchpad"
+    ]
+  }
+}

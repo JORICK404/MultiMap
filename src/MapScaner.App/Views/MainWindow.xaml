@@ -1,0 +1,121 @@
+<Window x:Class="MapScaner.App.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:MapScaner.App.ViewModels"
+        Title="{Binding WindowTitle}"
+        Height="750" Width="950"
+        WindowStartupLocation="CenterScreen">
+    <Window.DataContext>
+        <vm:MainViewModel/>
+    </Window.DataContext>
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+    </Window.Resources>
+    <Window.InputBindings>
+        <KeyBinding Modifiers="Control" Key="V" Command="{Binding PasteIntoSelectedCommand}"/>
+        <KeyBinding Key="Delete" Command="{Binding ClearSelectedCommand}"/>
+    </Window.InputBindings>
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Header="_New Project" Command="{Binding NewProjectCommand}"/>
+                <MenuItem Header="_Open Project..." Command="{Binding OpenProjectCommand}"/>
+                <MenuItem Header="_Save Project" Command="{Binding SaveProjectCommand}"/>
+                <MenuItem Header="Save Project _As..." Command="{Binding SaveProjectAsCommand}"/>
+                <Separator/>
+                <MenuItem Header="_Import Existing Stitched Image..." Command="{Binding ImportStitchedImageCommand}"/>
+                <MenuItem Header="_Export..." Command="{Binding ExportCommand}"/>
+                <Separator/>
+                <MenuItem Header="E_xit" Click="Exit_Click"/>
+            </MenuItem>
+            <MenuItem Header="_Grid">
+                <MenuItem Header="_Calibrate..." Command="{Binding CalibrateCommand}"/>
+                <MenuItem Header="_Resize Grid..." Command="{Binding ResizeGridCommand}"/>
+            </MenuItem>
+        </Menu>
+        <ToolBar DockPanel.Dock="Top">
+            <Button Content="New" Command="{Binding NewProjectCommand}" Margin="2"/>
+            <Button Content="Open..." Command="{Binding OpenProjectCommand}" Margin="2"/>
+            <Button Content="Save" Command="{Binding SaveProjectCommand}" Margin="2"/>
+            <Separator/>
+            <Button Content="Import Image..." Command="{Binding ImportStitchedImageCommand}" Margin="2"/>
+            <Button Content="Export..." Command="{Binding ExportCommand}" Margin="2"/>
+            <Separator/>
+            <Button Content="Calibrate..." Command="{Binding CalibrateCommand}" Margin="2"/>
+            <Button Content="Resize Grid..." Command="{Binding ResizeGridCommand}" Margin="2"/>
+            <Separator/>
+            <Button Content="Load File Into Cell..." Command="{Binding LoadFileIntoSelectedCommand}" Margin="2"/>
+            <Button Content="Clear Tile" Command="{Binding ClearSelectedCommand}" Margin="2"/>
+        </ToolBar>
+        <StatusBar DockPanel.Dock="Bottom">
+            <StatusBarItem>
+                <TextBlock Text="{Binding StatusMessage}"/>
+            </StatusBarItem>
+        </StatusBar>
+        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Background="#333">
+            <ListBox x:Name="CellsListBox"
+                     ItemsSource="{Binding Cells}"
+                     SelectedItem="{Binding SelectedCell}"
+                     SelectionMode="Single"
+                     BorderThickness="0"
+                     Background="Transparent"
+                     HorizontalAlignment="Center"
+                     VerticalAlignment="Center"
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                     ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Rows="{Binding Rows}" Columns="{Binding Cols}"/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="Padding" Value="0"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListBoxItem">
+                                    <ContentPresenter/>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+                <ListBox.ItemTemplate>
+                    <DataTemplate DataType="{x:Type vm:TileCellViewModel}">
+                        <Border Width="110" Height="110" Margin="4" BorderThickness="2"
+                                Background="#222222" MouseRightButtonUp="Cell_MouseRightButtonUp">
+                            <Border.BorderBrush>
+                                <SolidColorBrush Color="Gray"/>
+                            </Border.BorderBrush>
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem}, Path=IsSelected}" Value="True">
+                                            <Setter Property="BorderBrush" Value="OrangeRed"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <Grid>
+                                <Image Source="{Binding ThumbnailSource}" Stretch="Uniform"
+                                       RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+                                <TextBlock Text="{Binding Label}" Foreground="#AAAAAA" FontSize="10"
+                                           HorizontalAlignment="Left" VerticalAlignment="Top" Margin="2"/>
+                                <TextBlock Text="Click, Ctrl+V" Foreground="#777777" FontSize="11"
+                                           TextAlignment="Center" TextWrapping="Wrap" Width="90"
+                                           HorizontalAlignment="Center" VerticalAlignment="Center"
+                                           Visibility="{Binding IsEmpty, Converter={StaticResource BoolToVis}}"/>
+                            </Grid>
+                            <Border.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Load Image File..." Click="LoadImageMenuItem_Click"/>
+                                    <MenuItem Header="Clear Tile" Click="ClearTileMenuItem_Click"/>
+                                </ContextMenu>
+                            </Border.ContextMenu>
+                        </Border>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </ScrollViewer>
+    </DockPanel>
+</Window>
