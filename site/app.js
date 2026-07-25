@@ -485,14 +485,14 @@ function ping(msg) {
 
 /* ---------- init ---------- */
 
-fetch('region.json?v=1')
+fetch('/api/regions')
   .then(res => {
     if (!res.ok) throw new Error('HTTP ' + res.status);
     return res.json();
   })
   .then(raw => { territories = raw.map(buildTerritory); })
   .catch(err => {
-    console.error('Не удалось загрузить region.json', err);
+    console.error('Не удалось загрузить территории', err);
     territories = [];
     ping('Не удалось загрузить территории');
   })
