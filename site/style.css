@@ -440,7 +440,7 @@ input { font-family: inherit; }
 
 @media (min-width: 860px) {
   .topbar { padding: 0 22px; }
-  .zoom-controls { top: 18px; right: 18px; }
+  .zoom-controls { display: none; }
   .hud { left: 18px; bottom: 18px; }
   .sheet {
     padding: 18px;
