@@ -171,7 +171,6 @@ const els = {
   detailCount: document.getElementById('detailCount'),
   detailResidents: document.getElementById('detailResidents'),
   detailCloseBtn: document.getElementById('detailCloseBtn'),
-  copyCoordsBtn: document.getElementById('copyCoordsBtn'),
   listSheet: document.getElementById('listSheet'),
   listCloseBtn: document.getElementById('listCloseBtn'),
   searchInput: document.getElementById('searchInput'),
@@ -440,14 +439,6 @@ function renderSheets() {
 }
 
 els.detailCloseBtn.addEventListener('click', clearSelection);
-
-els.copyCoordsBtn.addEventListener('click', () => {
-  const t = territories.find(d => d.id === selectedId);
-  if (!t) return;
-  const cmd = `/tp ${t.centerX} 70 ${t.centerZ}`;
-  if (navigator.clipboard) navigator.clipboard.writeText(cmd).catch(() => {});
-  ping(cmd + ' скопировано');
-});
 
 /* ---------- list sheet ---------- */
 
