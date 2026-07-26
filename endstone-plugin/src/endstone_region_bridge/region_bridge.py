@@ -81,5 +81,10 @@ class RegionBridge(Plugin):
                 self.logger.info(
                     f"[RegionBridge] Sent {len(merged)} territories, status {response.status}"
                 )
+        except urllib.error.HTTPError as exc:
+            detail = exc.read().decode("utf-8", errors="replace")
+            self.logger.warning(
+                f"[RegionBridge] Failed to send territories: HTTP {exc.code}: {detail}"
+            )
         except urllib.error.URLError as exc:
             self.logger.warning(f"[RegionBridge] Failed to send territories: {exc}")

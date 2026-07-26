@@ -19,12 +19,18 @@ module.exports = async function handler(req, res) {
       return;
     }
 
-    await put(PATHNAME, JSON.stringify(body), {
-      access: 'public',
-      addRandomSuffix: false,
-      allowOverwrite: true,
-      contentType: 'application/json',
-    });
+    try {
+      await put(PATHNAME, JSON.stringify(body), {
+        access: 'public',
+        addRandomSuffix: false,
+        allowOverwrite: true,
+        contentType: 'application/json',
+      });
+    } catch (err) {
+      console.error('[regions] put failed:', err);
+      res.status(500).json({ error: 'blob write failed', message: String(err && err.message || err) });
+      return;
+    }
 
     res.status(200).json({ ok: true, count: body.length });
     return;
@@ -36,6 +42,7 @@ module.exports = async function handler(req, res) {
       res.setHeader('Cache-Control', 's-maxage=30, stale-while-revalidate=60');
       res.redirect(307, info.url);
     } catch (err) {
+      console.error('[regions] head failed:', err);
       res.status(404).json({ error: 'no data uploaded yet' });
     }
     return;
