@@ -1,8 +1,21 @@
-const { put, head } = require('@vercel/blob');
+const { put, get } = require('@vercel/blob');
 
 // Single blob, always overwritten — no history, just the latest snapshot
-// the plugin sent.
+// the plugin sent. Stored as private: the store itself is private-access-only,
+// and this way the blob's real URL is never exposed to the client — this
+// function is the only thing that reads it.
 const PATHNAME = 'regions.json';
+
+async function readStream(stream) {
+  const reader = stream.getReader();
+  const chunks = [];
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    chunks.push(Buffer.from(value));
+  }
+  return Buffer.concat(chunks);
+}
 
 module.exports = async function handler(req, res) {
   if (req.method === 'POST') {
@@ -21,7 +34,7 @@ module.exports = async function handler(req, res) {
 
     try {
       await put(PATHNAME, JSON.stringify(body), {
-        access: 'public',
+        access: 'private',
         addRandomSuffix: false,
         allowOverwrite: true,
         contentType: 'application/json',
@@ -38,11 +51,17 @@ module.exports = async function handler(req, res) {
 
   if (req.method === 'GET') {
     try {
-      const info = await head(PATHNAME);
+      const result = await get(PATHNAME, { access: 'private' });
+      if (!result) {
+        res.status(404).json({ error: 'no data uploaded yet' });
+        return;
+      }
+      const buf = await readStream(result.stream);
       res.setHeader('Cache-Control', 's-maxage=30, stale-while-revalidate=60');
-      res.redirect(307, info.url);
+      res.setHeader('Content-Type', 'application/json');
+      res.status(200).send(buf);
     } catch (err) {
-      console.error('[regions] head failed:', err);
+      console.error('[regions] get failed:', err);
       res.status(404).json({ error: 'no data uploaded yet' });
     }
     return;
