@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Manrope:wght@500;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=21">
+<link rel="stylesheet" href="style.css?v=23">
 </head>
 <body>
 <div class="app">
@@ -22,9 +22,16 @@
       <span class="subtitle" id="worldName">Верхний мир</span>
     </div>
     <div class="spacer"></div>
+    <button class="btn-list" id="toggleBordersBtn" type="button">
+      <span class="dot"></span>
+      Границы
+    </button>
     <button class="btn-list" id="toggleListBtn" type="button">
       <span class="dot"></span>
       Территории
+    </button>
+    <button class="btn-list btn-compact" id="downloadMapBtn" type="button" aria-label="Скачать карту" title="Скачать карту">
+      ⬇
     </button>
   </header>
 
@@ -101,7 +108,7 @@
 
   <div class="toast" id="toast" hidden></div>
 </div>
-<script src="app.js?v=14"></script>
+<script src="app.js?v=16"></script>
 <script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>

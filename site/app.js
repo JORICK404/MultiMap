@@ -149,6 +149,8 @@ let territories = [];
 const els = {
   worldName: document.getElementById('worldName'),
   toggleListBtn: document.getElementById('toggleListBtn'),
+  toggleBordersBtn: document.getElementById('toggleBordersBtn'),
+  downloadMapBtn: document.getElementById('downloadMapBtn'),
   viewport: document.getElementById('viewport'),
   stage: document.getElementById('stage'),
   mapImg: document.getElementById('mapImg'),
@@ -450,6 +452,64 @@ function toggleList() {
 els.toggleListBtn.addEventListener('click', toggleList);
 els.listCloseBtn.addEventListener('click', toggleList);
 els.sheetBackdrop.addEventListener('click', toggleList);
+
+/* ---------- border visibility toggle ---------- */
+
+let bordersVisible = true;
+
+function toggleBorders() {
+  bordersVisible = !bordersVisible;
+  els.territoriesLayer.classList.toggle('borders-hidden', !bordersVisible);
+  els.toggleBordersBtn.classList.toggle('is-off', !bordersVisible);
+}
+
+els.toggleBordersBtn.addEventListener('click', toggleBorders);
+
+/* ---------- map image export ---------- */
+
+function downloadMapImage() {
+  const img = new Image();
+  img.onload = () => {
+    const canvas = document.createElement('canvas');
+    canvas.width = img.naturalWidth;
+    canvas.height = img.naturalHeight;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+    if (bordersVisible) {
+      const scaleX = canvas.width / STAGE_W;
+      const scaleY = canvas.height / STAGE_H;
+      ctx.lineWidth = 3 * scaleX;
+      ctx.lineJoin = 'miter';
+      territories.forEach(t => {
+        ctx.fillStyle = t.fill;
+        ctx.strokeStyle = t.stroke;
+        t.outlineLoops.forEach(loop => {
+          ctx.beginPath();
+          loop.forEach((p, i) => {
+            const x = p[0] * scaleX, y = p[1] * scaleY;
+            if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+          });
+          ctx.closePath();
+          ctx.fill();
+          ctx.stroke();
+        });
+      });
+    }
+
+    canvas.toBlob(blob => {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = bordersVisible ? 'multipunk-map-borders.png' : 'multipunk-map.png';
+      a.click();
+      URL.revokeObjectURL(url);
+    }, 'image/png');
+  };
+  img.src = 'assets/map.png?v=2';
+}
+
+els.downloadMapBtn.addEventListener('click', downloadMapImage);
 
 els.searchInput.addEventListener('input', renderList);
 
