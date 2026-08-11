@@ -9,6 +9,8 @@
     <StackPanel Margin="12">
         <TextBlock TextWrapping="Wrap" MaxWidth="700" Margin="0,0,0,8"
                    Text="The map square was auto-detected below (largest solid non-black area). Check it looks right, nudge it with the fields if needed, or click Auto-detect again — then click Use Selection. This crop area will be reused automatically for every future screenshot at this resolution."/>
+        <TextBlock x:Name="LockInfoText" TextWrapping="Wrap" MaxWidth="700" Margin="0,0,0,8"
+                   FontWeight="Bold" Foreground="DarkOrange" Visibility="Collapsed"/>
         <Border BorderBrush="Gray" BorderThickness="1" Background="Black">
             <Grid>
                 <Image x:Name="PreviewImage" Stretch="Fill"/>
@@ -50,7 +52,7 @@
                 <ColumnDefinition Width="70"/>
             </Grid.ColumnDefinitions>
             <TextBlock Text="Edge trim (px):" VerticalAlignment="Center" Grid.Column="0" Margin="0,0,8,0"/>
-            <TextBox x:Name="TrimBox" Grid.Column="1" Text="2"/>
+            <TextBox x:Name="TrimBox" Grid.Column="1" Text="2" TextChanged="TrimBox_TextChanged"/>
         </Grid>
         <TextBlock TextWrapping="Wrap" MaxWidth="700" Margin="0,4,0,0" FontSize="11" Foreground="Gray"
                    Text="Shaves this many pixels off each edge of the selection above before saving — the map HUD often has a faint blended border that otherwise shows up as a thin seam where tiles meet."/>

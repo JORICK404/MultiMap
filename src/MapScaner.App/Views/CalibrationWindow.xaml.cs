@@ -14,16 +14,21 @@ public partial class CalibrationWindow : Window
 
     private readonly BitmapSource _source;
     private readonly double _scale;
+    private readonly int? _requiredWidth;
+    private readonly int? _requiredHeight;
     private Point? _dragStart;
     private bool _updatingFromCode;
+    private bool _loaded;
     private Int32Rect _selectedRect;
 
     public CalibrationProfile? Result { get; private set; }
 
-    public CalibrationWindow(BitmapSource source, Int32Rect? initialRect = null)
+    public CalibrationWindow(BitmapSource source, Int32Rect? initialRect = null, int? requiredWidth = null, int? requiredHeight = null)
     {
         InitializeComponent();
         _source = source;
+        _requiredWidth = requiredWidth;
+        _requiredHeight = requiredHeight;
 
         _scale = Math.Min(1.0, Math.Min(MaxDisplayWidth / source.PixelWidth, MaxDisplayHeight / source.PixelHeight));
 
@@ -42,6 +47,18 @@ public partial class CalibrationWindow : Window
         // default to trimming the faint blended border off.
         TrimBox.Text = initialRect.HasValue ? "0" : "2";
 
+        if (_requiredWidth is int rw && _requiredHeight is int rh)
+        {
+            // Free-hand dragging can't hit an exact pixel size, and the grid requires every
+            // tile to match exactly — so once other tiles exist, lock W/H to their size and
+            // only let the user reposition (not resize) the selection.
+            WBox.IsEnabled = false;
+            HBox.IsEnabled = false;
+            LockInfoText.Text = $"Size locked to {rw}x{rh} to match existing tiles — drag or use X/Y to position it, size won't change.";
+            LockInfoText.Visibility = Visibility.Visible;
+        }
+
+        _loaded = true;
         SetRectFromSource(initial);
     }
 
@@ -63,6 +80,11 @@ public partial class CalibrationWindow : Window
     {
         _dragStart = e.GetPosition(SelectionCanvas);
         SelectionCanvas.CaptureMouse();
+
+        if (_requiredWidth is not null)
+        {
+            MoveLockedRectTo(_dragStart.Value);
+        }
     }
 
     private void SelectionCanvas_MouseMove(object sender, MouseEventArgs e)
@@ -70,6 +92,13 @@ public partial class CalibrationWindow : Window
         if (_dragStart is not Point start || e.LeftButton != MouseButtonState.Pressed) return;
 
         var current = e.GetPosition(SelectionCanvas);
+
+        if (_requiredWidth is not null)
+        {
+            MoveLockedRectTo(current);
+            return;
+        }
+
         var displayRect = new Rect(start, current);
         displayRect.Intersect(new Rect(0, 0, SelectionCanvas.Width, SelectionCanvas.Height));
 
@@ -80,6 +109,16 @@ public partial class CalibrationWindow : Window
             Math.Max(1, (int)Math.Round(displayRect.Height / _scale)));
 
         SetRectFromSource(deviceRect);
+    }
+
+    // Repositions the (fixed-size) locked selection so it's centered under the given canvas point.
+    private void MoveLockedRectTo(Point displayPoint)
+    {
+        int cx = (int)Math.Round(displayPoint.X / _scale);
+        int cy = (int)Math.Round(displayPoint.Y / _scale);
+        int w = _selectedRect.Width > 0 ? _selectedRect.Width : _requiredWidth!.Value;
+        int h = _selectedRect.Height > 0 ? _selectedRect.Height : _requiredHeight!.Value;
+        SetRectFromSource(new Int32Rect(cx - w / 2, cy - h / 2, w, h));
     }
 
     private void SelectionCanvas_MouseUp(object sender, MouseButtonEventArgs e)
@@ -100,8 +139,26 @@ public partial class CalibrationWindow : Window
         SetRectFromSource(new Int32Rect(x, y, w, h));
     }
 
+    private void TrimBox_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        if (_updatingFromCode || !_loaded) return;
+        SetRectFromSource(_selectedRect);
+    }
+
+    private int ParseTrim() => int.TryParse(TrimBox.Text, out int t) ? Math.Max(0, t) : 0;
+
     private void SetRectFromSource(Int32Rect rect)
     {
+        if (_requiredWidth is int rw && _requiredHeight is int rh)
+        {
+            int trim = ParseTrim();
+            int targetW = rw + 2 * trim;
+            int targetH = rh + 2 * trim;
+            int cx = rect.X + rect.Width / 2;
+            int cy = rect.Y + rect.Height / 2;
+            rect = new Int32Rect(cx - targetW / 2, cy - targetH / 2, targetW, targetH);
+        }
+
         _selectedRect = ImageCropService.Clamp(rect, _source.PixelWidth, _source.PixelHeight);
 
         _updatingFromCode = true;
@@ -126,7 +183,7 @@ public partial class CalibrationWindow : Window
             return;
         }
 
-        int trim = int.TryParse(TrimBox.Text, out int t) ? Math.Max(0, t) : 0;
+        int trim = ParseTrim();
         var finalRect = InsetRect(_selectedRect, trim);
         if (finalRect.Width <= 0 || finalRect.Height <= 0)
         {

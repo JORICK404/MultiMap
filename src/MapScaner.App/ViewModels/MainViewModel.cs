@@ -221,7 +221,7 @@ public partial class MainViewModel : ObservableObject
         if (sample is null) return;
 
         var existing = _calibrationLibrary.TryGet(sample.PixelWidth, sample.PixelHeight);
-        var window = new CalibrationWindow(sample, existing?.CropRect) { Owner = OwnerWindow };
+        var window = new CalibrationWindow(sample, existing?.CropRect, _project.Manifest.TileWidth, _project.Manifest.TileHeight) { Owner = OwnerWindow };
         if (window.ShowDialog() == true && window.Result is CalibrationProfile profile)
         {
             _calibrationLibrary.Save(profile);
@@ -358,7 +358,7 @@ public partial class MainViewModel : ObservableObject
                 return;
             }
 
-            var window = new CalibrationWindow(fullImage) { Owner = OwnerWindow };
+            var window = new CalibrationWindow(fullImage, requiredWidth: _project.Manifest.TileWidth, requiredHeight: _project.Manifest.TileHeight) { Owner = OwnerWindow };
             if (window.ShowDialog() != true || window.Result is not CalibrationProfile newProfile)
             {
                 StatusMessage = "Calibration cancelled.";
@@ -382,7 +382,7 @@ public partial class MainViewModel : ObservableObject
                 return;
             }
 
-            var window = new CalibrationWindow(fullImage, profile.CropRect) { Owner = OwnerWindow };
+            var window = new CalibrationWindow(fullImage, profile.CropRect, _project.Manifest.TileWidth, _project.Manifest.TileHeight) { Owner = OwnerWindow };
             if (window.ShowDialog() != true || window.Result is not CalibrationProfile fixedProfile)
             {
                 StatusMessage = "Recalibration cancelled.";
