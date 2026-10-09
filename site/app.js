@@ -1,7 +1,14 @@
-const WORLD = 4100, STAGE_W = 1600, STAGE_H = 1606;
 const WORLD_NAME = 'Верхний мир';
-// Игровые координаты 0,0 на картинке смещены от геометрического центра карты.
-const ORIGIN_OFFSET_X = 50, ORIGIN_OFFSET_Z = 50;
+const MAP_DIR = 'assets/map/';
+const MAP_VERSION = 3;
+// 1 пиксель карты = 1 блок, игровые 0,0 — центр картинки. Размеры берутся из
+// assets/map/meta.json (его пишет tools/make_map_tiles.py), здесь — запасные.
+let STAGE_W = 6001, STAGE_H = 6001, TILE = 512, emptyTiles = new Set();
+let ORIGIN_X = 3000, ORIGIN_Z = 3000;
+// Начиная с этого масштаба (экранных пикселей на блок) поверх уменьшенной
+// карты подгружаются тайлы в полном разрешении.
+const DETAIL_K = 0.4;
+const MAX_K = 8;
 
 // Территория задаётся списком регионов (region.json: regions[].firstPoint /
 // secondPoint), каждый — два противоположных угла в любом порядке. Территория
@@ -15,10 +22,10 @@ function hashHue(str) {
   return h % 360;
 }
 
-function pctX(v) { return ((v + ORIGIN_OFFSET_X + WORLD / 2) / WORLD * 100).toFixed(3) + '%'; }
-function pctZ(v) { return ((v + ORIGIN_OFFSET_Z + WORLD / 2) / WORLD * 100).toFixed(3) + '%'; }
-function xPix(v) { return (v + ORIGIN_OFFSET_X + WORLD / 2) / WORLD * STAGE_W; }
-function zPix(v) { return (v + ORIGIN_OFFSET_Z + WORLD / 2) / WORLD * STAGE_H; }
+function pctX(v) { return (xPix(v) / STAGE_W * 100).toFixed(4) + '%'; }
+function pctZ(v) { return (zPix(v) / STAGE_H * 100).toFixed(4) + '%'; }
+function xPix(v) { return v + ORIGIN_X; }
+function zPix(v) { return v + ORIGIN_Z; }
 
 function rectWorld(r) {
   return {
@@ -29,7 +36,8 @@ function rectWorld(r) {
 
 function rectPixels(r) {
   const w = rectWorld(r);
-  return { x1: xPix(w.minX), x2: xPix(w.maxX), z1: zPix(w.minZ), z2: zPix(w.maxZ) };
+  // Углы региона — включительные блоки, поэтому дальний край на +1.
+  return { x1: xPix(w.minX), x2: xPix(w.maxX + 1), z1: zPix(w.minZ), z2: zPix(w.maxZ + 1) };
 }
 
 // Traces the outer boundary of a union of axis-aligned rectangles (a
@@ -130,12 +138,12 @@ function buildTerritory(raw, index) {
     stroke,
     about: raw.description || '',
     outlineLoops: unionOutline(rects.map(rectPixels)),
-    labelX: xPix(centerX), labelZ: zPix(bbox.minZ),
+    labelX: xPix((bbox.minX + bbox.maxX + 1) / 2), labelZ: zPix(bbox.minZ),
     fill: `hsl(${hue} 78% 68% / 0.18)`,
     centerX, centerZ,
     coords: `X ${bbox.minX} … ${bbox.maxX}   ·   Z ${bbox.minZ} … ${bbox.maxZ}`,
     short: `${centerX} / ${centerZ}`,
-    area: `${bbox.maxX - bbox.minX}×${bbox.maxZ - bbox.minZ}`,
+    area: `${bbox.maxX - bbox.minX + 1}×${bbox.maxZ - bbox.minZ + 1}`,
     residentsDetailed: raw.residents.map(r => ({
       name: r.name,
       role: ROLE_LABELS[r.status] || r.status,
@@ -154,6 +162,7 @@ const els = {
   viewport: document.getElementById('viewport'),
   stage: document.getElementById('stage'),
   mapImg: document.getElementById('mapImg'),
+  mapTiles: document.getElementById('mapTiles'),
   gridOverlay: document.getElementById('gridOverlay'),
   territoriesLayer: document.getElementById('territories'),
   screenOverlay: document.getElementById('screenOverlay'),
@@ -226,8 +235,9 @@ function apply() {
   });
   territoryShapes.forEach(s => {
     s.el.setAttribute('d', pathFromLoopsScreen(s.loops));
-    s.el.style.strokeWidth = (3 * view.k) + 'px';
+    s.el.style.strokeWidth = Math.max(1.5, Math.min(4, 2 * view.k)) + 'px';
   });
+  updateTiles();
   els.zoomLabel.textContent = Math.round((view.k / view.fitK) * 100) + '%';
   updateCoordLabel();
 }
@@ -237,13 +247,13 @@ function updateCoordLabel() {
   const px = lastPointer ? lastPointer.x - r.left : r.width / 2;
   const py = lastPointer ? lastPointer.y - r.top : r.height / 2;
   const sx = (px - view.tx) / view.k, sy = (py - view.ty) / view.k;
-  const bx = Math.round(sx / STAGE_W * WORLD - WORLD / 2 - ORIGIN_OFFSET_X);
-  const bz = Math.round(sy / STAGE_H * WORLD - WORLD / 2 - ORIGIN_OFFSET_Z);
+  const bx = Math.floor(sx - ORIGIN_X);
+  const bz = Math.floor(sy - ORIGIN_Z);
   els.coordLabel.textContent = `X ${bx} · Z ${bz}`;
 }
 
 function zoomAt(px, py, factor) {
-  const next = Math.max(view.fitK * 0.85, Math.min(view.fitK * 14, view.k * factor));
+  const next = Math.max(view.fitK * 0.85, Math.min(Math.max(MAX_K, view.fitK * 14), view.k * factor));
   const ratio = next / view.k;
   view.tx = px - (px - view.tx) * ratio;
   view.ty = py - (py - view.ty) * ratio;
@@ -258,11 +268,54 @@ function zoomCenter(factor) {
 
 function focus(t) {
   const r = els.viewport.getBoundingClientRect();
-  view.k = Math.max(view.k, view.fitK * 3);
-  const sx = (t.centerX + ORIGIN_OFFSET_X + WORLD / 2) / WORLD * STAGE_W, sy = (t.centerZ + ORIGIN_OFFSET_Z + WORLD / 2) / WORLD * STAGE_H;
+  view.k = Math.max(view.k, 1);
+  const sx = xPix(t.centerX), sy = zPix(t.centerZ);
   view.tx = r.width / 2 - sx * view.k;
   view.ty = r.height * 0.32 - sy * view.k;
   apply();
+}
+
+/* ---------- map tiles ---------- */
+
+// Уменьшенная карта (low.webp) лежит фоном всегда; при приближении поверх неё
+// подгружаются только видимые тайлы полного разрешения, а ушедшие за край
+// экрана удаляются — так весь мир (десятки мегабайт) никогда не грузится разом.
+const tileEls = new Map();
+
+function updateTiles() {
+  const wanted = new Set();
+  if (view.k >= DETAIL_K) {
+    const r = els.viewport.getBoundingClientRect();
+    const x0 = -view.tx / view.k, x1 = (r.width - view.tx) / view.k;
+    const y0 = -view.ty / view.k, y1 = (r.height - view.ty) / view.k;
+    const cols = Math.ceil(STAGE_W / TILE), rows = Math.ceil(STAGE_H / TILE);
+    const c0 = Math.max(0, Math.floor(x0 / TILE)), c1 = Math.min(cols - 1, Math.floor(x1 / TILE));
+    const r0 = Math.max(0, Math.floor(y0 / TILE)), r1 = Math.min(rows - 1, Math.floor(y1 / TILE));
+    for (let ty = r0; ty <= r1; ty++) {
+      for (let tx = c0; tx <= c1; tx++) {
+        const id = tx + '_' + ty;
+        if (!emptyTiles.has(id)) wanted.add(id);
+      }
+    }
+  }
+
+  tileEls.forEach((el, id) => {
+    if (!wanted.has(id)) { el.remove(); tileEls.delete(id); }
+  });
+  wanted.forEach(id => {
+    if (tileEls.has(id)) return;
+    const [tx, ty] = id.split('_').map(Number);
+    const el = document.createElement('div');
+    el.className = 'map-tile';
+    el.style.left = (tx * TILE) + 'px';
+    el.style.top = (ty * TILE) + 'px';
+    // +1px — тайлы нарезаны с перекрытием, чтобы не было швов.
+    el.style.width = Math.min(STAGE_W - tx * TILE, TILE + 1) + 'px';
+    el.style.height = Math.min(STAGE_H - ty * TILE, TILE + 1) + 'px';
+    el.style.backgroundImage = `url('${MAP_DIR}tiles/${id}.webp?v=${MAP_VERSION}')`;
+    els.mapTiles.appendChild(el);
+    tileEls.set(id, el);
+  });
 }
 
 /* ---------- pointer / wheel interaction ---------- */
@@ -467,46 +520,67 @@ els.toggleBordersBtn.addEventListener('click', toggleBorders);
 
 /* ---------- map image export ---------- */
 
-function downloadMapImage() {
-  const img = new Image();
-  img.onload = () => {
-    const canvas = document.createElement('canvas');
-    canvas.width = img.naturalWidth;
-    canvas.height = img.naturalHeight;
-    const ctx = canvas.getContext('2d');
-    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+function loadImage(src) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = reject;
+    img.src = src;
+  });
+}
 
-    if (bordersVisible) {
-      const scaleX = canvas.width / STAGE_W;
-      const scaleY = canvas.height / STAGE_H;
-      ctx.lineWidth = 3 * scaleX;
-      ctx.lineJoin = 'miter';
-      territories.forEach(t => {
-        ctx.fillStyle = t.fill;
-        ctx.strokeStyle = t.stroke;
-        t.outlineLoops.forEach(loop => {
-          ctx.beginPath();
-          loop.forEach((p, i) => {
-            const x = p[0] * scaleX, y = p[1] * scaleY;
-            if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-          });
-          ctx.closePath();
-          ctx.fill();
-          ctx.stroke();
-        });
-      });
+// Собирает карту в полном разрешении из тайлов (отдельного большого файла нет).
+async function downloadMapImage() {
+  ping('Собираю карту…');
+  const canvas = document.createElement('canvas');
+  canvas.width = STAGE_W;
+  canvas.height = STAGE_H;
+  const ctx = canvas.getContext('2d');
+
+  const jobs = [];
+  for (let ty = 0; ty * TILE < STAGE_H; ty++) {
+    for (let tx = 0; tx * TILE < STAGE_W; tx++) {
+      const id = tx + '_' + ty;
+      if (emptyTiles.has(id)) continue;
+      jobs.push(loadImage(`${MAP_DIR}tiles/${id}.webp?v=${MAP_VERSION}`)
+        .then(img => ctx.drawImage(img, tx * TILE, ty * TILE)));
     }
+  }
+  try {
+    await Promise.all(jobs);
+  } catch (err) {
+    console.error(err);
+    ping('Не удалось скачать карту');
+    return;
+  }
 
-    canvas.toBlob(blob => {
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = bordersVisible ? 'multipunk-map-borders.png' : 'multipunk-map.png';
-      a.click();
-      URL.revokeObjectURL(url);
-    }, 'image/png');
-  };
-  img.src = 'assets/map.png?v=2';
+  if (bordersVisible) {
+    ctx.lineWidth = 3;
+    ctx.lineJoin = 'miter';
+    territories.forEach(t => {
+      ctx.fillStyle = t.fill;
+      ctx.strokeStyle = t.stroke;
+      t.outlineLoops.forEach(loop => {
+        ctx.beginPath();
+        loop.forEach((p, i) => {
+          if (i === 0) ctx.moveTo(p[0], p[1]); else ctx.lineTo(p[0], p[1]);
+        });
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+      });
+    });
+  }
+
+  canvas.toBlob(blob => {
+    if (!blob) { ping('Не удалось скачать карту'); return; }
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = bordersVisible ? 'multipunk-map-borders.png' : 'multipunk-map.png';
+    a.click();
+    URL.revokeObjectURL(url);
+  }, 'image/png');
 }
 
 els.downloadMapBtn.addEventListener('click', downloadMapImage);
@@ -545,7 +619,22 @@ function ping(msg) {
 
 /* ---------- init ---------- */
 
-fetch('/api/regions')
+function applyMapMeta(meta) {
+  STAGE_W = meta.width;
+  STAGE_H = meta.height;
+  TILE = meta.tile;
+  emptyTiles = new Set(meta.empty || []);
+  ORIGIN_X = Math.floor(STAGE_W / 2);
+  ORIGIN_Z = Math.floor(STAGE_H / 2);
+  els.stage.style.width = STAGE_W + 'px';
+  els.stage.style.height = STAGE_H + 'px';
+}
+
+fetch(MAP_DIR + 'meta.json?v=' + MAP_VERSION)
+  .then(res => res.ok ? res.json() : Promise.reject(new Error('HTTP ' + res.status)))
+  .then(applyMapMeta)
+  .catch(err => console.error('Не удалось загрузить meta.json карты', err))
+  .then(() => fetch('/api/regions'))
   .then(res => {
     if (!res.ok) throw new Error('HTTP ' + res.status);
     return res.json();
