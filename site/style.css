@@ -107,8 +107,8 @@ input { font-family: inherit; }
 .stage {
   position: absolute;
   top: 0; left: 0;
-  width: 1600px;
-  height: 1606px;
+  width: 6001px;
+  height: 6001px;
   transform-origin: 0 0;
   will-change: transform;
 }
@@ -120,11 +120,19 @@ input { font-family: inherit; }
   position: absolute; inset: 0;
   width: 100%; height: 100%;
   display: block;
-  background-image: url('assets/map.png?v=2');
+  background-image: url('assets/map/low.webp?v=3');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  user-select: none;
+}
+
+/* Full-resolution tiles, added/removed by updateTiles() in app.js. */
+.map-tiles { position: absolute; inset: 0; pointer-events: none; }
+.map-tile {
+  position: absolute;
   background-size: 100% 100%;
   background-repeat: no-repeat;
   image-rendering: pixelated;
-  user-select: none;
 }
 
 /* Sized larger than the stage and centered, so its border texture peeks
@@ -162,8 +170,8 @@ input { font-family: inherit; }
 .screen-overlay { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
 
 .axis-line { position: absolute; pointer-events: none; background: rgba(226, 226, 236, .38); }
-.axis-line.axis-x { left: 0; width: 100%; height: 2px; }
-.axis-line.axis-z { top: 0; height: 100%; width: 2px; }
+.axis-line.axis-x { left: 0; width: 100%; height: 5px; }
+.axis-line.axis-z { top: 0; height: 100%; width: 5px; }
 
 .origin-marker {
   position: absolute;
