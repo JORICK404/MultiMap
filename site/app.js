@@ -7,7 +7,8 @@ let STAGE_W = 6001, STAGE_H = 6001, TILE = 512, emptyTiles = new Set();
 let ORIGIN_X = 3000, ORIGIN_Z = 3000;
 // Начиная с этого масштаба (экранных пикселей на блок) поверх уменьшенной
 // карты подгружаются тайлы в полном разрешении.
-const DETAIL_K = 0.4;
+// На экранах с высокой плотностью уменьшенная карта мылится раньше.
+const DETAIL_K = 0.4 / Math.min(window.devicePixelRatio || 1, 2);
 const MAX_K = 8;
 
 // Территория задаётся списком регионов (region.json: regions[].firstPoint /
@@ -228,7 +229,12 @@ function clamp() {
 
 function apply() {
   clamp();
-  els.stage.style.transform = `translate(${view.tx}px, ${view.ty}px) scale(${view.k})`;
+  // Сцена задаётся сразу в экранном размере, без CSS scale: иначе браузер
+  // растеризует весь слой 6001×6001 (× плотность экрана) целиком, и на
+  // телефонах при отдалении на это не хватает видеопамяти.
+  els.stage.style.width = (STAGE_W * view.k) + 'px';
+  els.stage.style.height = (STAGE_H * view.k) + 'px';
+  els.stage.style.transform = `translate(${view.tx}px, ${view.ty}px)`;
   overlayAnchors.forEach(a => {
     a.el.style.left = (view.tx + a.x * view.k) + 'px';
     a.el.style.top = (view.ty + a.z * view.k) + 'px';
@@ -307,11 +313,12 @@ function updateTiles() {
     const [tx, ty] = id.split('_').map(Number);
     const el = document.createElement('div');
     el.className = 'map-tile';
-    el.style.left = (tx * TILE) + 'px';
-    el.style.top = (ty * TILE) + 'px';
-    // +1px — тайлы нарезаны с перекрытием, чтобы не было швов.
-    el.style.width = Math.min(STAGE_W - tx * TILE, TILE + 1) + 'px';
-    el.style.height = Math.min(STAGE_H - ty * TILE, TILE + 1) + 'px';
+    // В процентах от сцены — тайл сам растягивается вместе с ней при зуме.
+    el.style.left = (tx * TILE / STAGE_W * 100) + '%';
+    el.style.top = (ty * TILE / STAGE_H * 100) + '%';
+    // +1 блок — тайлы нарезаны с перекрытием, чтобы не было швов.
+    el.style.width = (Math.min(STAGE_W - tx * TILE, TILE + 1) / STAGE_W * 100) + '%';
+    el.style.height = (Math.min(STAGE_H - ty * TILE, TILE + 1) / STAGE_H * 100) + '%';
     el.style.backgroundImage = `url('${MAP_DIR}tiles/${id}.webp?v=${MAP_VERSION}')`;
     els.mapTiles.appendChild(el);
     tileEls.set(id, el);
@@ -626,8 +633,6 @@ function applyMapMeta(meta) {
   emptyTiles = new Set(meta.empty || []);
   ORIGIN_X = Math.floor(STAGE_W / 2);
   ORIGIN_Z = Math.floor(STAGE_H / 2);
-  els.stage.style.width = STAGE_W + 'px';
-  els.stage.style.height = STAGE_H + 'px';
 }
 
 fetch(MAP_DIR + 'meta.json?v=' + MAP_VERSION)
