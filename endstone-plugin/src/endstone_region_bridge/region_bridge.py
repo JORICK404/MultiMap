@@ -6,6 +6,7 @@ import urllib.request
 from endstone.event import ScriptMessageEvent, event_handler
 from endstone.plugin import Plugin
 
+VERSION = "0.3.0"
 TARGET_MESSAGE_ID = "region:territory_reply"
 
 # The game sends the full territory list as several back-to-back scriptevent
@@ -28,7 +29,10 @@ class RegionBridge(Plugin):
 
     def on_enable(self) -> None:
         self.register_events(self)
-        self.logger.info(f"Watching for scriptevent id '{TARGET_MESSAGE_ID}'")
+        self.logger.info(
+            f"[RegionBridge] v{VERSION}: watching scriptevent '{TARGET_MESSAGE_ID}', "
+            f"posting to {REGIONS_ENDPOINT}"
+        )
 
     def on_disable(self) -> None:
         self.logger.info("on_disable is called!")
@@ -49,6 +53,9 @@ class RegionBridge(Plugin):
             )
             return
 
+        if not isinstance(chunk, list):
+            chunk = [chunk]
+
         with self._lock:
             self._buffer.append(chunk)
             if self._timer:
@@ -58,6 +65,14 @@ class RegionBridge(Plugin):
             self._timer.start()
 
     def _flush(self) -> None:
+        # Runs on a Timer thread: an uncaught exception here would vanish
+        # silently, so anything unexpected is logged instead.
+        try:
+            self._send()
+        except Exception as exc:
+            self.logger.error(f"[RegionBridge] Unexpected error while sending: {exc!r}")
+
+    def _send(self) -> None:
         with self._lock:
             chunks, self._buffer = self._buffer, []
             self._timer = None
@@ -66,6 +81,9 @@ class RegionBridge(Plugin):
         if not merged:
             return
 
+        self.logger.info(
+            f"[RegionBridge] Got {len(chunks)} chunks, {len(merged)} territories, sending..."
+        )
         payload = json.dumps(merged).encode("utf-8")
         request = urllib.request.Request(
             REGIONS_ENDPOINT,
@@ -77,7 +95,7 @@ class RegionBridge(Plugin):
             },
         )
         try:
-            with urllib.request.urlopen(request, timeout=10) as response:
+            with urllib.request.urlopen(request, timeout=30) as response:
                 self.logger.info(
                     f"[RegionBridge] Sent {len(merged)} territories, status {response.status}"
                 )

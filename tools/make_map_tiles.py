@@ -4,6 +4,7 @@
     python tools/make_map_tiles.py путь/к/карте.png
 
 Пишет в site/assets/map/:
+    preview.webp        — совсем маленькая карта, появляется мгновенно
     low.webp            — уменьшенная карта целиком (видна при отдалении)
     tiles/{x}_{y}.webp  — куски TILE×TILE в полном разрешении (грузятся при приближении)
     meta.json           — размеры, которые читает app.js
@@ -21,6 +22,7 @@ Image.MAX_IMAGE_PIXELS = None
 
 TILE = 512
 LOW_SIZE = 2048
+PREVIEW_SIZE = 768
 OUT = os.path.join(os.path.dirname(__file__), '..', 'site', 'assets', 'map')
 
 
@@ -45,9 +47,10 @@ def main(src):
                 continue
             tile.save(os.path.join(tiles_dir, f'{tx}_{ty}.webp'), 'WEBP', quality=90, alpha_quality=100, method=6)
 
-    scale = LOW_SIZE / max(w, h)
-    low = im.resize((round(w * scale), round(h * scale)), Image.LANCZOS)
-    low.save(os.path.join(OUT, 'low.webp'), 'WEBP', quality=88, alpha_quality=100, method=6)
+    for name, size, quality in (('low.webp', LOW_SIZE, 88), ('preview.webp', PREVIEW_SIZE, 80)):
+        scale = size / max(w, h)
+        small = im.resize((round(w * scale), round(h * scale)), Image.LANCZOS)
+        small.save(os.path.join(OUT, name), 'WEBP', quality=quality, alpha_quality=100, method=6)
 
     with open(os.path.join(OUT, 'meta.json'), 'w', encoding='utf-8') as f:
         json.dump({'width': w, 'height': h, 'tile': TILE, 'empty': empty}, f)

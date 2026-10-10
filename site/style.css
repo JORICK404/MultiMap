@@ -120,7 +120,8 @@ input { font-family: inherit; }
   position: absolute; inset: 0;
   width: 100%; height: 100%;
   display: block;
-  background-image: url('assets/map/low.webp?v=3');
+  /* preview.webp is tiny and shows first; low.webp paints over it once loaded. */
+  background-image: url('assets/map/low.webp?v=3'), url('assets/map/preview.webp?v=3');
   background-size: 100% 100%;
   background-repeat: no-repeat;
   user-select: none;
@@ -170,8 +171,8 @@ input { font-family: inherit; }
 .screen-overlay { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
 
 .axis-line { position: absolute; pointer-events: none; background: rgba(226, 226, 236, .38); }
-.axis-line.axis-x { left: 0; width: 100%; height: 5px; }
-.axis-line.axis-z { top: 0; height: 100%; width: 5px; }
+.axis-line.axis-x { left: 0; width: 100%; height: 2px; }
+.axis-line.axis-z { top: 0; height: 100%; width: 2px; }
 
 .origin-marker {
   position: absolute;

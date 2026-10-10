@@ -4,8 +4,8 @@ build-backend = "hatchling.build"
 
 [project]
 name = "endstone-region-bridge"
-version = "0.2.0"
-description = "Test plugin: logs region:territory_reply scriptevent messages to console"
+version = "0.3.0"
+description = "Forwards region:territory_reply scriptevent territory lists to the map site"
 requires-python = ">=3.10"
 
 [project.entry-points."endstone"]
