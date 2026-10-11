@@ -518,7 +518,7 @@ function select(o) {
   document.body.classList.toggle('has-card', !!o);
   if (!o) { apply(); return; }
   const g = o.group, tag = { terr: 'Территория', boss: 'Босс', station: 'Портал', exit: 'Портал' }[o.type];
-  let rows = '', extra = '', second = '<button data-act="xyz">Скопировать X Z</button>';
+  let rows = '', extra = '';
   const row = (k, val) => rows += `<dt>${k}</dt><dd>${val}</dd>`;
   if (o.type === 'terr') {
     row('Границы', `X ${num(o.b.x1)} … ${num(o.b.x2)}<br>Z ${num(o.b.z1)} … ${num(o.b.z2)}`);
@@ -534,14 +534,12 @@ function select(o) {
     row('В аду', `${num(nx)} / ${num(nz)}`);
     row('В верхнем мире', `${num(nx * 8)} / ${num(nz * 8)}`);
     if (g) row('Ветка', `${g.name}, ${g.dir}`);
-    second = `<button data-act="swap">${world === 'over' ? 'Открыть схему' : 'Показать наверху'}</button>`;
     if (canEditPortals() && !o.hub) extra = '<button class="edit" data-act="edit">Изменить портал</button>';
   }
   const where = g ? (o.type === 'terr' || o.type === 'boss' ? ` · ${g.name} губерния` : ` · ${g.name} ветка`) : '';
   card.style.setProperty('--c', g ? g.color : '#DEFFEA');
   card.innerHTML = `<header><div class="tag">${tag}${where}</div><h2>${esc(o.name)}</h2><button class="x" data-act="close" aria-label="Закрыть">✕</button></header>` +
-    `<div class="body">${o.about ? `<p>${esc(o.about)}</p>` : ''}<dl>${rows}</dl>${extra}</div>` +
-    `<footer><button data-act="copy">Скопировать ссылку</button>${second}</footer>`;
+    `<div class="body">${o.about ? `<p>${esc(o.about)}</p>` : ''}<dl>${rows}</dl>${extra}</div>`;
 }
 
 // Показывает объект в свободной от карточки части экрана.
@@ -564,18 +562,7 @@ $('card').addEventListener('click', e => {
   if (act === 'cancel') select(portalForm && portalForm.id ? stations.find(s => s.id === portalForm.id) : null);
   if (act === 'save') savePortal(b);
   if (act === 'remove') removePortal(b);
-  if (act === 'copy') copy(location.href, b);
-  if (act === 'xyz') copy(o.type === 'terr' ? `${o.cx} ~ ${o.cz}` : `${o.x} ~ ${o.z}`, b);
-  if (act === 'swap') {
-    const key = o.type === 'exit' ? o.key.slice(1) : 'e' + o.key;
-    setWorld(world === 'over' ? 'nether' : 'over');
-    if (registry.has(key)) focusOn(registry.get(key));
-  }
 });
-function copy(text, btn) {
-  const done = () => { const t = btn.textContent; btn.textContent = 'Скопировано'; setTimeout(() => btn.textContent = t, 1200); };
-  navigator.clipboard ? navigator.clipboard.writeText(text).then(done, done) : done();
-}
 
 /* ============ редактор порталов ============ */
 

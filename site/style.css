@@ -222,7 +222,7 @@ canvas.ruler { position: absolute; top: 0; left: 0; pointer-events: none; z-inde
 .card h2 { margin: 6px 40px 0 0; font-size: 22px; font-weight: 800; line-height: 1.15; overflow-wrap: anywhere; }
 .card h2::after { content: ''; display: block; height: 5px; margin-top: 10px; margin-right: -40px; border-radius: 3px; background: var(--bar); }
 .card .x { position: absolute; top: 8px; right: 8px; width: 44px; height: 44px; text-align: center; font-size: 18px; color: var(--text); }
-.card .body { overflow-y: auto; min-height: 0; overscroll-behavior: contain; padding: 0 16px 6px; }
+.card .body { overflow-y: auto; min-height: 0; overscroll-behavior: contain; padding: 0 16px calc(14px + var(--safe-b)); }
 .card p { margin: 0 0 12px; }
 .card dl { margin: 0 0 6px; display: grid; grid-template-columns: auto 1fr; gap: 6px 12px; padding: 12px; background: rgba(13,7,69,.45); border-radius: 8px; }
 .card dt, .card dd { margin: 0; }
