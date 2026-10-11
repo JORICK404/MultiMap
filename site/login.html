@@ -63,11 +63,14 @@ const ERRORS = {
   unavailable: 'Не получилось проверить аккаунт: сервер Multi Punk не ответил. Попробуй позже.',
   denied: 'Этого аккаунта нет в списке допущенных.',
   failed: 'Войти не получилось. Попробуй ещё раз.',
+  'tg-expired': 'Telegram прислал устаревшее подтверждение. Попробуй войти ещё раз.',
+  'ds-cancelled': 'Вход через Discord отменён.',
 };
 
 const reason = new URLSearchParams(location.search).get('auth');
 if (reason) {
-  $('err').textContent = ERRORS[reason] || ERRORS.failed;
+  // У непредвиденных сбоев показываем код — по нему видно, на каком шаге сломалось.
+  $('err').textContent = ERRORS[reason] || `${ERRORS.failed} (код: ${reason})`;
   $('err').hidden = false;
   $('toSite').hidden = reason !== 'notfound' && reason !== 'nosub';
   history.replaceState(null, '', location.pathname);

@@ -25,10 +25,10 @@ module.exports = async function handler(req, res) {
     return;
   }
 
-  if (error) { failLogin(req, res, 'discord returned ' + error); return; }
+  if (error) { failLogin(req, res, 'discord returned ' + error, null, 'ds-cancelled'); return; }
 
   const saved = unseal('state', readCookies(req)[STATE_COOKIE]);
-  if (!saved || saved.nonce !== state) { failLogin(req, res, 'discord state mismatch'); return; }
+  if (!saved || saved.nonce !== state) { failLogin(req, res, 'discord state mismatch', null, 'ds-state'); return; }
 
   try {
     const tokenRes = await fetch('https://discord.com/api/oauth2/token', {
@@ -55,6 +55,6 @@ module.exports = async function handler(req, res) {
       avatar: user.avatar ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=64` : null,
     });
   } catch (err) {
-    failLogin(req, res, 'discord login failed', err);
+    failLogin(req, res, 'discord login failed', err, 'ds-exchange');
   }
 };
