@@ -1,7 +1,9 @@
 const crypto = require('crypto');
 const { finishLogin, failLogin } = require('../_lib/session');
 
-const MAX_AGE_SECONDS = 600;
+// Сутки — как в официальном примере Telegram: при повторном входе он может
+// прислать данные с временем прошлой авторизации, а не текущим.
+const MAX_AGE_SECONDS = 86400;
 
 // Вход через Telegram Login Widget в режиме data-auth-url: Telegram сам
 // перенаправляет сюда с данными пользователя в адресе и подписью hash.
@@ -23,10 +25,10 @@ module.exports = async function handler(req, res) {
   if (!botToken) { res.status(503).json({ error: 'telegram login is not configured' }); return; }
 
   const q = req.query;
-  if (!verify(q, botToken)) { failLogin(req, res, 'telegram hash mismatch'); return; }
+  if (!verify(q, botToken)) { failLogin(req, res, 'telegram hash mismatch', null, 'tg-signature'); return; }
   // Старую ссылку с верной подписью повторно использовать нельзя.
   if (Math.abs(Date.now() / 1000 - Number(q.auth_date)) > MAX_AGE_SECONDS) {
-    failLogin(req, res, 'telegram auth_date is too old');
+    failLogin(req, res, 'telegram auth_date is too old: ' + q.auth_date, null, 'tg-expired');
     return;
   }
 
