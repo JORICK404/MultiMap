@@ -83,9 +83,11 @@ button { cursor: pointer; background: none; border: 0; padding: 0; text-align: l
 .brand span { margin-left: auto; font: 500 11px var(--mono); color: var(--muted); }
 .side > .worlds { margin: 0 18px; }
 
-.search { padding: 12px 18px 0; }
+.search { position: relative; display: block; margin-bottom: 10px; }
+.search svg { position: absolute; left: 13px; top: 50%; width: 18px; height: 18px; transform: translateY(-50%); fill: none; stroke: var(--muted); stroke-width: 2.2; stroke-linecap: round; pointer-events: none; }
+.search:focus-within svg { stroke: var(--text); }
 .search input {
-  width: 100%; height: 44px; padding: 0 14px;
+  width: 100%; height: 44px; padding: 0 14px 0 40px;
   background: var(--surface); border: 2px solid transparent; border-radius: 8px; outline: none; font-weight: 700;
 }
 .search input::placeholder { color: var(--muted); font-weight: 500; }
@@ -302,8 +304,7 @@ canvas.ruler { position: absolute; top: 0; left: 0; pointer-events: none; z-inde
   body.has-card .side { transform: translateY(105%); }
   .grab { display: block; flex: none; width: 100%; height: 26px; touch-action: none; cursor: grab; }
   .grab::before { content: ''; display: block; width: 44px; height: 5px; margin: 9px auto 0; border-radius: 3px; background: var(--text); opacity: .55; }
-  .search { padding: 0 12px; }
-  .chips { flex-wrap: nowrap; overflow-x: auto; padding: 10px 12px 12px; scrollbar-width: none; }
+  .chips { flex-wrap: nowrap; overflow-x: auto; padding: 2px 12px 12px; scrollbar-width: none; }
   .chips::-webkit-scrollbar { display: none; }
   .chip { height: 38px; }
   .scroll { padding-inline: 12px; }
