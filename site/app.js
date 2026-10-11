@@ -1,6 +1,8 @@
 const WORLD_NAME = 'Верхний мир';
 const MAP_DIR = 'assets/map/';
-const MAP_VERSION = 3;
+// Версия карты приходит из meta.json и меняется при каждой нарезке тайлов —
+// по ней браузер понимает, что картинки надо скачать заново.
+let MAP_VERSION = 0;
 // 1 пиксель карты = 1 блок, игровые 0,0 — центр картинки. Размеры берутся из
 // assets/map/meta.json (его пишет tools/make_map_tiles.py), здесь — запасные.
 let STAGE_W = 6001, STAGE_H = 6001, TILE = 512, emptyTiles = new Set();
@@ -627,6 +629,7 @@ function ping(msg) {
 /* ---------- init ---------- */
 
 function applyMapMeta(meta) {
+  MAP_VERSION = meta.version || 0;
   STAGE_W = meta.width;
   STAGE_H = meta.height;
   TILE = meta.tile;
@@ -635,10 +638,15 @@ function applyMapMeta(meta) {
   ORIGIN_Z = Math.floor(STAGE_H / 2);
 }
 
-fetch(MAP_DIR + 'meta.json?v=' + MAP_VERSION)
+fetch(MAP_DIR + 'meta.json', { cache: 'no-cache' })
   .then(res => res.ok ? res.json() : Promise.reject(new Error('HTTP ' + res.status)))
   .then(applyMapMeta)
   .catch(err => console.error('Не удалось загрузить meta.json карты', err))
+  .then(() => {
+    // preview.webp маленькая и появляется сразу; low.webp рисуется поверх, когда догрузится.
+    els.mapImg.style.backgroundImage =
+      `url('${MAP_DIR}low.webp?v=${MAP_VERSION}'), url('${MAP_DIR}preview.webp?v=${MAP_VERSION}')`;
+  })
   .then(() => fetch('/api/regions'))
   .then(res => {
     if (!res.ok) throw new Error('HTTP ' + res.status);

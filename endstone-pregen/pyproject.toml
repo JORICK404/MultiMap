@@ -1,0 +1,12 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "endstone-pregen"
+version = "0.3.1"
+description = "One-off plugin: slowly pre-generates the newly opened part of the world"
+requires-python = ">=3.10"
+
+[project.entry-points."endstone"]
+pregen = "endstone_pregen:Pregen"

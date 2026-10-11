@@ -7,7 +7,7 @@
     preview.webp        — совсем маленькая карта, появляется мгновенно
     low.webp            — уменьшенная карта целиком (видна при отдалении)
     tiles/{x}_{y}.webp  — куски TILE×TILE в полном разрешении (грузятся при приближении)
-    meta.json           — размеры, которые читает app.js
+    meta.json           — размеры и версия карты, которые читает app.js
 
 Центр картинки считается игровыми координатами 0,0 (для 6001×6001 это −3000…3000).
 """
@@ -15,6 +15,7 @@ import json
 import os
 import shutil
 import sys
+import time
 
 from PIL import Image
 
@@ -53,7 +54,7 @@ def main(src):
         small.save(os.path.join(OUT, name), 'WEBP', quality=quality, alpha_quality=100, method=6)
 
     with open(os.path.join(OUT, 'meta.json'), 'w', encoding='utf-8') as f:
-        json.dump({'width': w, 'height': h, 'tile': TILE, 'empty': empty}, f)
+        json.dump({'version': int(time.time()), 'width': w, 'height': h, 'tile': TILE, 'empty': empty}, f)
 
     print(f'{w}x{h}: {cols * rows - len(empty)} тайлов ({len(empty)} пустых пропущено)')
 
