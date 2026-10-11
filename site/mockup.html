@@ -1003,6 +1003,7 @@ function openAuth() {
       '<p>Войди через соцсеть, которая привязана к твоему аккаунту Multi Punk.</p>' +
       (p.discord ? '<a class="way discord" href="/api/auth/discord" data-login>Войти через Discord</a>' : '<div class="way off">Discord не настроен</div>') +
       (p.telegram ? '<div id="tgSlot"></div>' : '<div class="way off">Telegram не настроен</div>') +
+      (auth && auth.missing && auth.missing.length ? `<p class="note">На сервере (окружение ${esc(auth.env)}) не заданы: ${auth.missing.map(esc).join(', ')}</p>` : '') +
       (auth ? '' : '<p class="note">Сервер входа недоступен: страница открыта без функций Vercel.</p>');
     if (p.telegram) {
       // Кнопку Telegram рисует его собственный скрипт; после входа он сам уводит на data-auth-url.
