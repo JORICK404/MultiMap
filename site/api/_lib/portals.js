@@ -24,9 +24,16 @@ function canEdit(session) {
 
 async function load() {
   if (process.env.BLOB_READ_WRITE_TOKEN) {
-    const { get } = require('@vercel/blob');
+    const { get, BlobNotFoundError } = require('@vercel/blob');
     let result = null;
-    try { result = await get(PATHNAME, { access: 'private' }); } catch (err) { /* файла ещё нет */ }
+    try {
+      // useCache: false — читать само хранилище, а не кеш CDN: иначе сразу после
+      // сохранения приходит старый список, и следующая правка затирает предыдущую.
+      result = await get(PATHNAME, { access: 'private', useCache: false });
+    } catch (err) {
+      // Любая другая ошибка чтения должна прервать правку, а не подменить список стартовым.
+      if (!(err instanceof BlobNotFoundError)) throw err;
+    }
     if (!result) return DEFAULTS;
     return JSON.parse(await new Response(result.stream).text());
   }
