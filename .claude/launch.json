@@ -3,8 +3,8 @@
   "configurations": [
     {
       "name": "site",
-      "runtimeExecutable": "python",
-      "runtimeArgs": ["-m", "http.server", "5173", "--directory", "site"],
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["tools/dev_server.js"],
       "port": 5173
     }
   ]
