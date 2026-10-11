@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Карта сервера — Multi Punk (макет)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="robots" content="noindex">
+<link rel="icon" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Onest:wght@400;500;600&family=Sofia+Sans+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #14142B;
+  --ink-2: #5E5E78;
+  --ink-3: #9A9AB0;
+  --line: #E2E2EB;
+  --paper: #FFFFFF;
+  --paper-2: #F4F4F8;
+  --brand: #2E2ECC;
+  --canvas: #0F0F20;
+  --nether: #1E0A0D;
+  --ruler: 22px;
+  --cond: 'Sofia Sans Condensed', 'Arial Narrow', sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; overscroll-behavior: none; }
+body {
+  display: grid; grid-template-columns: 340px 1fr;
+  height: 100dvh; overflow: hidden;
+  background: var(--canvas); color: var(--ink);
+  font: 400 14px/1.4 Onest, system-ui, sans-serif;
+  -webkit-text-size-adjust: 100%;
+}
+button, input { font: inherit; color: inherit; }
+button { cursor: pointer; background: none; border: 0; padding: 0; text-align: left; }
+[hidden] { display: none !important; }
+
+/* ---------- боковая панель ---------- */
+.side {
+  display: flex; flex-direction: column; min-height: 0;
+  background: var(--paper); border-right: 1px solid var(--ink);
+  z-index: 20;
+}
+.brand { display: flex; align-items: center; gap: 10px; padding: 16px 18px 14px; }
+.brand img { height: 18px; display: block; }
+.brand span { margin-left: auto; font: 500 11px var(--mono); color: var(--ink-2); }
+
+.worlds { display: grid; grid-template-columns: 1fr 1fr; border-block: 1px solid var(--ink); }
+.worlds button {
+  padding: 11px 18px 10px;
+  font: 700 17px/1 var(--cond); text-transform: uppercase; letter-spacing: .02em;
+  color: var(--ink-2);
+}
+.worlds button + button { border-left: 1px solid var(--ink); }
+.worlds button small { display: block; margin-top: 4px; font: 500 10px var(--mono); letter-spacing: 0; text-transform: none; color: var(--ink-3); }
+.worlds button[aria-pressed="true"] { background: var(--ink); color: #fff; }
+.worlds button[aria-pressed="true"] small { color: #B9B9D0; }
+
+.scroll { flex: 1; min-height: 0; overflow-y: auto; }
+.sec { padding: 14px 18px 6px; }
+.sec h3 { margin: 0 0 6px; font: 500 11px var(--mono); color: var(--ink-3); }
+
+.row {
+  display: flex; align-items: center; gap: 10px; width: 100%;
+  padding: 7px 0; border-top: 1px solid var(--line);
+}
+.row:first-of-type { border-top: 0; }
+.row b { font-weight: 500; flex: 1; min-width: 0; }
+.row i { font: 500 11px var(--mono); color: var(--ink-3); font-style: normal; }
+.box { width: 14px; height: 14px; flex: none; border: 1.5px solid var(--ink); display: grid; place-items: center; }
+.row[aria-pressed="true"] .box { background: var(--ink); }
+.row[aria-pressed="true"] .box::after { content: ''; width: 6px; height: 3px; border: solid #fff; border-width: 0 0 1.5px 1.5px; transform: translateY(-1px) rotate(-45deg); }
+.row[aria-pressed="false"] b { color: var(--ink-3); }
+.sw { width: 14px; height: 14px; flex: none; background: var(--c); }
+.row.gub[aria-pressed="true"] { box-shadow: inset 3px 0 0 var(--c); padding-left: 10px; }
+
+.search { position: sticky; top: 0; background: var(--paper); padding: 12px 18px 8px; border-top: 1px solid var(--ink); margin-top: 10px; }
+.search input {
+  width: 100%; height: 36px; padding: 0 10px;
+  background: var(--paper-2); border: 1px solid var(--line); border-radius: 0; outline: none;
+}
+.search input:focus { border-color: var(--ink); background: #fff; }
+.search p { margin: 8px 0 0; font: 500 11px var(--mono); color: var(--ink-3); display: flex; justify-content: space-between; }
+.search p button { color: var(--brand); }
+
+.list { padding: 0 18px 18px; }
+.item { display: grid; grid-template-columns: 4px 1fr auto; gap: 0 10px; width: 100%; padding: 8px 0; border-top: 1px solid var(--line); align-items: center; }
+.item::before { content: ''; grid-row: 1 / 3; align-self: stretch; background: var(--c); }
+.item strong { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.item span { grid-column: 2; font-size: 12px; color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.item em { grid-row: 1 / 3; grid-column: 3; font: 500 11px var(--mono); color: var(--ink-3); font-style: normal; text-align: right; }
+.item:hover strong { color: var(--brand); }
+.empty { padding: 18px 0; color: var(--ink-3); }
+
+.foot { padding: 10px 18px; border-top: 1px solid var(--line); font: 500 10px/1.5 var(--mono); color: var(--ink-3); }
+
+/* ---------- карта ---------- */
+.map { position: relative; overflow: hidden; background: var(--canvas); min-width: 0; }
+.map.nether { background: var(--nether); }
+.view { position: absolute; inset: 0; touch-action: none; cursor: grab; user-select: none; -webkit-user-select: none; }
+.view.dragging { cursor: grabbing; }
+.stage { position: absolute; top: 0; left: 0; transform-origin: 0 0; background-size: 100% 100%; outline: 1px solid rgba(255,255,255,.25); }
+.map.nether .stage {
+  background-color: #2B0E12;
+  background-image:
+    linear-gradient(rgba(255,120,90,.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,120,90,.07) 1px, transparent 1px);
+}
+.tile { position: absolute; background-size: 100% 100%; image-rendering: pixelated; }
+svg.geo { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+svg.geo * { vector-effect: non-scaling-stroke; }
+.t-case { fill: none; stroke: rgba(10,10,30,.6); stroke-width: 4; pointer-events: none; }
+.t-rect { stroke-width: 1.5; cursor: pointer; shape-rendering: crispEdges; }
+.t-rect:hover, .t-rect.sel { stroke: #fff; stroke-width: 2.5; }
+.g-tint { pointer-events: none; }
+.g-axis { stroke: #fff; stroke-width: 1.5; stroke-dasharray: 10 6; opacity: .75; pointer-events: none; }
+.l-case { fill: none; stroke: #12060A; stroke-width: 10; stroke-linejoin: round; stroke-linecap: round; pointer-events: none; }
+.l-line { fill: none; stroke-width: 5; stroke-linejoin: round; stroke-linecap: round; pointer-events: none; }
+
+.anchors { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.a { position: absolute; width: 0; height: 0; }
+.g-name {
+  position: absolute; transform: translate(-50%, -50%); white-space: nowrap; text-align: center;
+  font: 800 34px/1 var(--cond); letter-spacing: .14em; text-transform: uppercase; color: #fff;
+  text-shadow: 0 0 2px #000, 0 1px 6px rgba(0,0,0,.7); transition: opacity .2s;
+}
+.g-name.dim { font-size: 22px; color: rgba(255,255,255,.45); text-shadow: none; }
+.g-name small { display: block; margin-top: 6px; font: 500 11px var(--mono); letter-spacing: 0; text-transform: none; opacity: .9; }
+.g-name::before { content: ''; display: block; width: 28px; height: 5px; margin: 0 auto 8px; background: var(--c); outline: 1px solid rgba(0,0,0,.5); }
+
+.pin { position: absolute; transform: translate(-50%, -50%); pointer-events: auto; cursor: pointer; }
+.boss { width: 26px; height: 26px; background: #111; outline: 2px solid #fff; transform: translate(-50%, -50%) rotate(45deg); display: grid; place-items: center; }
+.boss svg { width: 16px; height: 16px; transform: rotate(-45deg); fill: #fff; }
+.boss:hover, .boss.sel { background: #C3122B; }
+.exit { width: 12px; height: 16px; background: #6B2FD6; outline: 2px solid var(--c); box-shadow: 0 0 0 3px rgba(10,10,30,.6); }
+.exit:hover, .exit.sel { outline-color: #fff; }
+.station { width: 14px; height: 14px; background: #fff; outline: 3px solid var(--c); box-shadow: 0 0 0 5px #12060A; }
+.station.hub { width: 22px; height: 22px; outline-color: #fff; background: #12060A; }
+.station:hover, .station.sel { background: var(--c); }
+.cap {
+  position: absolute; left: 14px; top: -8px; white-space: nowrap; pointer-events: none;
+  font: 700 14px/1.1 var(--cond); letter-spacing: .03em; text-transform: uppercase; color: #fff;
+  text-shadow: 0 0 2px #000, 0 1px 4px rgba(0,0,0,.8);
+}
+.cap small { display: block; font: 500 10px var(--mono); letter-spacing: 0; text-transform: none; opacity: .75; }
+.cap.below { left: 0; top: 22px; transform: translateX(-50%); text-align: center; }
+.spawn { width: 9px; height: 9px; background: #fff; outline: 2px solid var(--ink); transform: translate(-50%, -50%) rotate(45deg); position: absolute; }
+
+/* линейки с координатами */
+canvas.ruler { position: absolute; top: 0; left: 0; pointer-events: none; z-index: 3; }
+.corner { position: absolute; top: 0; left: 0; width: var(--ruler); height: var(--ruler); background: var(--ink); z-index: 4; }
+
+.hud, .scale, .zoom, .stamp { position: absolute; z-index: 5; }
+.hud {
+  left: calc(var(--ruler) + 12px); bottom: 12px; padding: 7px 10px;
+  background: var(--paper); border: 1px solid var(--ink);
+  font: 500 12px/1.5 var(--mono); pointer-events: none; white-space: pre;
+}
+.hud span { color: var(--ink-3); }
+.scale { right: 60px; bottom: 12px; pointer-events: none; text-align: right; font: 500 11px var(--mono); color: #fff; text-shadow: 0 0 3px #000; }
+.scale div { height: 6px; margin-top: 3px; border: solid #fff; border-width: 0 2px 2px; filter: drop-shadow(0 0 1px #000); }
+.zoom { right: 12px; bottom: 12px; display: grid; border: 1px solid var(--ink); background: var(--paper); }
+.zoom button { width: 36px; height: 36px; text-align: center; font: 500 18px var(--mono); }
+.zoom button + button { border-top: 1px solid var(--line); }
+.zoom button:hover { background: var(--paper-2); }
+.zoom button:last-child { font-size: 10px; }
+.menu { position: absolute; z-index: 5; left: calc(var(--ruler) + 12px); top: calc(var(--ruler) + 12px); padding: 8px 12px; background: var(--paper); border: 1px solid var(--ink); font: 700 15px/1 var(--cond); text-transform: uppercase; display: none; }
+
+.tip {
+  position: absolute; z-index: 6; pointer-events: none; padding: 5px 8px;
+  background: var(--ink); color: #fff; font-size: 12px; font-weight: 500; white-space: nowrap;
+  transform: translate(12px, 14px);
+}
+.tip small { display: block; font: 500 10px var(--mono); color: #B9B9D0; }
+
+/* карточка объекта */
+.card {
+  position: absolute; z-index: 7; top: calc(var(--ruler) + 12px); right: 12px;
+  width: 320px; max-height: calc(100% - var(--ruler) - 72px);
+  display: flex; flex-direction: column;
+  background: var(--paper); border: 1px solid var(--ink); box-shadow: 6px 6px 0 rgba(10,10,30,.35);
+}
+.card header { padding: 14px 16px 12px; border-top: 5px solid var(--c); position: relative; }
+.card .tag { font: 500 11px var(--mono); color: var(--ink-2); }
+.card h2 { margin: 4px 30px 0 0; font: 800 26px/1.05 var(--cond); text-transform: uppercase; letter-spacing: .01em; overflow-wrap: anywhere; }
+.card .x { position: absolute; top: 10px; right: 10px; width: 28px; height: 28px; text-align: center; font-size: 16px; color: var(--ink-2); }
+.card .x:hover { background: var(--paper-2); color: var(--ink); }
+.card .body { overflow-y: auto; min-height: 0; }
+.card p { margin: 0; padding: 0 16px 12px; color: var(--ink-2); }
+.card dl { margin: 0; display: grid; grid-template-columns: auto 1fr; border-top: 1px solid var(--line); }
+.card dt, .card dd { margin: 0; padding: 7px 16px; border-bottom: 1px solid var(--line); }
+.card dt { color: var(--ink-2); font-size: 12px; padding-right: 0; }
+.card dd { font: 500 12px/1.6 var(--mono); text-align: right; }
+.card h4 { margin: 0; padding: 12px 16px 4px; font: 500 11px var(--mono); color: var(--ink-3); }
+.card ul { margin: 0; padding: 0 16px 10px; list-style: none; }
+.card li { display: flex; justify-content: space-between; gap: 10px; padding: 5px 0; border-top: 1px solid var(--line); font-weight: 500; }
+.card li:first-child { border-top: 0; }
+.card li span { color: var(--ink-3); font-weight: 400; font-size: 12px; }
+.card footer { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--ink); }
+.card footer button { padding: 10px 12px; text-align: center; font: 700 14px/1 var(--cond); text-transform: uppercase; letter-spacing: .03em; }
+.card footer button + button { border-left: 1px solid var(--ink); }
+.card footer button:hover { background: var(--ink); color: #fff; }
+
+.demo { position: absolute; z-index: 5; bottom: 12px; left: 50%; transform: translateX(-50%); padding: 5px 10px; background: #FFE45C; border: 1px solid var(--ink); font: 500 11px var(--mono); white-space: nowrap; }
+
+@media (max-width: 820px) {
+  body { grid-template-columns: 1fr; }
+  .side { position: fixed; inset: 0 auto 0 0; width: min(88vw, 340px); transform: translateX(-101%); transition: transform .18s; }
+  .side.open { transform: none; box-shadow: 0 0 0 100vw rgba(10,10,30,.5); }
+  .menu { display: block; }
+  .demo { display: none; }
+  .card { top: auto; bottom: 0; right: 0; left: 0; width: auto; max-height: 62%; border-width: 1px 0 0; box-shadow: none; }
+  .hud { bottom: 60px; }
+  .scale { display: none; }
+}
+</style>
+</head>
+<body>
+
+<aside class="side" id="side">
+  <div class="brand"><img src="assets/logo.svg" alt="Multi Punk"><span>SMP 02</span></div>
+
+  <div class="worlds">
+    <button data-world="over" aria-pressed="true">Верхний мир<small>6001 × 6001 блок</small></button>
+    <button data-world="nether" aria-pressed="false">Ад<small>схема хайперлупа</small></button>
+  </div>
+
+  <div class="scroll">
+    <div class="sec" id="layersSec"><h3>Слои</h3><div id="layers"></div></div>
+    <div class="sec"><h3>Губернии</h3><div id="gubs"></div></div>
+    <div class="search">
+      <input id="q" placeholder="Название, владелец или житель" autocomplete="off">
+      <p><span id="found"></span><button id="clearFilter" hidden>сбросить фильтр</button></p>
+    </div>
+    <div class="list" id="list"></div>
+  </div>
+
+  <div class="foot" id="stamp"></div>
+</aside>
+
+<main class="map" id="map">
+  <div class="view" id="view">
+    <div class="stage" id="stage"><div id="tiles"></div></div>
+    <svg class="geo" id="geo" xmlns="http://www.w3.org/2000/svg"><g id="world"></g></svg>
+    <div class="anchors" id="anchors"></div>
+  </div>
+
+  <canvas class="ruler" id="rulerX"></canvas>
+  <canvas class="ruler" id="rulerZ"></canvas>
+  <div class="corner"></div>
+
+  <button class="menu" id="menuBtn">Слои и список</button>
+  <div class="demo">макет · боссы, хайперлуп и цвета губерний — пример, не реальные данные</div>
+
+  <div class="hud" id="hud"></div>
+  <div class="scale"><span id="scaleLabel"></span><div id="scaleBar"></div></div>
+  <div class="zoom">
+    <button id="zin" aria-label="Приблизить">+</button>
+    <button id="zout" aria-label="Отдалить">−</button>
+    <button id="zfit" aria-label="Показать весь мир">ВСЁ</button>
+  </div>
+
+  <div class="tip" id="tip" hidden></div>
+  <div class="card" id="card" hidden></div>
+</main>
+
+<script>
+/* ============ данные ============ */
+
+// Какая губерния в какой четверти — ПРЕДПОЛОЖЕНИЕ, поправить под сервер.
+// sx/sz — знак координат X и Z этой четверти.
+const GUBS = [
+  { id: 'red',    name: 'Красная', color: '#F0453A', sx: -1, sz: -1 },
+  { id: 'green',  name: 'Зелёная', color: '#2FBF5B', sx:  1, sz: -1 },
+  { id: 'blue',   name: 'Синяя',   color: '#3B7BFF', sx: -1, sz:  1 },
+  { id: 'yellow', name: 'Жёлтая',  color: '#F2B90F', sx:  1, sz:  1 },
+];
+const gubOf = (x, z) => GUBS.find(g => (x < 0 ? -1 : 1) === g.sx && (z < 0 ? -1 : 1) === g.sz);
+
+// Пример. В реальности — отдельный bosses.json или тот же плагин.
+const BOSSES = [
+  { name: 'Иссушитель', x: -1840, z: -1320, about: 'Арена под горой. Вход с южной стороны.', respawn: 'раз в 6 часов' },
+  { name: 'Древний страж', x: 2210, z: -640, about: 'Подводный храм, нужна водяная дыхалка.', respawn: 'раз в сутки' },
+  { name: 'Вождь разбойников', x: -980, z: 1760, about: 'Аванпост на холме.', respawn: 'раз в 3 часа' },
+  { name: 'Хранитель', x: 1490, z: 2140, about: 'Древний город, тихо!', respawn: 'не возрождается' },
+  { name: 'Ледяной колосс', x: -2520, z: 310, about: 'Ледник на западе.', respawn: 'раз в 12 часов' },
+];
+
+const ROLES = { owner: 'владелец', sherif: 'шериф', resident: 'житель' };
+const WORLDS = { over: { half: 3000, size: 6001, maxK: 8 }, nether: { half: 375, size: 751, maxK: 24 } };
+const MAP_DIR = 'assets/map/';
+let TILE = 512, MAP_VERSION = 0;
+
+let territories = [], stations = [], lines = [];
+
+/* ============ состояние ============ */
+
+let world = 'over';
+const layers = { gub: true, terr: true, boss: true, loop: true };
+const LAYER_NAMES = { gub: 'Губернии', terr: 'Территории', boss: 'Боссы', loop: 'Выходы хайперлупа' };
+let gubFilter = null, selected = null;
+const view = { k: 1, tx: 0, ty: 0, fitK: 1 };
+const anchors = [];
+const registry = new Map();
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const W = () => WORLDS[world];
+const px = v => v + W().half;
+const num = n => String(Math.round(n)).replace('-', '−');
+const SVG = 'http://www.w3.org/2000/svg';
+
+/* ============ подготовка данных ============ */
+
+function buildTerritory(raw, i) {
+  const rects = raw.regions.map(r => ({
+    x1: Math.min(r.firstPoint.x, r.secondPoint.x), x2: Math.max(r.firstPoint.x, r.secondPoint.x),
+    z1: Math.min(r.firstPoint.z, r.secondPoint.z), z2: Math.max(r.firstPoint.z, r.secondPoint.z),
+  }));
+  const b = rects.reduce((a, r) => ({
+    x1: Math.min(a.x1, r.x1), x2: Math.max(a.x2, r.x2), z1: Math.min(a.z1, r.z1), z2: Math.max(a.z2, r.z2),
+  }));
+  const cx = Math.round((b.x1 + b.x2) / 2), cz = Math.round((b.z1 + b.z2) / 2);
+  const owner = raw.residents.find(r => r.status === 'owner') || raw.residents[0];
+  const isSpawn = raw.name === 'Спавн';
+  return {
+    key: 't:' + i, type: 'terr', name: (raw.name || 'Без названия').trim(), about: raw.description || '',
+    rects, b, cx, cz, owner: owner ? owner.name : '—', residents: raw.residents,
+    gub: isSpawn ? null : gubOf(cx, cz), isSpawn,
+    hay: [raw.name, ...raw.residents.map(r => r.name)].join(' ').toLowerCase(),
+  };
+}
+
+// Пример хайперлупа: по ветке на губернию, станции — у самых населённых территорий.
+function buildDemoLoop() {
+  stations = [{ key: 's:hub', type: 'station', name: 'Спавн-хаб', x: 0, z: 0, hub: true, gub: null }];
+  lines = [];
+  GUBS.forEach(g => {
+    const picked = [];
+    territories.filter(t => t.gub === g).sort((a, b) => b.residents.length - a.residents.length).forEach(t => {
+      if (picked.length < 4 && Math.hypot(t.cx, t.cz) > 500 && picked.every(p => Math.hypot(p.cx - t.cx, p.cz - t.cz) > 600)) picked.push(t);
+    });
+    picked.sort((a, b) => Math.hypot(a.cx, a.cz) - Math.hypot(b.cx, b.cz));
+    const stops = picked.map((t, i) => ({
+      key: `s:${g.id}${i}`, type: 'station', gub: g,
+      name: t.name.length > 24 ? t.name.slice(0, 23) + '…' : t.name,
+      x: Math.round(t.cx / 8), z: Math.round(t.cz / 8),
+    }));
+    stations.push(...stops);
+    // «Метрошная» трасса: сначала по диагонали, потом по прямой.
+    const pts = [[0, 0]];
+    stops.forEach(s => {
+      const [ax, az] = pts[pts.length - 1];
+      const dx = s.x - ax, dz = s.z - az, d = Math.min(Math.abs(dx), Math.abs(dz));
+      pts.push([ax + Math.sign(dx) * d, az + Math.sign(dz) * d], [s.x, s.z]);
+    });
+    lines.push({ gub: g, pts });
+  });
+}
+
+/* ============ отрисовка ============ */
+
+function el(tag, attrs, parent) {
+  const n = document.createElementNS(SVG, tag);
+  for (const k in attrs) n.setAttribute(k, attrs[k]);
+  parent.appendChild(n);
+  return n;
+}
+
+function anchor(x, z, html) {
+  const a = document.createElement('div');
+  a.className = 'a';
+  a.innerHTML = html;
+  $('anchors').appendChild(a);
+  anchors.push({ el: a, x: px(x), z: px(z) });
+  return a;
+}
+
+const SKULL = '<svg viewBox="0 0 16 16"><path d="M3 2h10v2h1v6h-2v2h-1v2H5v-2H4v-2H2V4h1zM5 6v3h2V6zm4 0v3h2V6zM7 10v1h2v-1z"/></svg>';
+
+function rebuild() {
+  const g = $('world'), half = W().half, size = W().size;
+  g.innerHTML = ''; $('anchors').innerHTML = ''; anchors.length = 0; registry.clear();
+  $('map').classList.toggle('nether', world === 'nether');
+
+  if (layers.gub || world === 'nether') {
+    GUBS.forEach(q => {
+      el('rect', {
+        class: 'g-tint', fill: q.color, 'fill-opacity': world === 'nether' ? .06 : .13,
+        x: q.sx < 0 ? 0 : half, y: q.sz < 0 ? 0 : half, width: half + (q.sx > 0 ? 1 : 0), height: half + (q.sz > 0 ? 1 : 0),
+      }, g);
+      const n = territories.filter(t => t.gub === q).length;
+      const a = world === 'over' ? anchor(q.sx * half * .5, q.sz * half * .56,
+        `<div class="g-name" style="--c:${q.color}">${q.name}<small>${world === 'over' ? n + ' терр.' : ''}</small></div>`) : anchor(q.sx * half * .8, q.sz * half * .88, `<div class="g-name dim" style="--c:${q.color}">${q.name}</div>`);
+      a.dataset.fade = '1';
+    });
+    el('path', { class: 'g-axis', d: `M0 ${half}H${size}M${half} 0V${size}` }, g);
+  }
+
+  if (world === 'over') {
+    if (layers.terr) territories.forEach(t => {
+      const c = t.gub ? t.gub.color : '#fff';
+      t.rects.forEach(r => {
+        const box = { x: px(r.x1), y: px(r.z1), width: r.x2 - r.x1 + 1, height: r.z2 - r.z1 + 1 };
+        el('rect', { class: 't-case', ...box }, g);
+        el('rect', { class: 't-rect', ...box, stroke: c, fill: c, 'fill-opacity': .16, 'data-sel': t.key }, g);
+      });
+      registry.set(t.key, t);
+    });
+    if (layers.loop) stations.filter(s => !s.hub).forEach(s => {
+      const o = { ...s, key: 'e' + s.key, type: 'exit', nx: s.x, nz: s.z, x: s.x * 8, z: s.z * 8 };
+      anchor(o.x, o.z, `<div class="pin exit" style="--c:${s.gub.color}" data-sel="${o.key}"></div>`);
+      registry.set(o.key, o);
+    });
+    if (layers.boss) BOSSES.forEach((b, i) => {
+      const o = { ...b, key: 'b:' + i, type: 'boss', gub: gubOf(b.x, b.z) };
+      anchor(b.x, b.z, `<div class="pin boss" data-sel="${o.key}">${SKULL}</div><div class="cap below">${esc(b.name)}</div>`);
+      registry.set(o.key, o);
+    });
+    anchor(0, 0, '<div class="spawn"></div><div class="cap">Спавн<small>0 / 0</small></div>');
+  } else {
+    lines.forEach(l => {
+      const d = 'M' + l.pts.map(p => px(p[0]) + ' ' + px(p[1])).join('L');
+      el('path', { class: 'l-case', d }, g);
+      el('path', { class: 'l-line', d, stroke: l.gub.color }, g);
+    });
+    stations.forEach(s => {
+      anchor(s.x, s.z, `<div class="pin station${s.hub ? ' hub' : ''}" style="--c:${s.gub ? s.gub.color : '#fff'}" data-sel="${s.key}"></div>` +
+        `<div class="cap">${esc(s.name)}<small>${num(s.x)} / ${num(s.z)}</small></div>`);
+      registry.set(s.key, s);
+    });
+  }
+  markSelected();
+  apply();
+}
+
+function markSelected() {
+  document.querySelectorAll('.sel').forEach(n => n.classList.remove('sel'));
+  if (selected) document.querySelectorAll(`[data-sel="${selected.key}"]`).forEach(n => n.classList.add('sel'));
+}
+
+/* ============ камера ============ */
+
+function rect() { return $('view').getBoundingClientRect(); }
+
+function fitTo(x1, z1, x2, z2) {
+  const r = rect(), R = 22, pad = 24;
+  const w = x2 - x1, h = z2 - z1;
+  view.k = Math.min((r.width - R - pad * 2) / w, (r.height - R - pad * 2) / h);
+  view.tx = R + (r.width - R - w * view.k) / 2 - px(x1) * view.k;
+  view.ty = R + (r.height - R - h * view.k) / 2 - px(z1) * view.k;
+}
+
+function fit() {
+  const h = W().half;
+  fitTo(-h, -h, h + 1, h + 1);
+  view.fitK = view.k;
+  apply();
+}
+
+function zoomAt(sx, sy, f) {
+  const next = Math.max(view.fitK * .7, Math.min(W().maxK, view.k * f)), ratio = next / view.k;
+  view.tx = sx - (sx - view.tx) * ratio;
+  view.ty = sy - (sy - view.ty) * ratio;
+  view.k = next;
+  apply();
+}
+
+function apply() {
+  const r = rect(), s = W().size * view.k;
+  view.tx = Math.min(r.width * .6, Math.max(r.width * .4 - s, view.tx));
+  view.ty = Math.min(r.height * .6, Math.max(r.height * .4 - s, view.ty));
+
+  const st = $('stage').style;
+  st.width = st.height = s + 'px';
+  st.transform = `translate(${view.tx}px, ${view.ty}px)`;
+  if (world === 'nether') st.backgroundSize = `${16 * view.k}px ${16 * view.k}px`;
+  $('world').setAttribute('transform', `translate(${view.tx} ${view.ty}) scale(${view.k})`);
+
+  const far = view.k < view.fitK * 2.6;
+  anchors.forEach(a => {
+    a.el.style.transform = `translate(${view.tx + a.x * view.k}px, ${view.ty + a.z * view.k}px)`;
+    if (a.el.dataset.fade) a.el.style.opacity = far ? 1 : 0;
+  });
+  updateTiles(r);
+  drawRulers(r);
+  drawScale();
+  updateHud();
+  saveHash();
+}
+
+/* ---------- тайлы (как в текущем app.js) ---------- */
+
+const tileEls = new Map();
+function updateTiles(r) {
+  const want = new Set();
+  if (world === 'over' && view.k >= .4 / Math.min(devicePixelRatio || 1, 2)) {
+    const n = Math.ceil(W().size / TILE);
+    const c0 = Math.max(0, Math.floor(-view.tx / view.k / TILE)), c1 = Math.min(n - 1, Math.floor((r.width - view.tx) / view.k / TILE));
+    const r0 = Math.max(0, Math.floor(-view.ty / view.k / TILE)), r1 = Math.min(n - 1, Math.floor((r.height - view.ty) / view.k / TILE));
+    for (let y = r0; y <= r1; y++) for (let x = c0; x <= c1; x++) want.add(x + '_' + y);
+  }
+  tileEls.forEach((n, id) => { if (!want.has(id)) { n.remove(); tileEls.delete(id); } });
+  want.forEach(id => {
+    if (tileEls.has(id)) return;
+    const [x, y] = id.split('_').map(Number), S = W().size, n = document.createElement('div');
+    n.className = 'tile';
+    n.style.cssText = `left:${x * TILE / S * 100}%;top:${y * TILE / S * 100}%;width:${Math.min(S - x * TILE, TILE + 1) / S * 100}%;height:${Math.min(S - y * TILE, TILE + 1) / S * 100}%;background-image:url('${MAP_DIR}tiles/${id}.webp?v=${MAP_VERSION}')`;
+    $('tiles').appendChild(n);
+    tileEls.set(id, n);
+  });
+}
+
+/* ---------- линейки, масштаб, HUD ---------- */
+
+const niceStep = minPx => [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000].find(s => s * view.k >= minPx) || 5000;
+
+function drawRulers(r) {
+  const R = 22, dpr = devicePixelRatio || 1, step = niceStep(64), half = W().half;
+  [[$('rulerX'), r.width, R, true], [$('rulerZ'), R, r.height, false]].forEach(([c, w, h, horiz]) => {
+    c.width = w * dpr; c.height = h * dpr; c.style.width = w + 'px'; c.style.height = h + 'px';
+    const ctx = c.getContext('2d');
+    ctx.scale(dpr, dpr);
+    ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, w, h);
+    ctx.fillStyle = '#14142B'; ctx.fillRect(horiz ? 0 : R - 1, horiz ? R - 1 : 0, horiz ? w : 1, horiz ? 1 : h);
+    ctx.font = '500 10px "JetBrains Mono", monospace'; ctx.textBaseline = 'middle';
+    const off = horiz ? view.tx : view.ty, len = horiz ? w : h;
+    const from = Math.ceil(((0 - off) / view.k - half) / step) * step, to = (len - off) / view.k - half;
+    for (let v = from; v <= to; v += step) {
+      if (Math.abs(v) > half) continue;
+      const p = Math.round(off + (v + half) * view.k);
+      if (p < R) continue;
+      ctx.fillStyle = v === 0 ? '#2E2ECC' : '#14142B';
+      if (horiz) { ctx.fillRect(p, R - 6, 1, 6); ctx.fillText(num(v), p + 4, 9); }
+      else { ctx.fillRect(R - 6, p, 6, 1); ctx.save(); ctx.translate(9, p - 4); ctx.rotate(-Math.PI / 2); ctx.fillText(num(v), 0, 0); ctx.restore(); }
+    }
+  });
+}
+
+function drawScale() {
+  const step = niceStep(70);
+  $('scaleLabel').textContent = step + ' блоков';
+  $('scaleBar').style.width = step * view.k + 'px';
+}
+
+let pointer = null;
+function updateHud() {
+  const r = rect(), p = pointer || { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+  const x = Math.floor((p.x - r.left - view.tx) / view.k - W().half), z = Math.floor((p.y - r.top - view.ty) / view.k - W().half);
+  const other = world === 'over' ? `в аду   ${num(Math.floor(x / 8))} / ${num(Math.floor(z / 8))}` : `наверху ${num(x * 8)} / ${num(z * 8)}`;
+  const g = Math.abs(x) <= W().half && Math.abs(z) <= W().half ? gubOf(x, z) : null;
+  $('hud').innerHTML = `X ${num(x).padStart(6)}   Z ${num(z).padStart(6)}\n<span>${other}${g ? '   ·   ' + g.name.toLowerCase() + ' губ.' : ''}</span>`;
+}
+
+let hashTimer;
+function saveHash() {
+  clearTimeout(hashTimer);
+  hashTimer = setTimeout(() => {
+    const r = rect(), x = Math.round((r.width / 2 - view.tx) / view.k - W().half), z = Math.round((r.height / 2 - view.ty) / view.k - W().half);
+    history.replaceState(null, '', `#${world}/${x}/${z}/${(view.k / view.fitK).toFixed(2)}`);
+  }, 250);
+}
+
+function goto(x, z, k) {
+  const r = rect();
+  if (k) view.k = k;
+  view.tx = r.width / 2 - px(x) * view.k;
+  view.ty = r.height / 2 - px(z) * view.k;
+  apply();
+}
+
+/* ============ ввод ============ */
+
+const pts = new Map();
+let moved = 0, pinch = null;
+const v = $('view');
+
+v.addEventListener('pointerdown', e => {
+  pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
+  v.setPointerCapture(e.pointerId);
+  moved = 0; pinch = null;
+  v.classList.add('dragging');
+  $('tip').hidden = true;
+});
+v.addEventListener('pointermove', e => {
+  pointer = { x: e.clientX, y: e.clientY };
+  if (!pts.has(e.pointerId)) { updateHud(); hover(e); return; }
+  const prev = pts.get(e.pointerId);
+  pts.set(e.pointerId, pointer);
+  if (pts.size >= 2) {
+    const [a, b] = [...pts.values()], d = Math.hypot(a.x - b.x, a.y - b.y), r = rect();
+    if (pinch) zoomAt((a.x + b.x) / 2 - r.left, (a.y + b.y) / 2 - r.top, d / pinch);
+    pinch = d; moved = 99;
+    return;
+  }
+  moved += Math.abs(e.clientX - prev.x) + Math.abs(e.clientY - prev.y);
+  view.tx += e.clientX - prev.x; view.ty += e.clientY - prev.y;
+  apply();
+});
+function up(e) {
+  const tap = pts.size === 1 && moved <= 14;
+  pts.delete(e.pointerId);
+  if (pts.size < 2) pinch = null;
+  if (!pts.size) v.classList.remove('dragging');
+  if (!tap) return;
+  // Захват указателя ломает обычный click по вложенным фигурам — ищем цель сами.
+  const hit = document.elementFromPoint(e.clientX, e.clientY);
+  const key = hit && hit.closest('[data-sel]');
+  select(key ? registry.get(key.dataset.sel) : null);
+}
+v.addEventListener('pointerup', up);
+v.addEventListener('pointercancel', up);
+v.addEventListener('pointerleave', () => { pointer = null; $('tip').hidden = true; updateHud(); });
+v.addEventListener('wheel', e => {
+  e.preventDefault();
+  const r = rect();
+  zoomAt(e.clientX - r.left, e.clientY - r.top, Math.exp(-e.deltaY * .0016));
+}, { passive: false });
+['gesturestart', 'gesturechange', 'gestureend'].forEach(t => v.addEventListener(t, e => e.preventDefault()));
+
+function hover(e) {
+  const n = e.target.closest && e.target.closest('[data-sel]'), o = n && registry.get(n.dataset.sel), tip = $('tip');
+  if (!o || o.type === 'station') { tip.hidden = true; return; }
+  const r = $('map').getBoundingClientRect();
+  tip.hidden = false;
+  tip.style.left = e.clientX - r.left + 'px'; tip.style.top = e.clientY - r.top + 'px';
+  tip.innerHTML = esc(o.name) + `<small>${o.type === 'terr' ? esc(o.owner) + ' · ' + o.residents.length + ' жит.' : o.type === 'boss' ? 'босс' : 'выход хайперлупа'}</small>`;
+}
+
+$('zin').onclick = () => { const r = rect(); zoomAt(r.width / 2, r.height / 2, 1.6); };
+$('zout').onclick = () => { const r = rect(); zoomAt(r.width / 2, r.height / 2, 1 / 1.6); };
+$('zfit').onclick = fit;
+$('menuBtn').onclick = () => $('side').classList.toggle('open');
+$('map').addEventListener('pointerdown', e => { if (!e.target.closest('#menuBtn')) $('side').classList.remove('open'); }, true);
+window.addEventListener('resize', () => { const k = view.k / view.fitK; const h = W().half; const keep = { ...view }; fitTo(-h, -h, h + 1, h + 1); view.fitK = view.k; Object.assign(view, { k: keep.k, tx: keep.tx, ty: keep.ty }); if (k <= 1.01) fit(); else apply(); });
+window.addEventListener('keydown', e => { if (e.key === 'Escape') select(null); if (e.key === '/' && document.activeElement !== $('q')) { e.preventDefault(); $('q').focus(); } });
+
+/* ============ карточка ============ */
+
+function select(o) {
+  selected = o || null;
+  markSelected();
+  const card = $('card');
+  card.hidden = !o;
+  if (!o) return;
+  const g = o.gub, tag = { terr: 'территория', boss: 'босс', station: 'станция хайперлупа', exit: 'выход хайперлупа' }[o.type];
+  let rows = '', extra = '', actions = '';
+  const row = (k, val) => rows += `<dt>${k}</dt><dd>${val}</dd>`;
+  if (o.type === 'terr') {
+    row('Границы', `X ${num(o.b.x1)} … ${num(o.b.x2)}<br>Z ${num(o.b.z1)} … ${num(o.b.z2)}`);
+    row('Размер', `${o.b.x2 - o.b.x1 + 1} × ${o.b.z2 - o.b.z1 + 1}`);
+    row('Портал в аду', `${num(o.cx / 8)} / ${num(o.cz / 8)}`);
+    extra = `<h4>Жители · ${o.residents.length}</h4><ul>` + o.residents.map(r => `<li>${esc(r.name)}<span>${ROLES[r.status] || esc(r.status)}</span></li>`).join('') + '</ul>';
+  } else if (o.type === 'boss') {
+    row('Координаты', `${num(o.x)} / ${num(o.z)}`);
+    row('Возрождение', esc(o.respawn));
+    row('Ближайшая станция', nearestStation(o.x, o.z));
+  } else {
+    const nx = o.type === 'exit' ? o.nx : o.x, nz = o.type === 'exit' ? o.nz : o.z;
+    row('В аду', `${num(nx)} / ${num(nz)}`);
+    row('В верхнем мире', `${num(nx * 8)} / ${num(nz * 8)}`);
+    if (g) row('Ветка', g.name);
+    actions = `<button data-act="swap">${world === 'over' ? 'Открыть схему' : 'Показать наверху'}</button>`;
+  }
+  card.style.setProperty('--c', g ? g.color : '#14142B');
+  card.innerHTML = `<header><div class="tag">${tag}${g && o.type !== 'station' ? ' · ' + g.name.toLowerCase() + ' губерния' : ''}</div><h2>${esc(o.name)}</h2><button class="x" data-act="close" aria-label="Закрыть">✕</button></header>` +
+    `<div class="body">${o.about ? `<p>${esc(o.about)}</p>` : ''}<dl>${rows}</dl>${extra}</div>` +
+    `<footer><button data-act="copy">Скопировать ссылку</button>${actions || '<button data-act="xyz">Скопировать X Z</button>'}</footer>`;
+}
+
+function nearestStation(x, z) {
+  const s = stations.slice().sort((a, b) => Math.hypot(a.x * 8 - x, a.z * 8 - z) - Math.hypot(b.x * 8 - x, b.z * 8 - z))[0];
+  return s ? `${esc(s.name)}<br>${Math.round(Math.hypot(s.x * 8 - x, s.z * 8 - z))} бл.` : '—';
+}
+
+$('card').addEventListener('click', e => {
+  const b = e.target.closest('[data-act]'); if (!b) return;
+  const o = selected, act = b.dataset.act;
+  if (act === 'close') select(null);
+  if (act === 'copy') copy(location.href, b);
+  if (act === 'xyz') copy(o.type === 'terr' ? `${o.cx} ~ ${o.cz}` : `${o.x} ~ ${o.z}`, b);
+  if (act === 'swap') {
+    const nx = o.type === 'exit' ? o.nx : o.x, nz = o.type === 'exit' ? o.nz : o.z;
+    setWorld(world === 'over' ? 'nether' : 'over');
+    world === 'over' ? goto(nx * 8, nz * 8, Math.max(view.fitK * 4, .6)) : goto(nx, nz, view.fitK * 2);
+  }
+});
+function copy(text, btn) {
+  const done = () => { const t = btn.textContent; btn.textContent = 'Скопировано'; setTimeout(() => btn.textContent = t, 1200); };
+  navigator.clipboard ? navigator.clipboard.writeText(text).then(done, done) : done();
+}
+
+/* ============ боковая панель ============ */
+
+function renderSide() {
+  $('layersSec').hidden = world !== 'over';
+  $('layers').innerHTML = Object.keys(layers).map(k => {
+    const n = { gub: 4, terr: territories.length, boss: BOSSES.length, loop: stations.length - 1 }[k];
+    return `<button class="row" data-layer="${k}" aria-pressed="${layers[k]}"><span class="box"></span><b>${LAYER_NAMES[k]}</b><i>${n}</i></button>`;
+  }).join('');
+  $('gubs').innerHTML = GUBS.map(g => {
+    const n = world === 'over' ? territories.filter(t => t.gub === g).length : stations.filter(s => s.gub === g).length;
+    return `<button class="row gub" data-gub="${g.id}" style="--c:${g.color}" aria-pressed="${gubFilter === g}"><span class="sw"></span><b>${g.name}</b><i>${n}${world === 'over' ? ' терр.' : ' ст.'}</i></button>`;
+  }).join('');
+  renderList();
+}
+
+function renderList() {
+  const q = $('q').value.trim().toLowerCase();
+  const src = world === 'over' ? territories : stations;
+  const out = src.filter(o => (!gubFilter || o.gub === gubFilter) && (!q || (o.hay || o.name.toLowerCase()).includes(q)));
+  $('q').placeholder = world === 'over' ? 'Название, владелец или житель' : 'Название станции';
+  $('found').textContent = (world === 'over' ? 'территорий: ' : 'станций: ') + out.length;
+  $('clearFilter').hidden = !gubFilter && !q;
+  $('list').innerHTML = out.map(o => {
+    const c = o.gub ? o.gub.color : '#14142B';
+    const sub = o.type === 'terr' ? `${esc(o.owner)} · ${o.residents.length} жит.` : o.hub ? 'пересадка на все ветки' : `ветка ${o.gub.name.toLowerCase()}`;
+    const xy = o.type === 'terr' ? `${num(o.cx)}<br>${num(o.cz)}` : `${num(o.x)}<br>${num(o.z)}`;
+    return `<button class="item" style="--c:${c}" data-key="${o.key}"><strong>${esc(o.name)}</strong><span>${sub}</span><em>${xy}</em></button>`;
+  }).join('') || '<div class="empty">Ничего не нашлось.</div>';
+}
+
+$('side').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  if (b.dataset.world) setWorld(b.dataset.world);
+  if (b.dataset.layer) { layers[b.dataset.layer] = !layers[b.dataset.layer]; renderSide(); rebuild(); }
+  if (b.dataset.gub) {
+    const g = GUBS.find(x => x.id === b.dataset.gub), h = W().half;
+    gubFilter = gubFilter === g ? null : g;
+    if (gubFilter) { fitTo(g.sx < 0 ? -h : 0, g.sz < 0 ? -h : 0, g.sx < 0 ? 0 : h, g.sz < 0 ? 0 : h); apply(); } else fit();
+    renderSide();
+  }
+  if (b.id === 'clearFilter') { gubFilter = null; $('q').value = ''; renderSide(); }
+  if (b.dataset.key) {
+    const o = (world === 'over' ? territories : stations).find(x => x.key === b.dataset.key);
+    $('side').classList.remove('open');
+    if (o.type === 'terr') { fitTo(o.b.x1 - 60, o.b.z1 - 60, o.b.x2 + 60, o.b.z2 + 60); view.k = Math.min(view.k, 3); goto(o.cx, o.cz); }
+    else goto(o.x, o.z, Math.max(view.k, view.fitK * 2));
+    select(o);
+  }
+});
+$('q').addEventListener('input', renderList);
+
+function setWorld(w) {
+  world = w; gubFilter = null; select(null);
+  document.querySelectorAll('[data-world]').forEach(b => b.setAttribute('aria-pressed', b.dataset.world === w));
+  $('stage').style.backgroundImage = w === 'over' ? `url('${MAP_DIR}low.webp?v=${MAP_VERSION}'), url('${MAP_DIR}preview.webp?v=${MAP_VERSION}')` : '';
+  $('stage').style.backgroundSize = '';
+  renderSide(); rebuild(); fit();
+}
+
+/* ============ запуск ============ */
+
+const json = url => fetch(url).then(r => r.ok ? r.json() : Promise.reject(new Error(url + ' ' + r.status)));
+
+json(MAP_DIR + 'meta.json').then(m => {
+  MAP_VERSION = m.version || 0; TILE = m.tile;
+  WORLDS.over.size = m.width; WORLDS.over.half = Math.floor(m.width / 2);
+  const d = new Date(MAP_VERSION * 1000);
+  $('stamp').textContent = isNaN(d) ? '' : 'Снимок карты: ' + d.toLocaleString('ru', { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' });
+}).catch(() => {})
+  .then(() => json('/api/regions').catch(() => json('region.json')))
+  .then(raw => { territories = raw.map(buildTerritory); })
+  .catch(err => console.error(err))
+  .then(() => {
+    buildDemoLoop();
+    const h = location.hash.slice(1).split('/');
+    setWorld(h[0] === 'nether' ? 'nether' : 'over');
+    if (h.length === 4 && h.slice(1).every(n => isFinite(n))) goto(+h[1], +h[2], view.fitK * Math.max(.7, +h[3]));
+  });
+</script>
+</body>
+</html>
