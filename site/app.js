@@ -160,22 +160,13 @@ function buildTerritory(raw, i) {
   };
 }
 
-// ПРИМЕР станций, пока нет настоящих: ответвления к самым населённым
-// территориям вдоль каждой магистрали. Координаты станции — в аду (÷8).
-function buildDemoLoop() {
-  stations = [{ key: 's:hub', type: 'station', name: 'Спавн', x: 0, z: 0, hub: true, group: null }];
-  LINES.forEach(l => {
-    const along = t => t.cx * l.dx + t.cz * l.dz, off = t => Math.abs(t.cx * l.dz) + Math.abs(t.cz * l.dx);
-    const picked = [];
-    territories.filter(t => t.group && along(t) > 350 && along(t) > off(t))
-      .sort((a, b) => b.residents.length - a.residents.length)
-      .forEach(t => { if (picked.length < 5 && picked.every(p => Math.abs(along(p) - along(t)) > 300)) picked.push(t); });
-    picked.sort((a, b) => along(a) - along(b)).forEach((t, i) => stations.push({
-      key: `s:${l.id}${i}`, type: 'station', group: l,
-      name: t.name.length > 22 ? t.name.slice(0, 21) + '…' : t.name,
-      x: Math.round(t.cx / 8), z: Math.round(t.cz / 8),
-    }));
-  });
+// Порталы приходят с сервера (/api/portals), координаты — в аду.
+function setPortals(list) {
+  stations = [{ key: 's:hub', type: 'station', name: 'Спавн', x: 0, z: 0, hub: true, group: null }]
+    .concat(list.map(p => ({
+      key: 's:' + p.id, id: p.id, type: 'station', name: p.name, x: p.x, z: p.z,
+      group: LINES.find(l => l.id === p.line) || LINES[0],
+    })));
 }
 
 /* ============ отрисовка ============ */
@@ -243,7 +234,7 @@ function rebuild() {
     });
     anchor(0, 0, '<div class="spawn"></div><div class="cap">Спавн</div>');
   } else {
-    // Магистраль идёт по оси от спавна, к каждой станции — ответвление под прямым углом.
+    // Магистраль идёт по оси от спавна, к каждому порталу — ответвление под прямым углом.
     LINES.forEach(l => {
       const stops = stations.filter(s => s.group === l);
       const reach = Math.max(120, ...stops.map(s => s.x * l.dx + s.z * l.dz)) + 30;
@@ -253,7 +244,6 @@ function rebuild() {
       el('path', { class: 'l-case l-spur', d: spurs }, g);
       el('path', { class: 'l-line l-spur', d: spurs, stroke: l.color }, g);
       el('path', { class: 'l-line', d: trunk, stroke: l.color }, g);
-      anchor(l.dx * (reach + 26), l.dz * (reach + 14), `<div class="g-name end" style="--c:${l.color}">${l.name}</div>`);
     });
     stations.forEach(s => {
       anchor(s.x, s.z, `<div class="pin station${s.hub ? ' hub' : ''}" style="--c:${s.group ? s.group.color : '#fff'}" data-sel="${s.key}"></div>` +
@@ -473,13 +463,13 @@ function hover(e) {
   const r = $('map').getBoundingClientRect();
   tip.hidden = false;
   tip.style.left = e.clientX - r.left + 'px'; tip.style.top = e.clientY - r.top + 'px';
-  tip.innerHTML = esc(o.name) + `<small>${o.type === 'terr' ? esc(o.owner) + ' · ' + o.residents.length + ' жит.' : o.type === 'boss' ? 'босс' : 'портал хайперлупа'}</small>`;
+  tip.innerHTML = esc(o.name) + `<small>${o.type === 'terr' ? esc(o.owner) + ' · ' + o.residents.length + ' жит.' : o.type === 'boss' ? 'босс' : 'портал'}</small>`;
 }
 
 $('zin').onclick = () => { const c = center(); zoomAt(c.x, c.y, 1.6); };
 $('zout').onclick = () => { const c = center(); zoomAt(c.x, c.y, 1 / 1.6); };
 $('zfit').onclick = fit;
-window.addEventListener('keydown', e => { if (e.key === 'Escape') select(null); if (e.key === '/' && document.activeElement !== $('q')) { e.preventDefault(); $('q').focus(); } });
+window.addEventListener('keydown', e => { if (e.key === 'Escape') select(null); if (e.key === '/' && !/^(INPUT|SELECT|TEXTAREA)$/.test(document.activeElement.tagName)) { e.preventDefault(); $('q').focus(); } });
 
 /* ============ шторка на телефоне ============ */
 
@@ -527,7 +517,7 @@ function select(o) {
   card.hidden = !o;
   document.body.classList.toggle('has-card', !!o);
   if (!o) { apply(); return; }
-  const g = o.group, tag = { terr: 'Территория', boss: 'Босс', station: 'Станция хайперлупа', exit: 'Портал хайперлупа' }[o.type];
+  const g = o.group, tag = { terr: 'Территория', boss: 'Босс', station: 'Портал', exit: 'Портал' }[o.type];
   let rows = '', extra = '', second = '<button data-act="xyz">Скопировать X Z</button>';
   const row = (k, val) => rows += `<dt>${k}</dt><dd>${val}</dd>`;
   if (o.type === 'terr') {
@@ -545,6 +535,7 @@ function select(o) {
     row('В верхнем мире', `${num(nx * 8)} / ${num(nz * 8)}`);
     if (g) row('Ветка', `${g.name}, ${g.dir}`);
     second = `<button data-act="swap">${world === 'over' ? 'Открыть схему' : 'Показать наверху'}</button>`;
+    if (canEditPortals() && !o.hub) extra = '<button class="edit" data-act="edit">Изменить портал</button>';
   }
   const where = g ? (o.type === 'terr' || o.type === 'boss' ? ` · ${g.name} губерния` : ` · ${g.name} ветка`) : '';
   card.style.setProperty('--c', g ? g.color : '#DEFFEA');
@@ -569,6 +560,10 @@ $('card').addEventListener('click', e => {
   const b = e.target.closest('[data-act]'); if (!b) return;
   const o = selected, act = b.dataset.act;
   if (act === 'close') select(null);
+  if (act === 'edit') editPortal(o.type === 'exit' ? stations.find(s => 'e' + s.key === o.key) : o);
+  if (act === 'cancel') select(portalForm && portalForm.id ? stations.find(s => s.id === portalForm.id) : null);
+  if (act === 'save') savePortal(b);
+  if (act === 'remove') removePortal(b);
   if (act === 'copy') copy(location.href, b);
   if (act === 'xyz') copy(o.type === 'terr' ? `${o.cx} ~ ${o.cz}` : `${o.x} ~ ${o.z}`, b);
   if (act === 'swap') {
@@ -582,6 +577,67 @@ function copy(text, btn) {
   navigator.clipboard ? navigator.clipboard.writeText(text).then(done, done) : done();
 }
 
+/* ============ редактор порталов ============ */
+
+// Кнопки правки видят только те, кого сервер считает редактором; права он проверяет ещё раз при сохранении.
+const canEditPortals = () => Boolean(auth && auth.user && auth.user.canEditPortals);
+let portalForm = null;
+
+// portal === null — новый портал: координаты берутся из центра экрана, ветка — по ближайшей оси.
+function editPortal(portal) {
+  if (world !== 'nether') setWorld('nether');
+  const c = center(), h = W().half;
+  const at = portal || { x: Math.round((c.x - view.tx) / view.k - h), z: Math.round((c.y - view.ty) / view.k - h) };
+  const line = portal ? portal.group : LINES.slice().sort((a, b) => (b.dx * at.x + b.dz * at.z) - (a.dx * at.x + a.dz * at.z))[0];
+  portalForm = { id: portal ? portal.id : null };
+  selected = portal;
+  markSelected();
+
+  const card = $('card');
+  card.hidden = false;
+  document.body.classList.add('has-card');
+  card.style.setProperty('--c', line.color);
+  card.innerHTML = `<header><div class="tag">Портал · ${portal ? 'правка' : 'новый'}</div><h2>${portal ? esc(portal.name) : 'Новый портал'}</h2>` +
+    '<button class="x" data-act="cancel" aria-label="Закрыть">✕</button></header>' +
+    '<div class="body"><form id="portalForm" autocomplete="off">' +
+    `<label>Название<input name="name" maxlength="40" value="${portal ? esc(portal.name) : ''}"></label>` +
+    `<div class="pair"><label>X в аду<input name="x" type="number" step="1" inputmode="numeric" value="${at.x}"></label>` +
+    `<label>Z в аду<input name="z" type="number" step="1" inputmode="numeric" value="${at.z}"></label></div>` +
+    `<label>Ветка<select name="line">${LINES.map(l => `<option value="${l.id}"${l === line ? ' selected' : ''}>${l.name}, ${l.dir}</option>`).join('')}</select></label>` +
+    '<p class="err" id="portalErr" hidden></p></form></div>' +
+    `<footer><button data-act="save">Сохранить</button>${portal ? '<button data-act="remove">Удалить</button>' : '<button data-act="cancel">Отмена</button>'}</footer>`;
+  $('portalForm').addEventListener('submit', e => { e.preventDefault(); savePortal(card.querySelector('[data-act="save"]')); });
+  if (!portal) $('portalForm').elements.name.focus();
+}
+
+function sendPortal(body, btn) {
+  btn.disabled = true;
+  return fetch('/api/portals', {
+    method: 'POST', credentials: 'same-origin',
+    headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body),
+  }).then(r => r.json().catch(() => ({})).then(data => r.ok ? data : Promise.reject(new Error(data.error || 'ошибка ' + r.status))))
+    .then(data => { setPortals(data.portals); renderSide(); rebuild(); return data; })
+    .catch(err => {
+      btn.disabled = false;
+      const box = $('portalErr');
+      if (box) { box.textContent = 'Не сохранилось: ' + err.message; box.hidden = false; }
+    });
+}
+
+function savePortal(btn) {
+  const f = $('portalForm').elements;
+  const portal = { name: f.name.value, x: Number(f.x.value), z: Number(f.z.value), line: f.line.value };
+  if (portalForm.id) portal.id = portalForm.id;
+  sendPortal({ op: 'upsert', portal }, btn).then(data => {
+    if (data) focusOn(stations.find(s => s.id === data.id));
+  });
+}
+
+function removePortal(btn) {
+  if (!confirm('Удалить этот портал со схемы?')) return;
+  sendPortal({ op: 'delete', id: portalForm.id }, btn).then(data => { if (data) select(null); });
+}
+
 /* ============ панель ============ */
 
 function renderSide() {
@@ -593,8 +649,9 @@ function renderSide() {
   $('gubs').parentElement.hidden = !over;
   $('gubs').innerHTML = GUBS.map(g =>
     `<button class="gub" data-group="${g.id}" style="--c:${g.color}" aria-pressed="${groupFilter === g}">${g.name}<small>${territories.filter(t => t.group === g).length} терр.</small></button>`).join('');
-  $('listTitle').textContent = over ? 'Территории' : 'Станции';
-  $('q').placeholder = over ? 'Территория, владелец, житель' : 'Название станции';
+  $('listTitle').textContent = over ? 'Территории' : 'Порталы';
+  $('addPortal').hidden = over || !canEditPortals();
+  $('q').placeholder = over ? 'Территория, владелец, житель' : 'Название портала';
   renderList();
   if (mobile()) setSheet(sheet.state);
 }
@@ -630,6 +687,7 @@ document.addEventListener('click', e => {
       groupFilter ? fitTo(g.sx < 0 ? -h : 0, g.sz < 0 ? -h : 0, g.sx < 0 ? 0 : h, g.sz < 0 ? 0 : h) : fit();
     }
   }
+  if (b.id === 'addPortal') { setSheet('peek'); editPortal(null); }
   if (b.id === 'clearFilter') { groupFilter = null; $('q').value = ''; renderSide(); }
   if (b.dataset.key) {
     $('q').blur();
@@ -675,6 +733,7 @@ function renderAcct() {
     b.classList.toggle('in', !!user);
     if (user && user.avatar) b.innerHTML = `<img src="${esc(user.avatar)}" alt="">`;
   });
+  $('addPortal').hidden = world === 'over' || !canEditPortals();
 }
 
 function openAuth() {
@@ -734,13 +793,15 @@ json(MAP_DIR + 'meta.json').then(m => {
   MAP_VERSION = m.version || 0; TILE = m.tile;
   WORLDS.over.size = m.width; WORLDS.over.half = Math.floor(m.width / 2);
   const d = new Date(MAP_VERSION * 1000);
-  $('stamp').textContent = 'Станции хайперлупа пока примерные. ' + (isNaN(d) ? '' : 'Снимок карты: ') + d.toLocaleString('ru', { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' });
+  $('stamp').textContent = (isNaN(d) ? '' : 'Снимок карты: ') + d.toLocaleString('ru', { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' });
 }).catch(() => {})
   .then(() => json('/api/regions').catch(() => json('region.json')))
   .then(raw => { territories = raw.map(buildTerritory); })
   .catch(err => console.error(err))
+  .then(() => json('/api/portals'))
+  .then(setPortals)
+  .catch(err => console.error('Не удалось загрузить порталы', err))
   .then(() => {
-    buildDemoLoop();
     const h = location.hash.slice(1).split('/');
     setWorld(h[0] === 'nether' ? 'nether' : 'over');
     if (h.length === 4 && h.slice(1).every(n => isFinite(n))) goto(+h[1], +h[2], view.fitK * Math.max(.7, +h[3]));
