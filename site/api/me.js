@@ -1,4 +1,5 @@
 const { getSession } = require('./_lib/session');
+const { canEdit } = require('./_lib/portals');
 
 // Кто вошёл и какие способы входа настроены на сервере.
 module.exports = function handler(req, res) {
@@ -17,7 +18,10 @@ module.exports = function handler(req, res) {
 
   res.setHeader('Cache-Control', 'no-store');
   res.status(200).json({
-    user: session && { provider: session.provider, name: session.name, avatar: session.avatar, mp: session.mp },
+    user: session && {
+      provider: session.provider, name: session.name, avatar: session.avatar, mp: session.mp,
+      canEditPortals: canEdit(session),
+    },
     missing,
     env: process.env.VERCEL_ENV || 'local',
     providers: {

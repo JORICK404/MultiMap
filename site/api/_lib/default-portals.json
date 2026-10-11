@@ -1,0 +1,14 @@
+[
+  { "id": "sektor", "name": "Сектор", "x": -173, "z": -2, "line": "green" },
+  { "id": "galyam", "name": "Галям", "x": -244, "z": 2, "line": "green" },
+  { "id": "end-portal", "name": "Энд Портал", "x": -254, "z": 2, "line": "green" },
+  { "id": "sen-kverto", "name": "Сен Кверто", "x": 89, "z": 2, "line": "blue" },
+  { "id": "fantoka", "name": "Фантока", "x": 141, "z": 2, "line": "blue" },
+  { "id": "campfire", "name": "Клан CampFire", "x": 193, "z": -6, "line": "blue" },
+  { "id": "myausvard", "name": "Мяусвард", "x": 241, "z": 2, "line": "blue" },
+  { "id": "ludomaniya", "name": "Лудомания", "x": 2, "z": -87, "line": "red" },
+  { "id": "vokselor", "name": "Вокселор", "x": 2, "z": -143, "line": "red" },
+  { "id": "fermy-gery", "name": "Общ фермы Геры", "x": -2, "z": -171, "line": "red" },
+  { "id": "rynok-omega", "name": "Рынок Омега", "x": -20, "z": 50, "line": "yellow" },
+  { "id": "port-epsilon", "name": "Порт Эпсилон", "x": -4, "z": 71, "line": "yellow" }
+]
