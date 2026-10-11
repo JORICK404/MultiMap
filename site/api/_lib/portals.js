@@ -10,6 +10,9 @@ const LINES = ['red', 'blue', 'yellow', 'green'];
 const MAX_PORTALS = 300;
 // Локально, без хранилища Vercel, правки пишутся в файл рядом с сайтом (в гит не попадает).
 const LOCAL_FILE = path.join(__dirname, '..', '..', '.data', PATHNAME);
+// На Vercel всегда идём в его хранилище и не гадаем по переменным: как именно
+// авторизоваться (токен или привязка хранилища к проекту), решает сама библиотека.
+const useBlob = () => Boolean(process.env.VERCEL || process.env.BLOB_READ_WRITE_TOKEN);
 
 // Кто может править порталы — по нику в игре. Свой список: PORTAL_EDITORS через запятую.
 function editors() {
@@ -23,7 +26,7 @@ function canEdit(session) {
 }
 
 async function load() {
-  if (process.env.BLOB_READ_WRITE_TOKEN) {
+  if (useBlob()) {
     const { get, BlobNotFoundError } = require('@vercel/blob');
     let result = null;
     try {
@@ -42,12 +45,11 @@ async function load() {
 
 async function save(portals) {
   const body = JSON.stringify(portals);
-  if (process.env.BLOB_READ_WRITE_TOKEN) {
+  if (useBlob()) {
     const { put } = require('@vercel/blob');
     await put(PATHNAME, body, { access: 'private', addRandomSuffix: false, allowOverwrite: true, contentType: 'application/json' });
     return;
   }
-  if (process.env.VERCEL) throw new Error('BLOB_READ_WRITE_TOKEN is not set');
   fs.mkdirSync(path.dirname(LOCAL_FILE), { recursive: true });
   fs.writeFileSync(LOCAL_FILE, body);
 }

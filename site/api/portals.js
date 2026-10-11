@@ -49,6 +49,7 @@ module.exports = async function handler(req, res) {
     }
   } catch (err) {
     console.error('[portals] save failed:', err);
-    res.status(500).json({ error: 'не удалось сохранить' });
+    // Сюда доходят только редакторы, так что причину показываем им прямо в форме.
+    res.status(500).json({ error: 'сбой хранилища — ' + String(err && err.message || err).slice(0, 200) });
   }
 };
