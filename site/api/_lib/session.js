@@ -6,7 +6,9 @@ const { findAccount } = require('./multipunk');
 const SESSION_COOKIE = 'mp_session';
 const STATE_COOKIE = 'mp_oauth_state';
 const NEXT_COOKIE = 'mp_next';
-const SESSION_MAX_AGE = 60 * 60 * 24 * 30;
+// Подписка проверяется только при входе, поэтому сессия короткая:
+// через неделю придётся войти заново, и проверка повторится.
+const SESSION_MAX_AGE = 60 * 60 * 24 * 7;
 
 function secret() {
   const s = process.env.SESSION_SECRET;
@@ -65,7 +67,8 @@ function addCookie(req, res, name, value, maxAge, httpOnly = true) {
 }
 
 function getSession(req) {
-  return unseal('session', readCookies(req)[SESSION_COOKIE]);
+  const session = unseal('session', readCookies(req)[SESSION_COOKIE]);
+  return session && isAllowed(session) ? session : null;
 }
 
 // Куда вернуть после входа: только путь на этом же сайте, иначе главная.
@@ -75,9 +78,13 @@ function nextPath(req) {
 }
 
 // Закрытый режим: если задан AUTH_ALLOWLIST ("discord:123,telegram:456"),
-// войти могут только перечисленные аккаунты. Пустой или не задан — входят все.
+// войти могут только перечисленные аккаунты. Пустой или не задан — входят все,
+// у кого соцсеть привязана к аккаунту Multi Punk.
+function allowlist() {
+  return (process.env.AUTH_ALLOWLIST || '').split(',').map(s => s.trim()).filter(Boolean);
+}
 function isAllowed(identity) {
-  const list = (process.env.AUTH_ALLOWLIST || '').split(',').map(s => s.trim()).filter(Boolean);
+  const list = allowlist();
   return list.length === 0 || list.includes(identity.provider + ':' + identity.id);
 }
 
@@ -88,11 +95,24 @@ async function finishLogin(req, res, identity) {
     failLogin(req, res, `not in AUTH_ALLOWLIST: ${identity.provider}:${identity.id}`, null, 'denied');
     return;
   }
+  // Пускаем только тех, чья соцсеть привязана к аккаунту Multi Punk
+  // и у кого есть платная подписка. Исключение — аккаунты, прямо вписанные в AUTH_ALLOWLIST: им доверяем
+  // и без ответа Multi Punk, иначе при сбое их API на сайт не попал бы никто.
+  const trusted = allowlist().includes(identity.provider + ':' + identity.id);
   let mp = null;
   try {
     mp = await findAccount(identity.provider, identity.id);
   } catch (err) {
-    console.error('[auth] multipunk lookup failed:', err);
+    if (!trusted) { failLogin(req, res, 'multipunk lookup failed', err, 'unavailable'); return; }
+    console.error('[auth] multipunk lookup failed, letting allowlisted account in:', err.message);
+  }
+  if (!mp && !trusted) {
+    failLogin(req, res, `no Multi Punk account for ${identity.provider}:${identity.id}`, null, 'notfound');
+    return;
+  }
+  if (mp && !mp.subscribed && !trusted) {
+    failLogin(req, res, `no paid subscription for ${identity.provider}:${identity.id}`, null, 'nosub');
+    return;
   }
   addCookie(req, res, SESSION_COOKIE, seal('session', { ...identity, mp }, SESSION_MAX_AGE), SESSION_MAX_AGE);
   addCookie(req, res, STATE_COOKIE, '', 0);
@@ -102,9 +122,9 @@ async function finishLogin(req, res, identity) {
 
 function failLogin(req, res, reason, err, code = 'failed') {
   console.error('[auth] ' + reason, err || '');
-  const next = nextPath(req).split('#')[0];
   addCookie(req, res, STATE_COOKIE, '', 0);
-  res.redirect(302, next + (next.includes('?') ? '&' : '?') + 'auth=' + code);
+  // Сайт закрыт для невошедших (middleware.js), поэтому показать ошибку может только страница входа.
+  res.redirect(302, '/login.html?auth=' + code);
 }
 
 module.exports = {

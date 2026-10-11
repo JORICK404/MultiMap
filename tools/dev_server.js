@@ -68,8 +68,28 @@ function serveFile(res, url) {
   fs.createReadStream(file).pipe(res);
 }
 
-http.createServer((req, res) => {
-  const url = new URL(req.url, 'http://localhost');
+// site/middleware.js на Vercel выполняется перед каждым запросом — здесь так же.
+// Возвращает true, если запрос можно пропустить дальше.
+async function runMiddleware(req, res, url) {
+  const { default: middleware } = await import('../site/middleware.js');
+  const headers = new Headers();
+  for (const [k, v] of Object.entries(req.headers)) headers.set(k, [].concat(v).join(', '));
+  const out = await middleware(new Request(url, { method: req.method, headers }));
+  if (!out || out.headers.get('x-middleware-next')) return true;
+  res.writeHead(out.status, Object.fromEntries(out.headers));
+  res.end(await out.text());
+  return false;
+}
+
+http.createServer(async (req, res) => {
+  const url = new URL(req.url, 'http://' + req.headers.host);
+  try {
+    if (!await runMiddleware(req, res, url)) return;
+  } catch (err) {
+    console.error(err);
+    res.writeHead(500).end('Middleware crashed');
+    return;
+  }
   if (url.pathname.startsWith('/api/')) runFunction(req, res, url);
   else serveFile(res, url);
 }).listen(PORT, '127.0.0.1', () => console.log(`http://localhost:${PORT}/mockup.html`));
