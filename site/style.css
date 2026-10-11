@@ -74,7 +74,7 @@ button { cursor: pointer; background: none; border: 0; padding: 0; text-align: l
 }
 .grab { display: none; }
 .brand { display: flex; align-items: center; gap: 10px; padding: 12px 12px 12px 18px; }
-.brand img, .topbar img { height: 18px; display: block; filter: var(--logo); }
+.brand > img, .topbar > img { height: 18px; display: block; filter: var(--logo); }
 .theme { flex: none; width: 36px; height: 36px; border-radius: 8px; display: grid; place-items: center; color: var(--text); }
 .theme:hover { background: var(--surface); }
 .theme svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
