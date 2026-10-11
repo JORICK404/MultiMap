@@ -92,4 +92,4 @@ http.createServer(async (req, res) => {
   }
   if (url.pathname.startsWith('/api/')) runFunction(req, res, url);
   else serveFile(res, url);
-}).listen(PORT, '127.0.0.1', () => console.log(`http://localhost:${PORT}/mockup.html`));
+}).listen(PORT, '127.0.0.1', () => console.log(`http://localhost:${PORT}/`));

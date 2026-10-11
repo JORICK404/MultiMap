@@ -1,47 +1,72 @@
-const WORLD_NAME = 'Верхний мир';
+/* ============ данные ============ */
+
+// sx/sz — знак X и Z четверти (в Minecraft север — это −Z, то есть верх карты).
+const GUBS = [
+  { id: 'green',  name: 'Зелёная', color: '#3DDC6B', sx: -1, sz: -1 },
+  { id: 'red',    name: 'Красная', color: '#FF5A52', sx:  1, sz: -1 },
+  { id: 'yellow', name: 'Жёлтая',  color: '#FFD23F', sx: -1, sz:  1 },
+  { id: 'blue',   name: 'Синяя',   color: '#4FA3FF', sx:  1, sz:  1 },
+];
+const gubOf = (x, z) => GUBS.find(g => (x < 0 ? -1 : 1) === g.sx && (z < 0 ? -1 : 1) === g.sz);
+const colorOf = id => GUBS.find(g => g.id === id).color;
+
+// Магистрали хайперлупа: от спавна в четыре стороны.
+const LINES = [
+  { id: 'red',    name: 'Красная', dir: 'на север',  dx:  0, dz: -1 },
+  { id: 'blue',   name: 'Синяя',   dir: 'на восток', dx:  1, dz:  0 },
+  { id: 'yellow', name: 'Жёлтая',  dir: 'на юг',     dx:  0, dz:  1 },
+  { id: 'green',  name: 'Зелёная', dir: 'на запад',  dx: -1, dz:  0 },
+].map(l => ({ ...l, color: colorOf(l.id) }));
+
+const BOSSES = [
+  { name: 'Тотемник', x: -1866, z: 243 },
+  { name: 'Флейтист', x: 1291, z: 498 },
+  { name: 'Склеп', x: 45, z: -1265 },
+];
+
+const ROLES = { owner: 'владелец', sherif: 'шериф', resident: 'житель' };
+const WORLDS = { over: { half: 3000, size: 6001, maxK: 8 }, nether: { half: 375, size: 751, maxK: 24 } };
 const MAP_DIR = 'assets/map/';
-// Версия карты приходит из meta.json и меняется при каждой нарезке тайлов —
-// по ней браузер понимает, что картинки надо скачать заново.
-let MAP_VERSION = 0;
-// 1 пиксель карты = 1 блок, игровые 0,0 — центр картинки. Размеры берутся из
-// assets/map/meta.json (его пишет tools/make_map_tiles.py), здесь — запасные.
-let STAGE_W = 6001, STAGE_H = 6001, TILE = 512, emptyTiles = new Set();
-let ORIGIN_X = 3000, ORIGIN_Z = 3000;
-// Начиная с этого масштаба (экранных пикселей на блок) поверх уменьшенной
-// карты подгружаются тайлы в полном разрешении.
-// На экранах с высокой плотностью уменьшенная карта мылится раньше.
-const DETAIL_K = 0.4 / Math.min(window.devicePixelRatio || 1, 2);
-const MAX_K = 8;
+const FRAME_OUT = .065;   // отступ подписи губернии от карты, в долях полумира
+const EXIT_MIN_K = .55;   // выходы хайперлупа на верхней карте видны только вблизи
+let TILE = 512, MAP_VERSION = 0;
 
-// Территория задаётся списком регионов (region.json: regions[].firstPoint /
-// secondPoint), каждый — два противоположных угла в любом порядке. Территория
-// может состоять из нескольких регионов сразу (например, кусок сбоку) —
-// все они рисуются как один слитный контур через unionOutline().
-const ROLE_LABELS = { owner: 'Владелец', sherif: 'Шериф', resident: 'Житель' };
+let territories = [], stations = [];
 
-function hashHue(str) {
-  let h = 0;
-  for (let i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) >>> 0;
-  return h % 360;
+/* ============ состояние ============ */
+
+let world = 'over';
+const layers = { gub: true, terr: true, boss: true, loop: true };
+const LAYER_NAMES = { gub: 'Губернии', terr: 'Территории', boss: 'Боссы', loop: 'Порталы' };
+let groupFilter = null, selected = null;
+const view = { k: 1, tx: 0, ty: 0, fitK: 1 };
+const anchors = [];
+const registry = new Map();
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const W = () => WORLDS[world];
+const px = v => v + W().half;
+const num = n => String(Math.round(n)).replace('-', '−');
+const SVG = 'http://www.w3.org/2000/svg';
+const mq = matchMedia('(max-width: 820px)');
+const mobile = () => mq.matches;
+const css = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+
+/* ============ тема ============ */
+
+function setTheme(t) {
+  document.documentElement.dataset.theme = t;
+  document.querySelector('meta[name="theme-color"]').content = t === 'light' ? '#FFFFFF' : '#150C61';
+  try { localStorage.setItem('theme', t); } catch (e) {}
+}
+{
+  let saved = null;
+  try { saved = localStorage.getItem('theme'); } catch (e) {}
+  setTheme(saved === 'light' ? 'light' : 'dark');
 }
 
-function pctX(v) { return (xPix(v) / STAGE_W * 100).toFixed(4) + '%'; }
-function pctZ(v) { return (zPix(v) / STAGE_H * 100).toFixed(4) + '%'; }
-function xPix(v) { return v + ORIGIN_X; }
-function zPix(v) { return v + ORIGIN_Z; }
-
-function rectWorld(r) {
-  return {
-    minX: Math.min(r.x1, r.x2), maxX: Math.max(r.x1, r.x2),
-    minZ: Math.min(r.z1, r.z2), maxZ: Math.max(r.z1, r.z2)
-  };
-}
-
-function rectPixels(r) {
-  const w = rectWorld(r);
-  // Углы региона — включительные блоки, поэтому дальний край на +1.
-  return { x1: xPix(w.minX), x2: xPix(w.maxX + 1), z1: zPix(w.minZ), z2: zPix(w.maxZ + 1) };
-}
+/* ============ подготовка данных ============ */
 
 // Traces the outer boundary of a union of axis-aligned rectangles (a
 // territory's region plus its subregions) as one closed rectilinear
@@ -117,549 +142,606 @@ function simplifyLoop(points) {
   return out.length >= 3 ? out : points;
 }
 
-function buildTerritory(raw, index) {
-  const rects = raw.regions.map(reg => ({
-    x1: reg.firstPoint.x, z1: reg.firstPoint.z,
-    x2: reg.secondPoint.x, z2: reg.secondPoint.z
+function buildTerritory(raw, i) {
+  const rects = raw.regions.map(r => ({
+    x1: Math.min(r.firstPoint.x, r.secondPoint.x), x2: Math.max(r.firstPoint.x, r.secondPoint.x),
+    z1: Math.min(r.firstPoint.z, r.secondPoint.z), z2: Math.max(r.firstPoint.z, r.secondPoint.z),
   }));
-  const bbox = rects.map(rectWorld).reduce((acc, w) => ({
-    minX: Math.min(acc.minX, w.minX), maxX: Math.max(acc.maxX, w.maxX),
-    minZ: Math.min(acc.minZ, w.minZ), maxZ: Math.max(acc.maxZ, w.maxZ)
-  }), { minX: Infinity, maxX: -Infinity, minZ: Infinity, maxZ: -Infinity });
-
-  const centerX = Math.round((bbox.minX + bbox.maxX) / 2);
-  const centerZ = Math.round((bbox.minZ + bbox.maxZ) / 2);
+  const b = rects.reduce((a, r) => ({
+    x1: Math.min(a.x1, r.x1), x2: Math.max(a.x2, r.x2), z1: Math.min(a.z1, r.z1), z2: Math.max(a.z2, r.z2),
+  }));
+  const cx = Math.round((b.x1 + b.x2) / 2), cz = Math.round((b.z1 + b.z2) / 2);
   const owner = raw.residents.find(r => r.status === 'owner') || raw.residents[0];
-  const hue = hashHue(raw.name || String(index));
-  const stroke = `hsl(${hue} 78% 68%)`;
-
   return {
-    id: 't' + index,
-    name: raw.name || 'Без названия',
-    kind: 'Территория',
-    owner: owner ? owner.name : '—',
-    stroke,
-    about: raw.description || '',
-    outlineLoops: unionOutline(rects.map(rectPixels)),
-    labelX: xPix((bbox.minX + bbox.maxX + 1) / 2), labelZ: zPix(bbox.minZ),
-    fill: `hsl(${hue} 78% 68% / 0.18)`,
-    centerX, centerZ,
-    coords: `X ${bbox.minX} … ${bbox.maxX}   ·   Z ${bbox.minZ} … ${bbox.maxZ}`,
-    short: `${centerX} / ${centerZ}`,
-    area: `${bbox.maxX - bbox.minX + 1}×${bbox.maxZ - bbox.minZ + 1}`,
-    residentsDetailed: raw.residents.map(r => ({
-      name: r.name,
-      role: ROLE_LABELS[r.status] || r.status,
-      initial: (r.name || '?')[0].toUpperCase()
-    }))
+    key: 't:' + i, type: 'terr', name: (raw.name || 'Без названия').trim(), about: raw.description || '',
+    rects, b, cx, cz, owner: owner ? owner.name : '—', residents: raw.residents,
+    group: raw.name === 'Спавн' ? null : gubOf(cx, cz),
+    hay: [raw.name, ...raw.residents.map(r => r.name)].join(' ').toLowerCase(),
   };
 }
 
-let territories = [];
-
-const els = {
-  worldName: document.getElementById('worldName'),
-  toggleListBtn: document.getElementById('toggleListBtn'),
-  toggleBordersBtn: document.getElementById('toggleBordersBtn'),
-  downloadMapBtn: document.getElementById('downloadMapBtn'),
-  viewport: document.getElementById('viewport'),
-  stage: document.getElementById('stage'),
-  mapImg: document.getElementById('mapImg'),
-  mapTiles: document.getElementById('mapTiles'),
-  gridOverlay: document.getElementById('gridOverlay'),
-  territoriesLayer: document.getElementById('territories'),
-  screenOverlay: document.getElementById('screenOverlay'),
-  zoomInBtn: document.getElementById('zoomInBtn'),
-  zoomOutBtn: document.getElementById('zoomOutBtn'),
-  resetBtn: document.getElementById('resetBtn'),
-  zoomLabel: document.getElementById('zoomLabel'),
-  coordLabel: document.getElementById('coordLabel'),
-  sheetBackdrop: document.getElementById('sheetBackdrop'),
-  detailSheet: document.getElementById('detailSheet'),
-  detailKind: document.getElementById('detailKind'),
-  detailName: document.getElementById('detailName'),
-  detailCoords: document.getElementById('detailCoords'),
-  detailOwner: document.getElementById('detailOwner'),
-  detailArea: document.getElementById('detailArea'),
-  detailAbout: document.getElementById('detailAbout'),
-  detailCount: document.getElementById('detailCount'),
-  detailResidents: document.getElementById('detailResidents'),
-  detailCloseBtn: document.getElementById('detailCloseBtn'),
-  listSheet: document.getElementById('listSheet'),
-  listCloseBtn: document.getElementById('listCloseBtn'),
-  searchInput: document.getElementById('searchInput'),
-  territoryList: document.getElementById('territoryList'),
-  toast: document.getElementById('toast')
-};
-
-els.worldName.textContent = WORLD_NAME;
-
-const view = { k: 0.25, tx: 0, ty: 0, fitK: 0.25 };
-const overlayAnchors = [];
-const territoryShapes = [];
-
-function pathFromLoopsScreen(loops) {
-  return loops.map(loop => 'M ' + loop.map(p =>
-    (view.tx + p[0] * view.k).toFixed(1) + ' ' + (view.ty + p[1] * view.k).toFixed(1)
-  ).join(' L ') + ' Z').join(' ');
+// ПРИМЕР станций, пока нет настоящих: ответвления к самым населённым
+// территориям вдоль каждой магистрали. Координаты станции — в аду (÷8).
+function buildDemoLoop() {
+  stations = [{ key: 's:hub', type: 'station', name: 'Спавн', x: 0, z: 0, hub: true, group: null }];
+  LINES.forEach(l => {
+    const along = t => t.cx * l.dx + t.cz * l.dz, off = t => Math.abs(t.cx * l.dz) + Math.abs(t.cz * l.dx);
+    const picked = [];
+    territories.filter(t => t.group && along(t) > 350 && along(t) > off(t))
+      .sort((a, b) => b.residents.length - a.residents.length)
+      .forEach(t => { if (picked.length < 5 && picked.every(p => Math.abs(along(p) - along(t)) > 300)) picked.push(t); });
+    picked.sort((a, b) => along(a) - along(b)).forEach((t, i) => stations.push({
+      key: `s:${l.id}${i}`, type: 'station', group: l,
+      name: t.name.length > 22 ? t.name.slice(0, 21) + '…' : t.name,
+      x: Math.round(t.cx / 8), z: Math.round(t.cz / 8),
+    }));
+  });
 }
-let selectedId = null;
-let listOpen = false;
-let moved = 0;
-let dragging = false;
-const pts = new Map();
-let pinchDist = null;
-let lastPointer = null;
-const TAP_THRESHOLD = 14;
 
-function fit() {
-  const r = els.viewport.getBoundingClientRect();
-  view.fitK = Math.min(r.width / STAGE_W, r.height / STAGE_H) * 0.98;
-  view.k = view.fitK;
-  view.tx = (r.width - STAGE_W * view.k) / 2;
-  view.ty = (r.height - STAGE_H * view.k) / 2;
+/* ============ отрисовка ============ */
+
+function el(tag, attrs, parent) {
+  const n = document.createElementNS(SVG, tag);
+  for (const k in attrs) n.setAttribute(k, attrs[k]);
+  parent.appendChild(n);
+  return n;
+}
+
+function anchor(x, z, html, opts = {}) {
+  const a = document.createElement('div');
+  a.className = 'a';
+  a.innerHTML = html;
+  $('anchors').appendChild(a);
+  anchors.push({ el: a, x: px(x), z: px(z), ...opts });
+  return a;
+}
+
+const SKULL = '<svg viewBox="0 0 16 16"><path d="M3 2h10v2h1v6h-2v2h-1v2H5v-2H4v-2H2V4h1zM5 6v3h2V6zm4 0v3h2V6zM7 10v1h2v-1z"/></svg>';
+
+function rebuild() {
+  const g = $('world'), half = W().half, size = W().size;
+  g.innerHTML = ''; $('anchors').innerHTML = ''; anchors.length = 0; registry.clear();
+  $('map').classList.toggle('nether', world === 'nether');
+
+  if (layers.gub || world === 'nether') {
+    GUBS.forEach(q => {
+      el('rect', {
+        class: 'g-tint', fill: q.color, 'fill-opacity': world === 'nether' ? .05 : .14,
+        x: q.sx < 0 ? 0 : half, y: q.sz < 0 ? 0 : half, width: half + (q.sx > 0 ? 1 : 0), height: half + (q.sz > 0 ? 1 : 0),
+      }, g);
+      if (world === 'over') {
+                // Уголок — по краю самой карты, внутри рамки; подпись — за рамкой.
+        const o = half * FRAME_OUT, arm = 0;   // 0 — уголок тянется до середины стороны, half — исчезает
+        const cx = q.sx < 0 ? 0 : size, cz = q.sz < 0 ? 0 : size;
+        el('path', { class: 'g-corner', stroke: q.color, d: `M${px(q.sx * arm)} ${cz}H${cx}V${px(q.sz * arm)}` }, g);
+        anchor(q.sx * half * .5, q.sz * (half + o),
+          `<div class="g-name ${q.sz < 0 ? 'top' : 'bot'}" style="--c:${q.color}">${q.name}</div>`);
+      }
+    });
+    if (world === 'over') el('path', { class: 'g-axis', d: `M0 ${half}H${size}M${half} 0V${size}` }, g);
+  }
+
+  if (world === 'over') {
+    if (layers.terr) territories.forEach(t => {
+      const c = t.group ? t.group.color : '#fff';
+      // Углы региона — включительные блоки, поэтому дальний край на +1.
+      const d = unionOutline(t.rects.map(r => ({ x1: px(r.x1), x2: px(r.x2 + 1), z1: px(r.z1), z2: px(r.z2 + 1) })))
+        .map(loop => 'M' + loop.map(p => p[0] + ' ' + p[1]).join('L') + 'Z').join('');
+      el('path', { class: 't-case', d }, g);
+      el('path', { class: 't-rect', d, stroke: c, fill: c, 'fill-opacity': .18, 'fill-rule': 'evenodd', 'data-sel': t.key }, g);
+      registry.set(t.key, t);
+    });
+    if (layers.loop) stations.filter(s => !s.hub).forEach(s => {
+      const o = { ...s, key: 'e' + s.key, type: 'exit', nx: s.x, nz: s.z, x: s.x * 8, z: s.z * 8 };
+      anchor(o.x, o.z, `<div class="pin exit" style="--c:${s.group.color}" data-sel="${o.key}"></div>`, { minK: EXIT_MIN_K });
+      registry.set(o.key, o);
+    });
+    if (layers.boss) BOSSES.forEach((b, i) => {
+      const o = { ...b, key: 'b:' + i, type: 'boss', group: gubOf(b.x, b.z) };
+      anchor(b.x, b.z, `<div class="pin boss" data-sel="${o.key}">${SKULL}</div><div class="cap below">${esc(b.name)}</div>`);
+      registry.set(o.key, o);
+    });
+    anchor(0, 0, '<div class="spawn"></div><div class="cap">Спавн</div>');
+  } else {
+    // Магистраль идёт по оси от спавна, к каждой станции — ответвление под прямым углом.
+    LINES.forEach(l => {
+      const stops = stations.filter(s => s.group === l);
+      const reach = Math.max(120, ...stops.map(s => s.x * l.dx + s.z * l.dz)) + 30;
+      const trunk = `M${px(0)} ${px(0)}L${px(l.dx * reach)} ${px(l.dz * reach)}`;
+      const spurs = stops.map(s => `M${px(l.dx ? s.x : 0)} ${px(l.dz ? s.z : 0)}L${px(s.x)} ${px(s.z)}`).join('');
+      el('path', { class: 'l-case', d: trunk }, g);
+      el('path', { class: 'l-case l-spur', d: spurs }, g);
+      el('path', { class: 'l-line l-spur', d: spurs, stroke: l.color }, g);
+      el('path', { class: 'l-line', d: trunk, stroke: l.color }, g);
+      anchor(l.dx * (reach + 26), l.dz * (reach + 14), `<div class="g-name end" style="--c:${l.color}">${l.name}</div>`);
+    });
+    stations.forEach(s => {
+      anchor(s.x, s.z, `<div class="pin station${s.hub ? ' hub' : ''}" style="--c:${s.group ? s.group.color : '#fff'}" data-sel="${s.key}"></div>` +
+        `<div class="cap">${esc(s.name)}<small>${num(s.x)} / ${num(s.z)}</small></div>`);
+      registry.set(s.key, s);
+    });
+  }
+  markSelected();
   apply();
 }
 
-function clamp() {
-  const r = els.viewport.getBoundingClientRect();
-  const w = STAGE_W * view.k, h = STAGE_H * view.k;
-  const mx = Math.min(r.width * 0.5, w * 0.5), my = Math.min(r.height * 0.5, h * 0.5);
-  view.tx = Math.min(r.width - mx, Math.max(mx - w, view.tx));
-  view.ty = Math.min(r.height - my, Math.max(my - h, view.ty));
+function markSelected() {
+  document.querySelectorAll('.sel').forEach(n => n.classList.remove('sel'));
+  if (selected) document.querySelectorAll(`[data-sel="${selected.key}"]`).forEach(n => n.classList.add('sel'));
 }
 
-function apply() {
-  clamp();
-  // Сцена задаётся сразу в экранном размере, без CSS scale: иначе браузер
-  // растеризует весь слой 6001×6001 (× плотность экрана) целиком, и на
-  // телефонах при отдалении на это не хватает видеопамяти.
-  els.stage.style.width = (STAGE_W * view.k) + 'px';
-  els.stage.style.height = (STAGE_H * view.k) + 'px';
-  els.stage.style.transform = `translate(${view.tx}px, ${view.ty}px)`;
-  overlayAnchors.forEach(a => {
-    a.el.style.left = (view.tx + a.x * view.k) + 'px';
-    a.el.style.top = (view.ty + a.z * view.k) + 'px';
-  });
-  territoryShapes.forEach(s => {
-    s.el.setAttribute('d', pathFromLoopsScreen(s.loops));
-    s.el.style.strokeWidth = Math.max(1.5, Math.min(4, 2 * view.k)) + 'px';
-  });
-  updateTiles();
-  els.zoomLabel.textContent = Math.round((view.k / view.fitK) * 100) + '%';
-  updateCoordLabel();
+/* ============ камера ============ */
+
+const rect = () => $('view').getBoundingClientRect();
+
+// Часть карты, не закрытая интерфейсом: всё центрируется относительно неё.
+function insets() {
+  if (!mobile()) return { l: 22, t: 22, r: 0, b: 0 };
+  const card = $('card');
+  return { l: 0, t: 64, r: 0, b: card.hidden ? peekH() : card.offsetHeight };
+}
+function center() {
+  const r = rect(), i = insets();
+  return { x: i.l + (r.width - i.l - i.r) / 2, y: i.t + (r.height - i.t - i.b) / 2 };
 }
 
-function updateCoordLabel() {
-  const r = els.viewport.getBoundingClientRect();
-  const px = lastPointer ? lastPointer.x - r.left : r.width / 2;
-  const py = lastPointer ? lastPointer.y - r.top : r.height / 2;
-  const sx = (px - view.tx) / view.k, sy = (py - view.ty) / view.k;
-  const bx = Math.floor(sx - ORIGIN_X);
-  const bz = Math.floor(sy - ORIGIN_Z);
-  els.coordLabel.textContent = `X ${bx} · Z ${bz}`;
+function fitK(x1, z1, x2, z2) {
+  const r = rect(), i = insets(), pad = mobile() ? 10 : 24;
+  return Math.min((r.width - i.l - i.r - pad * 2) / (x2 - x1), (r.height - i.t - i.b - pad * 2) / (z2 - z1));
+}
+// Весь мир вместе с рамкой и подписями губерний вокруг неё.
+function worldFitK() {
+  const h = W().half, mx = world === 'over' ? h * .09 : 0, mz = world === 'over' ? h * .16 : 0;
+  return fitK(-h - mx, -h - mz, h + 1 + mx, h + 1 + mz);
+}
+function fitTo(x1, z1, x2, z2, maxK) {
+  goto((x1 + x2) / 2, (z1 + z2) / 2, Math.min(fitK(x1, z1, x2, z2), maxK || Infinity));
+}
+function fit() {
+  view.fitK = worldFitK();
+  goto(.5, .5, view.fitK);
+}
+function goto(x, z, k) {
+  const c = center();
+  if (k) view.k = k;
+  view.tx = c.x - px(x) * view.k;
+  view.ty = c.y - px(z) * view.k;
+  apply();
 }
 
-function zoomAt(px, py, factor) {
-  const next = Math.max(view.fitK * 0.85, Math.min(Math.max(MAX_K, view.fitK * 14), view.k * factor));
-  const ratio = next / view.k;
-  view.tx = px - (px - view.tx) * ratio;
-  view.ty = py - (py - view.ty) * ratio;
+function zoomAt(sx, sy, f) {
+  const next = Math.max(view.fitK * .7, Math.min(W().maxK, view.k * f)), ratio = next / view.k;
+  view.tx = sx - (sx - view.tx) * ratio;
+  view.ty = sy - (sy - view.ty) * ratio;
   view.k = next;
   apply();
 }
 
-function zoomCenter(factor) {
-  const r = els.viewport.getBoundingClientRect();
-  zoomAt(r.width / 2, r.height / 2, factor);
+function apply() {
+  const r = rect(), s = W().size * view.k, c = center();
+  view.tx = Math.min(c.x, Math.max(c.x - s, view.tx));
+  view.ty = Math.min(c.y, Math.max(c.y - s, view.ty));
+
+  const st = $('stage').style;
+  st.width = st.height = s + 'px';
+  st.transform = `translate(${view.tx}px, ${view.ty}px)`;
+  const fr = $('frame').style;
+  fr.width = fr.height = s * 1.1 + 'px';
+  fr.transform = `translate(${view.tx - s * .05}px, ${view.ty - s * .05}px)`;
+  if (world === 'nether') st.backgroundSize = `${16 * view.k}px ${16 * view.k}px`;
+  $('world').setAttribute('transform', `translate(${view.tx} ${view.ty}) scale(${view.k})`);
+
+  const far = view.k < view.fitK * 2.6;
+  anchors.forEach(a => {
+    a.el.style.transform = `translate(${view.tx + a.x * view.k}px, ${view.ty + a.z * view.k}px)`;
+    if (a.far) a.el.style.opacity = far ? 1 : 0;
+    if (a.minK) a.el.hidden = view.k < a.minK;
+  });
+  $('cross').style.left = c.x + 'px'; $('cross').style.top = c.y + 'px';
+  updateTiles(r);
+  if (!mobile()) { drawRulers(r); drawScale(); }
+  updateHud();
+  saveHash();
 }
 
-function focus(t) {
-  const r = els.viewport.getBoundingClientRect();
-  view.k = Math.max(view.k, 1);
-  const sx = xPix(t.centerX), sy = zPix(t.centerZ);
-  view.tx = r.width / 2 - sx * view.k;
-  view.ty = r.height * 0.32 - sy * view.k;
-  apply();
-}
+/* ---------- тайлы (как в текущем app.js) ---------- */
 
-/* ---------- map tiles ---------- */
-
-// Уменьшенная карта (low.webp) лежит фоном всегда; при приближении поверх неё
-// подгружаются только видимые тайлы полного разрешения, а ушедшие за край
-// экрана удаляются — так весь мир (десятки мегабайт) никогда не грузится разом.
 const tileEls = new Map();
-
-function updateTiles() {
-  const wanted = new Set();
-  if (view.k >= DETAIL_K) {
-    const r = els.viewport.getBoundingClientRect();
-    const x0 = -view.tx / view.k, x1 = (r.width - view.tx) / view.k;
-    const y0 = -view.ty / view.k, y1 = (r.height - view.ty) / view.k;
-    const cols = Math.ceil(STAGE_W / TILE), rows = Math.ceil(STAGE_H / TILE);
-    const c0 = Math.max(0, Math.floor(x0 / TILE)), c1 = Math.min(cols - 1, Math.floor(x1 / TILE));
-    const r0 = Math.max(0, Math.floor(y0 / TILE)), r1 = Math.min(rows - 1, Math.floor(y1 / TILE));
-    for (let ty = r0; ty <= r1; ty++) {
-      for (let tx = c0; tx <= c1; tx++) {
-        const id = tx + '_' + ty;
-        if (!emptyTiles.has(id)) wanted.add(id);
-      }
-    }
+function updateTiles(r) {
+  const want = new Set();
+  if (world === 'over' && view.k >= .4 / Math.min(devicePixelRatio || 1, 2)) {
+    const n = Math.ceil(W().size / TILE);
+    const c0 = Math.max(0, Math.floor(-view.tx / view.k / TILE)), c1 = Math.min(n - 1, Math.floor((r.width - view.tx) / view.k / TILE));
+    const r0 = Math.max(0, Math.floor(-view.ty / view.k / TILE)), r1 = Math.min(n - 1, Math.floor((r.height - view.ty) / view.k / TILE));
+    for (let y = r0; y <= r1; y++) for (let x = c0; x <= c1; x++) want.add(x + '_' + y);
   }
-
-  tileEls.forEach((el, id) => {
-    if (!wanted.has(id)) { el.remove(); tileEls.delete(id); }
-  });
-  wanted.forEach(id => {
+  tileEls.forEach((n, id) => { if (!want.has(id)) { n.remove(); tileEls.delete(id); } });
+  want.forEach(id => {
     if (tileEls.has(id)) return;
-    const [tx, ty] = id.split('_').map(Number);
-    const el = document.createElement('div');
-    el.className = 'map-tile';
-    // В процентах от сцены — тайл сам растягивается вместе с ней при зуме.
-    el.style.left = (tx * TILE / STAGE_W * 100) + '%';
-    el.style.top = (ty * TILE / STAGE_H * 100) + '%';
-    // +1 блок — тайлы нарезаны с перекрытием, чтобы не было швов.
-    el.style.width = (Math.min(STAGE_W - tx * TILE, TILE + 1) / STAGE_W * 100) + '%';
-    el.style.height = (Math.min(STAGE_H - ty * TILE, TILE + 1) / STAGE_H * 100) + '%';
-    el.style.backgroundImage = `url('${MAP_DIR}tiles/${id}.webp?v=${MAP_VERSION}')`;
-    els.mapTiles.appendChild(el);
-    tileEls.set(id, el);
+    const [x, y] = id.split('_').map(Number), S = W().size, n = document.createElement('div');
+    n.className = 'tile';
+    n.style.cssText = `left:${x * TILE / S * 100}%;top:${y * TILE / S * 100}%;width:${Math.min(S - x * TILE, TILE + 1) / S * 100}%;height:${Math.min(S - y * TILE, TILE + 1) / S * 100}%;background-image:url('${MAP_DIR}tiles/${id}.webp?v=${MAP_VERSION}')`;
+    $('tiles').appendChild(n);
+    tileEls.set(id, n);
   });
 }
 
-/* ---------- pointer / wheel interaction ---------- */
+/* ---------- линейки, масштаб, HUD ---------- */
 
-els.viewport.addEventListener('pointerdown', e => {
+const niceStep = minPx => [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000].find(s => s * view.k >= minPx) || 5000;
+
+function drawRulers(r) {
+  const R = 22, dpr = devicePixelRatio || 1, step = niceStep(64), half = W().half, zero = css('--zero'), tick = css('--muted');
+  [[$('rulerX'), r.width, R, true], [$('rulerZ'), R, r.height, false]].forEach(([c, w, h, horiz]) => {
+    c.width = w * dpr; c.height = h * dpr; c.style.width = w + 'px'; c.style.height = h + 'px';
+    const ctx = c.getContext('2d');
+    ctx.scale(dpr, dpr);
+    ctx.fillStyle = css('--bg'); ctx.fillRect(0, 0, w, h);
+    ctx.font = '500 10px "JetBrains Mono", monospace'; ctx.textBaseline = 'middle';
+    const off = horiz ? view.tx : view.ty, len = horiz ? w : h;
+    const from = Math.ceil(((0 - off) / view.k - half) / step) * step, to = (len - off) / view.k - half;
+    for (let v = from; v <= to; v += step) {
+      if (Math.abs(v) > half) continue;
+      const p = Math.round(off + (v + half) * view.k);
+      if (p < R) continue;
+      ctx.fillStyle = v === 0 ? zero : tick;
+      if (horiz) { ctx.fillRect(p, R - 6, 1, 6); ctx.fillText(num(v), p + 4, 10); }
+      else { ctx.fillRect(R - 6, p, 6, 1); ctx.save(); ctx.translate(10, p - 4); ctx.rotate(-Math.PI / 2); ctx.fillText(num(v), 0, 0); ctx.restore(); }
+    }
+  });
+}
+
+function drawScale() {
+  const step = niceStep(70);
+  $('scaleLabel').textContent = step + ' блоков';
+  $('scaleBar').style.width = step * view.k + 'px';
+}
+
+// На компьютере — координаты под курсором, на телефоне — под перекрестием.
+let pointer = null;
+function updateHud() {
+  const r = rect(), c = center(), p = pointer ? { x: pointer.x - r.left, y: pointer.y - r.top } : c;
+  const x = Math.floor((p.x - view.tx) / view.k - W().half), z = Math.floor((p.y - view.ty) / view.k - W().half);
+  const other = world === 'over' ? `в аду ${num(Math.floor(x / 8))} / ${num(Math.floor(z / 8))}` : `наверху ${num(x * 8)} / ${num(z * 8)}`;
+  const q = world === 'over' && Math.abs(x) <= W().half && Math.abs(z) <= W().half ? gubOf(x, z) : null;
+  $('hud').innerHTML = `X ${num(x)}  Z ${num(z)}\n<span>${other}</span>` + (q ? `\n<b style="color:${q.color}">■</b> ${q.name}` : '');
+}
+
+let hashTimer;
+function saveHash() {
+  clearTimeout(hashTimer);
+  hashTimer = setTimeout(() => {
+    const c = center(), x = Math.round((c.x - view.tx) / view.k - W().half), z = Math.round((c.y - view.ty) / view.k - W().half);
+    history.replaceState(null, '', `#${world}/${x}/${z}/${(view.k / view.fitK).toFixed(2)}`);
+  }, 250);
+}
+
+/* ============ ввод на карте ============ */
+
+const pts = new Map();
+let moved = 0, pinch = null;
+const v = $('view');
+
+v.addEventListener('pointerdown', e => {
   pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
-  els.viewport.setPointerCapture(e.pointerId);
-  moved = 0;
-  pinchDist = null;
-  dragging = true;
-  els.viewport.classList.add('dragging');
-  lastPointer = { x: e.clientX, y: e.clientY };
-  updateCoordLabel();
+  v.setPointerCapture(e.pointerId);
+  moved = 0; pinch = null;
+  v.classList.add('dragging');
+  $('tip').hidden = true;
+  $('q').blur();
+  if (sheet.state !== 'peek') setSheet('peek');
 });
-
-els.viewport.addEventListener('pointermove', e => {
-  lastPointer = { x: e.clientX, y: e.clientY };
-  updateCoordLabel();
-  if (!pts.has(e.pointerId)) return;
+v.addEventListener('pointermove', e => {
+  if (e.pointerType === 'mouse') pointer = { x: e.clientX, y: e.clientY };
+  if (!pts.has(e.pointerId)) { updateHud(); hover(e); return; }
   const prev = pts.get(e.pointerId);
   pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
   if (pts.size >= 2) {
-    const [a, b] = Array.from(pts.values());
-    const dist = Math.hypot(a.x - b.x, a.y - b.y);
-    const r = els.viewport.getBoundingClientRect();
-    const cx = (a.x + b.x) / 2 - r.left, cy = (a.y + b.y) / 2 - r.top;
-    if (pinchDist) zoomAt(cx, cy, dist / pinchDist);
-    pinchDist = dist;
-    moved = 99;
+    const [a, b] = [...pts.values()], d = Math.hypot(a.x - b.x, a.y - b.y), r = rect();
+    if (pinch) zoomAt((a.x + b.x) / 2 - r.left, (a.y + b.y) / 2 - r.top, d / pinch);
+    pinch = d; moved = 99;
     return;
   }
-  const dx = e.clientX - prev.x, dy = e.clientY - prev.y;
-  moved += Math.abs(dx) + Math.abs(dy);
-  view.tx += dx; view.ty += dy;
+  moved += Math.abs(e.clientX - prev.x) + Math.abs(e.clientY - prev.y);
+  view.tx += e.clientX - prev.x; view.ty += e.clientY - prev.y;
   apply();
 });
-
-function handleTap(clientX, clientY) {
-  const el = document.elementFromPoint(clientX, clientY);
-  const hit = el && el.closest ? el.closest('.territory, .territory-label') : null;
-  if (hit && hit.dataset.id) select(hit.dataset.id);
-  else clearSelection();
-}
-
-function onPointerEnd(e) {
-  const tap = pts.size === 1 && moved <= TAP_THRESHOLD;
+function up(e) {
+  const tap = pts.size === 1 && moved <= 14;
   pts.delete(e.pointerId);
-  if (pts.size < 2) pinchDist = null;
-  dragging = pts.size > 0;
-  if (!dragging) els.viewport.classList.remove('dragging');
-  // Native click targeting is unreliable here: setPointerCapture retargets
-  // the mouse-synthesized click to the capturing element (this happens for
-  // real mouse pointers but not touch), so nested territories/labels never
-  // receive it on desktop. Resolving the tap target ourselves via
-  // elementFromPoint sidesteps that inconsistency for both input types.
-  if (tap) handleTap(e.clientX, e.clientY);
+  if (pts.size < 2) pinch = null;
+  if (!pts.size) v.classList.remove('dragging');
+  if (!tap) return;
+  // Захват указателя ломает обычный click по вложенным фигурам — ищем цель сами.
+  const hit = document.elementFromPoint(e.clientX, e.clientY);
+  const key = hit && hit.closest('[data-sel]');
+  select(key ? registry.get(key.dataset.sel) : null);
 }
-els.viewport.addEventListener('pointerup', onPointerEnd);
-els.viewport.addEventListener('pointercancel', onPointerEnd);
-
-els.viewport.addEventListener('wheel', e => {
+v.addEventListener('pointerup', up);
+v.addEventListener('pointercancel', up);
+v.addEventListener('pointerleave', () => { pointer = null; $('tip').hidden = true; updateHud(); });
+v.addEventListener('wheel', e => {
   e.preventDefault();
-  const r = els.viewport.getBoundingClientRect();
-  zoomAt(e.clientX - r.left, e.clientY - r.top, Math.exp(-e.deltaY * 0.0016));
+  const r = rect();
+  zoomAt(e.clientX - r.left, e.clientY - r.top, Math.exp(-e.deltaY * .0016));
 }, { passive: false });
+['gesturestart', 'gesturechange', 'gestureend'].forEach(t => v.addEventListener(t, e => e.preventDefault()));
 
-// Safari drives pinch-zoom through its own legacy gesture events, which
-// `touch-action: none` does not suppress — left unblocked, a pinch that
-// exceeds our zoom cap falls through to the OS-level page zoom, which
-// scales the whole layout (labels included) on top of our own transform,
-// making them keep growing past the size our counter-scale locks in.
-['gesturestart', 'gesturechange', 'gestureend'].forEach(type => {
-  els.viewport.addEventListener(type, e => e.preventDefault());
-});
+function hover(e) {
+  const n = e.target.closest && e.target.closest('[data-sel]'), o = n && registry.get(n.dataset.sel), tip = $('tip');
+  if (!o || o.type === 'station' || e.pointerType !== 'mouse') { tip.hidden = true; return; }
+  const r = $('map').getBoundingClientRect();
+  tip.hidden = false;
+  tip.style.left = e.clientX - r.left + 'px'; tip.style.top = e.clientY - r.top + 'px';
+  tip.innerHTML = esc(o.name) + `<small>${o.type === 'terr' ? esc(o.owner) + ' · ' + o.residents.length + ' жит.' : o.type === 'boss' ? 'босс' : 'портал хайперлупа'}</small>`;
+}
 
-els.viewport.addEventListener('pointerleave', () => {
-  if (pts.size === 0) { lastPointer = null; updateCoordLabel(); }
-});
+$('zin').onclick = () => { const c = center(); zoomAt(c.x, c.y, 1.6); };
+$('zout').onclick = () => { const c = center(); zoomAt(c.x, c.y, 1 / 1.6); };
+$('zfit').onclick = fit;
+window.addEventListener('keydown', e => { if (e.key === 'Escape') select(null); if (e.key === '/' && document.activeElement !== $('q')) { e.preventDefault(); $('q').focus(); } });
 
-window.addEventListener('resize', fit);
+/* ============ шторка на телефоне ============ */
 
-els.zoomInBtn.addEventListener('click', () => zoomCenter(1.5));
-els.zoomOutBtn.addEventListener('click', () => zoomCenter(1 / 1.5));
-els.resetBtn.addEventListener('click', fit);
-
-/* ---------- territories render ---------- */
-
-const SVG_NS = 'http://www.w3.org/2000/svg';
-
-function renderMap() {
-  els.territoriesLayer.innerHTML = '';
-  els.screenOverlay.innerHTML = '';
-  territoryShapes.length = 0;
-  overlayAnchors.length = 0;
-
-  territories.forEach(t => {
-    const path = document.createElementNS(SVG_NS, 'path');
-    path.setAttribute('class', 'territory');
-    path.style.fill = t.fill;
-    path.style.stroke = t.stroke;
-    path.dataset.id = t.id;
-    els.territoriesLayer.appendChild(path);
-    territoryShapes.push({ el: path, loops: t.outlineLoops });
-
-    const alwaysLabel = t.name === 'Спавн';
-    const label = document.createElement('div');
-    label.className = alwaysLabel ? 'territory-label' : 'territory-label hover-only';
-    label.dataset.id = t.id;
-    label.innerHTML = `<span class="territory-label-inner" style="--stroke:${t.stroke}"><span class="territory-label-dot" style="--stroke:${t.stroke}"></span>${t.name}</span>`;
-    els.screenOverlay.appendChild(label);
-    overlayAnchors.push({ el: label, x: t.labelX, z: t.labelZ });
-
-    if (!alwaysLabel) {
-      path.addEventListener('pointerenter', () => label.classList.add('is-visible'));
-      path.addEventListener('pointerleave', () => label.classList.remove('is-visible'));
-    }
+const sheet = { state: 'peek', y: 0 };
+const peekH = () => $('scroll').offsetTop + 2;
+function snapY(state) {
+  const h = $('side').offsetHeight;
+  return { full: 0, half: Math.max(0, h - innerHeight * .52), peek: h - peekH() }[state];
+}
+function setSheet(state) {
+  sheet.state = state;
+  sheet.y = snapY(state);
+  $('side').style.setProperty('--y', sheet.y + 'px');
+  document.documentElement.style.setProperty('--peek', peekH() + 'px');
+}
+{
+  const grab = $('grab'), side = $('side');
+  let start = null;
+  grab.addEventListener('pointerdown', e => { start = { py: e.clientY, y: sheet.y, moved: 0 }; grab.setPointerCapture(e.pointerId); side.classList.add('dragging'); });
+  grab.addEventListener('pointermove', e => {
+    if (!start) return;
+    const dy = e.clientY - start.py;
+    start.moved = Math.max(start.moved, Math.abs(dy));
+    sheet.y = Math.max(0, Math.min(snapY('peek'), start.y + dy));
+    side.style.setProperty('--y', sheet.y + 'px');
   });
-
-  const axisX = document.createElement('div');
-  axisX.className = 'axis-line axis-x';
-  axisX.style.top = pctZ(0);
-  els.stage.appendChild(axisX);
-
-  const axisZ = document.createElement('div');
-  axisZ.className = 'axis-line axis-z';
-  axisZ.style.left = pctX(0);
-  els.stage.appendChild(axisZ);
-
-  const originMarker = document.createElement('div');
-  originMarker.className = 'origin-marker';
-  originMarker.innerHTML = '<span class="origin-marker-ring"></span><span class="origin-marker-dot"></span>';
-  els.screenOverlay.appendChild(originMarker);
-  overlayAnchors.push({ el: originMarker, x: xPix(0), z: zPix(0) });
+  const end = () => {
+    if (!start) return;
+    side.classList.remove('dragging');
+    if (start.moved < 6) setSheet({ peek: 'half', half: 'full', full: 'peek' }[sheet.state]);
+    else setSheet(['full', 'half', 'peek'].sort((a, b) => Math.abs(snapY(a) - sheet.y) - Math.abs(snapY(b) - sheet.y))[0]);
+    start = null;
+  };
+  grab.addEventListener('pointerup', end);
+  grab.addEventListener('pointercancel', end);
+  $('q').addEventListener('focus', () => { if (mobile()) setSheet('full'); });
 }
 
-/* ---------- selection / detail sheet ---------- */
+/* ============ карточка ============ */
 
-function select(id) {
-  selectedId = id;
-  listOpen = false;
-  renderSheets();
-}
-
-function clearSelection() {
-  if (moved > TAP_THRESHOLD) return;
-  selectedId = null;
-  renderSheets();
-}
-
-function renderSheets() {
-  const selected = territories.find(t => t.id === selectedId) || null;
-
-  els.detailSheet.hidden = !selected;
-  els.listSheet.hidden = !listOpen;
-  els.sheetBackdrop.hidden = !listOpen;
-
-  if (selected) {
-    els.detailKind.textContent = selected.kind;
-    els.detailKind.style.color = selected.stroke;
-    els.detailName.textContent = selected.name;
-    els.detailCoords.textContent = selected.coords;
-    els.detailOwner.textContent = selected.owner;
-    els.detailArea.textContent = selected.area;
-    els.detailAbout.textContent = selected.about;
-    els.detailCount.textContent = selected.residentsDetailed.length;
-    els.detailResidents.innerHTML = '';
-    selected.residentsDetailed.forEach(r => {
-      const row = document.createElement('div');
-      row.className = 'resident-row';
-      row.innerHTML = `<span class="resident-initial">${r.initial}</span><span class="resident-name">${r.name}</span><div class="spacer"></div><span class="resident-role">${r.role}</span>`;
-      els.detailResidents.appendChild(row);
-    });
+function select(o) {
+  selected = o || null;
+  markSelected();
+  const card = $('card');
+  card.hidden = !o;
+  document.body.classList.toggle('has-card', !!o);
+  if (!o) { apply(); return; }
+  const g = o.group, tag = { terr: 'Территория', boss: 'Босс', station: 'Станция хайперлупа', exit: 'Портал хайперлупа' }[o.type];
+  let rows = '', extra = '', second = '<button data-act="xyz">Скопировать X Z</button>';
+  const row = (k, val) => rows += `<dt>${k}</dt><dd>${val}</dd>`;
+  if (o.type === 'terr') {
+    row('Границы', `X ${num(o.b.x1)} … ${num(o.b.x2)}<br>Z ${num(o.b.z1)} … ${num(o.b.z2)}`);
+    row('Размер', `${o.b.x2 - o.b.x1 + 1} × ${o.b.z2 - o.b.z1 + 1}`);
+    row('В аду это', `${num(o.cx / 8)} / ${num(o.cz / 8)}`);
+    extra = `<h4>Жители · ${o.residents.length}</h4><ul>` + o.residents.map(r => `<li>${esc(r.name)}<span>${ROLES[r.status] || esc(r.status)}</span></li>`).join('') + '</ul>';
+  } else if (o.type === 'boss') {
+    row('Координаты', `${num(o.x)} / ${num(o.z)}`);
+    row('В аду это', `${num(o.x / 8)} / ${num(o.z / 8)}`);
+    row('Ближайший портал', nearestStation(o.x, o.z));
+  } else {
+    const nx = o.type === 'exit' ? o.nx : o.x, nz = o.type === 'exit' ? o.nz : o.z;
+    row('В аду', `${num(nx)} / ${num(nz)}`);
+    row('В верхнем мире', `${num(nx * 8)} / ${num(nz * 8)}`);
+    if (g) row('Ветка', `${g.name}, ${g.dir}`);
+    second = `<button data-act="swap">${world === 'over' ? 'Открыть схему' : 'Показать наверху'}</button>`;
   }
+  const where = g ? (o.type === 'terr' || o.type === 'boss' ? ` · ${g.name} губерния` : ` · ${g.name} ветка`) : '';
+  card.style.setProperty('--c', g ? g.color : '#DEFFEA');
+  card.innerHTML = `<header><div class="tag">${tag}${where}</div><h2>${esc(o.name)}</h2><button class="x" data-act="close" aria-label="Закрыть">✕</button></header>` +
+    `<div class="body">${o.about ? `<p>${esc(o.about)}</p>` : ''}<dl>${rows}</dl>${extra}</div>` +
+    `<footer><button data-act="copy">Скопировать ссылку</button>${second}</footer>`;
+}
 
+// Показывает объект в свободной от карточки части экрана.
+function focusOn(o) {
+  select(o);
+  if (o.type === 'terr') fitTo(o.b.x1 - 40, o.b.z1 - 40, o.b.x2 + 41, o.b.z2 + 41, 3);
+  else goto(o.x, o.z, Math.max(view.k, world === 'over' ? .8 : view.fitK * 2));
+}
+
+function nearestStation(x, z) {
+  const d = s => Math.hypot(s.x * 8 - x, s.z * 8 - z), s = stations.slice().sort((a, b) => d(a) - d(b))[0];
+  return s ? `${esc(s.name)}<br>${Math.round(d(s))} бл.` : '—';
+}
+
+$('card').addEventListener('click', e => {
+  const b = e.target.closest('[data-act]'); if (!b) return;
+  const o = selected, act = b.dataset.act;
+  if (act === 'close') select(null);
+  if (act === 'copy') copy(location.href, b);
+  if (act === 'xyz') copy(o.type === 'terr' ? `${o.cx} ~ ${o.cz}` : `${o.x} ~ ${o.z}`, b);
+  if (act === 'swap') {
+    const key = o.type === 'exit' ? o.key.slice(1) : 'e' + o.key;
+    setWorld(world === 'over' ? 'nether' : 'over');
+    if (registry.has(key)) focusOn(registry.get(key));
+  }
+});
+function copy(text, btn) {
+  const done = () => { const t = btn.textContent; btn.textContent = 'Скопировано'; setTimeout(() => btn.textContent = t, 1200); };
+  navigator.clipboard ? navigator.clipboard.writeText(text).then(done, done) : done();
+}
+
+/* ============ панель ============ */
+
+function renderSide() {
+  const over = world === 'over';
+  $('layers').innerHTML = over ? Object.keys(layers).map(k => {
+    const n = { gub: 4, terr: territories.length, boss: BOSSES.length, loop: stations.length - 1 }[k];
+    return `<button class="chip" data-layer="${k}" aria-pressed="${layers[k]}">${LAYER_NAMES[k]}<i>${n}</i></button>`;
+  }).join('') : LINES.map(l => `<button class="chip" data-group="${l.id}" aria-pressed="${groupFilter === l}" style="${groupFilter === l ? 'background:' + l.color : ''}">${l.name}<i>${l.dir}</i></button>`).join('');
+  $('gubs').parentElement.hidden = !over;
+  $('gubs').innerHTML = GUBS.map(g =>
+    `<button class="gub" data-group="${g.id}" style="--c:${g.color}" aria-pressed="${groupFilter === g}">${g.name}<small>${territories.filter(t => t.group === g).length} терр.</small></button>`).join('');
+  $('listTitle').textContent = over ? 'Территории' : 'Станции';
+  $('q').placeholder = over ? 'Территория, владелец, житель' : 'Название станции';
   renderList();
+  if (mobile()) setSheet(sheet.state);
 }
-
-els.detailCloseBtn.addEventListener('click', clearSelection);
-
-/* ---------- list sheet ---------- */
-
-function toggleList() {
-  listOpen = !listOpen;
-  renderSheets();
-}
-
-els.toggleListBtn.addEventListener('click', toggleList);
-els.listCloseBtn.addEventListener('click', toggleList);
-els.sheetBackdrop.addEventListener('click', toggleList);
-
-/* ---------- border visibility toggle ---------- */
-
-let bordersVisible = true;
-
-function toggleBorders() {
-  bordersVisible = !bordersVisible;
-  els.territoriesLayer.classList.toggle('borders-hidden', !bordersVisible);
-  els.toggleBordersBtn.classList.toggle('is-off', !bordersVisible);
-}
-
-els.toggleBordersBtn.addEventListener('click', toggleBorders);
-
-/* ---------- map image export ---------- */
-
-function loadImage(src) {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.onload = () => resolve(img);
-    img.onerror = reject;
-    img.src = src;
-  });
-}
-
-// Собирает карту в полном разрешении из тайлов (отдельного большого файла нет).
-async function downloadMapImage() {
-  ping('Собираю карту…');
-  const canvas = document.createElement('canvas');
-  canvas.width = STAGE_W;
-  canvas.height = STAGE_H;
-  const ctx = canvas.getContext('2d');
-
-  const jobs = [];
-  for (let ty = 0; ty * TILE < STAGE_H; ty++) {
-    for (let tx = 0; tx * TILE < STAGE_W; tx++) {
-      const id = tx + '_' + ty;
-      if (emptyTiles.has(id)) continue;
-      jobs.push(loadImage(`${MAP_DIR}tiles/${id}.webp?v=${MAP_VERSION}`)
-        .then(img => ctx.drawImage(img, tx * TILE, ty * TILE)));
-    }
-  }
-  try {
-    await Promise.all(jobs);
-  } catch (err) {
-    console.error(err);
-    ping('Не удалось скачать карту');
-    return;
-  }
-
-  if (bordersVisible) {
-    ctx.lineWidth = 3;
-    ctx.lineJoin = 'miter';
-    territories.forEach(t => {
-      ctx.fillStyle = t.fill;
-      ctx.strokeStyle = t.stroke;
-      t.outlineLoops.forEach(loop => {
-        ctx.beginPath();
-        loop.forEach((p, i) => {
-          if (i === 0) ctx.moveTo(p[0], p[1]); else ctx.lineTo(p[0], p[1]);
-        });
-        ctx.closePath();
-        ctx.fill();
-        ctx.stroke();
-      });
-    });
-  }
-
-  canvas.toBlob(blob => {
-    if (!blob) { ping('Не удалось скачать карту'); return; }
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = bordersVisible ? 'multipunk-map-borders.png' : 'multipunk-map.png';
-    a.click();
-    URL.revokeObjectURL(url);
-  }, 'image/png');
-}
-
-els.downloadMapBtn.addEventListener('click', downloadMapImage);
-
-els.searchInput.addEventListener('input', renderList);
 
 function renderList() {
-  const q = els.searchInput.value.trim().toLowerCase();
-  const filtered = q ? territories.filter(t => (t.name + ' ' + t.owner).toLowerCase().includes(q)) : territories;
-  els.territoryList.innerHTML = '';
-  filtered.forEach(t => {
-    const item = document.createElement('button');
-    item.className = 'territory-item';
-    item.type = 'button';
-    item.innerHTML = `
-      <span class="territory-swatch" style="--stroke:${t.stroke}"></span>
-      <span class="territory-item-text">
-        <span class="territory-item-name">${t.name}</span>
-        <span class="territory-item-meta">${t.owner} · ${t.residentsDetailed.length} жит.</span>
-      </span>
-      <span class="territory-item-short">${t.short}</span>`;
-    item.addEventListener('click', () => { select(t.id); focus(t); });
-    els.territoryList.appendChild(item);
+  const q = $('q').value.trim().toLowerCase();
+  const src = world === 'over' ? territories : stations;
+  const out = src.filter(o => (!groupFilter || o.group === groupFilter) && (!q || (o.hay || o.name.toLowerCase()).includes(q)));
+  $('found').textContent = 'найдено: ' + out.length;
+  $('clearFilter').hidden = !groupFilter && !q;
+  $('list').innerHTML = out.map(o => {
+    const c = o.group ? o.group.color : '#DEFFEA';
+    const sub = o.type === 'terr' ? `${esc(o.owner)} · ${o.residents.length} жит.` : o.hub ? 'все четыре ветки' : `${o.group.name} ветка`;
+    const xy = o.type === 'terr' ? `${num(o.cx)}<br>${num(o.cz)}` : `${num(o.x)}<br>${num(o.z)}`;
+    return `<button class="item" style="--c:${c}" data-key="${o.key}"><strong>${esc(o.name)}</strong><span>${sub}</span><em>${xy}</em></button>`;
+  }).join('') || '<div class="empty">Ничего не нашлось.</div>';
+}
+
+document.addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  if ('acct' in b.dataset) openAuth();
+  if (b.dataset.auth === 'close') $('auth').hidden = true;
+  if (b.dataset.auth === 'logout') logout();
+  if ('themeToggle' in b.dataset) { setTheme(document.documentElement.dataset.theme === 'light' ? 'dark' : 'light'); apply(); }
+  if (b.dataset.world) setWorld(b.dataset.world);
+  if (b.dataset.layer) { layers[b.dataset.layer] = !layers[b.dataset.layer]; renderSide(); rebuild(); }
+  if (b.dataset.group) {
+    const g = (world === 'over' ? GUBS : LINES).find(x => x.id === b.dataset.group), h = W().half;
+    groupFilter = groupFilter === g ? null : g;
+    renderSide();
+    if (world === 'over') {
+      if (mobile()) setSheet('half');
+      groupFilter ? fitTo(g.sx < 0 ? -h : 0, g.sz < 0 ? -h : 0, g.sx < 0 ? 0 : h, g.sz < 0 ? 0 : h) : fit();
+    }
+  }
+  if (b.id === 'clearFilter') { groupFilter = null; $('q').value = ''; renderSide(); }
+  if (b.dataset.key) {
+    $('q').blur();
+    setSheet('peek');
+    focusOn((world === 'over' ? territories : stations).find(x => x.key === b.dataset.key));
+  }
+});
+$('q').addEventListener('input', renderList);
+
+function setWorld(w) {
+  world = w; groupFilter = null; select(null);
+  document.querySelectorAll('[data-world]').forEach(b => b.setAttribute('aria-pressed', b.dataset.world === w));
+  $('stage').style.backgroundImage = w === 'over' ? `url('${MAP_DIR}low.webp?v=${MAP_VERSION}'), url('${MAP_DIR}preview.webp?v=${MAP_VERSION}')` : '';
+  $('stage').style.backgroundSize = '';
+  renderSide(); rebuild(); fit();
+}
+
+function relayout() {
+  setSheet(mobile() ? sheet.state : 'peek');
+  const atFit = view.k <= view.fitK * 1.01;
+  view.fitK = worldFitK();
+  atFit ? fit() : apply();
+}
+window.addEventListener('resize', relayout);
+
+/* ============ вход ============ */
+
+// auth === null — сервер входа недоступен (например, сайт открыт как статика).
+let auth = null, authError = '';
+const PROVIDER_NAMES = { discord: 'Discord', telegram: 'Telegram' };
+
+function loadMe() {
+  return fetch('/api/me', { credentials: 'same-origin' })
+    .then(r => r.ok ? r.json() : Promise.reject(new Error('HTTP ' + r.status)))
+    .then(data => { auth = data; })
+    .catch(() => { auth = null; })
+    .then(renderAcct);
+}
+
+function renderAcct() {
+  const user = auth && auth.user;
+  document.querySelectorAll('[data-acct]').forEach(b => {
+    b.classList.toggle('in', !!user);
+    if (user && user.avatar) b.innerHTML = `<img src="${esc(user.avatar)}" alt="">`;
   });
 }
 
-/* ---------- toast ---------- */
-
-let toastTimer = null;
-function ping(msg) {
-  els.toast.textContent = msg;
-  els.toast.hidden = false;
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => { els.toast.hidden = true; }, 1800);
+function openAuth() {
+  const box = $('authBox'), user = auth && auth.user, close = '<button class="x" data-auth="close" aria-label="Закрыть">✕</button>';
+  if (user) {
+    const mp = !user.mp ? 'Вход по списку доступа, без проверки аккаунта Multi Punk.'
+      : user.mp.nick ? `Ник в игре: <b>${esc(user.mp.nick)}</b>`
+      : 'К аккаунту Multi Punk не привязан Minecraft, поэтому ника нет.';
+    box.innerHTML = `<h2>Аккаунт</h2>${close}<div class="who">${user.avatar ? `<img src="${esc(user.avatar)}" alt="">` : ''}` +
+      `<div><b>${esc(user.name)}</b><span>вход через ${PROVIDER_NAMES[user.provider] || esc(user.provider)}</span></div></div>` +
+      `<p class="note">${mp}</p><button class="way main" data-auth="logout">Выйти</button>`;
+  } else {
+    const p = auth ? auth.providers : {};
+    box.innerHTML = `<h2>Вход</h2>${close}` +
+      (authError === 'denied' ? '<p class="err">Вход пока открыт только для своих — этого аккаунта нет в списке.</p>' : authError ? '<p class="err">Войти не получилось. Попробуй ещё раз.</p>' : '') +
+      '<p>Войди через соцсеть, которая привязана к твоему аккаунту Multi Punk.</p>' +
+      (p.discord ? '<a class="way discord" href="/api/auth/discord" data-login>Войти через Discord</a>' : '<div class="way off">Discord не настроен</div>') +
+      (p.telegram ? '<div id="tgSlot"></div>' : '<div class="way off">Telegram не настроен</div>') +
+      (auth && auth.missing && auth.missing.length ? `<p class="note">На сервере (окружение ${esc(auth.env)}) не заданы: ${auth.missing.map(esc).join(', ')}</p>` : '') +
+      (auth ? '' : '<p class="note">Сервер входа недоступен: страница открыта без функций Vercel.</p>');
+    if (p.telegram) {
+      // Кнопку Telegram рисует его собственный скрипт; после входа он сам уводит на data-auth-url.
+      const s = document.createElement('script');
+      s.async = true;
+      s.src = 'https://telegram.org/js/telegram-widget.js?22';
+      s.dataset.telegramLogin = p.telegram;
+      s.dataset.size = 'large';
+      s.dataset.radius = '5';
+      s.dataset.authUrl = location.origin + '/api/auth/telegram';
+      $('tgSlot').appendChild(s);
+    }
+  }
+  // Сервер вернёт сюда же, с тем же местом на карте.
+  document.cookie = 'mp_next=' + encodeURIComponent(location.pathname + location.hash) + '; Path=/; Max-Age=600; SameSite=Lax';
+  $('auth').hidden = false;
 }
 
-/* ---------- init ---------- */
-
-function applyMapMeta(meta) {
-  MAP_VERSION = meta.version || 0;
-  STAGE_W = meta.width;
-  STAGE_H = meta.height;
-  TILE = meta.tile;
-  emptyTiles = new Set(meta.empty || []);
-  ORIGIN_X = Math.floor(STAGE_W / 2);
-  ORIGIN_Z = Math.floor(STAGE_H / 2);
+function logout() {
+  fetch('/api/auth/logout', { method: 'POST', credentials: 'same-origin' }).then(() => location.reload());
 }
 
-fetch(MAP_DIR + 'meta.json', { cache: 'no-cache' })
-  .then(res => res.ok ? res.json() : Promise.reject(new Error('HTTP ' + res.status)))
-  .then(applyMapMeta)
-  .catch(err => console.error('Не удалось загрузить meta.json карты', err))
-  .then(() => {
-    // preview.webp маленькая и появляется сразу; low.webp рисуется поверх, когда догрузится.
-    els.mapImg.style.backgroundImage =
-      `url('${MAP_DIR}low.webp?v=${MAP_VERSION}'), url('${MAP_DIR}preview.webp?v=${MAP_VERSION}')`;
-  })
-  .then(() => fetch('/api/regions'))
-  .then(res => {
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    return res.json();
-  })
+$('auth').addEventListener('click', e => { if (e.target === $('auth')) $('auth').hidden = true; });
+
+/* ============ запуск ============ */
+
+loadMe().then(() => {
+  const params = new URLSearchParams(location.search);
+  if (!params.get('auth')) return;
+  authError = params.get('auth');
+  history.replaceState(null, '', location.pathname + location.hash);
+  openAuth();
+});
+
+const json = url => fetch(url).then(r => r.ok ? r.json() : Promise.reject(new Error(url + ' ' + r.status)));
+
+json(MAP_DIR + 'meta.json').then(m => {
+  MAP_VERSION = m.version || 0; TILE = m.tile;
+  WORLDS.over.size = m.width; WORLDS.over.half = Math.floor(m.width / 2);
+  const d = new Date(MAP_VERSION * 1000);
+  $('stamp').textContent = 'Станции хайперлупа пока примерные. ' + (isNaN(d) ? '' : 'Снимок карты: ') + d.toLocaleString('ru', { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' });
+}).catch(() => {})
+  .then(() => json('/api/regions').catch(() => json('region.json')))
   .then(raw => { territories = raw.map(buildTerritory); })
-  .catch(err => {
-    console.error('Не удалось загрузить территории', err);
-    territories = [];
-    ping('Не удалось загрузить территории');
-  })
-  .finally(() => {
-    renderMap();
-    fit();
-    renderSheets();
+  .catch(err => console.error(err))
+  .then(() => {
+    buildDemoLoop();
+    const h = location.hash.slice(1).split('/');
+    setWorld(h[0] === 'nether' ? 'nether' : 'over');
+    if (h.length === 4 && h.slice(1).every(n => isFinite(n))) goto(+h[1], +h[2], view.fitK * Math.max(.7, +h[3]));
   });
