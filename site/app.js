@@ -742,14 +742,21 @@ function openAuth() {
       (auth && auth.missing && auth.missing.length ? `<p class="note">На сервере (окружение ${esc(auth.env)}) не заданы: ${auth.missing.map(esc).join(', ')}</p>` : '') +
       (auth ? '' : '<p class="note">Сервер входа недоступен: страница открыта без функций Vercel.</p>');
     if (p.telegram) {
-      // Кнопку Telegram рисует его собственный скрипт; после входа он сам уводит на data-auth-url.
+      // Кнопку Telegram рисует его собственный скрипт. Данные входа он отдаёт нашей функции,
+      // и на сервер переходит уже сама страница: если поручить переход виджету (data-auth-url),
+      // браузер блокирует его после закрытия окна подтверждения, и вход срабатывает через раз.
+      window.onTelegramAuth = user => {
+        // Пустые поля (нет фамилии, нет фото) пропускаем: в подписи Telegram их тоже нет.
+        const fields = Object.entries(user).filter(([, v]) => v !== null && v !== undefined);
+        location.href = '/api/auth/telegram?' + new URLSearchParams(fields);
+      };
       const s = document.createElement('script');
       s.async = true;
       s.src = 'https://telegram.org/js/telegram-widget.js?22';
       s.dataset.telegramLogin = p.telegram;
       s.dataset.size = 'large';
       s.dataset.radius = '5';
-      s.dataset.authUrl = location.origin + '/api/auth/telegram';
+      s.dataset.onauth = 'onTelegramAuth(user)';
       $('tgSlot').appendChild(s);
     }
   }
