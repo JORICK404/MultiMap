@@ -1,5 +1,6 @@
 const crypto = require('crypto');
 const { findAccount } = require('./multipunk');
+const { canEdit } = require('./portals');
 
 // Сессия целиком лежит в подписанной куке — хранилища на сервере нет.
 // Файлы в api/_lib не становятся маршрутами (Vercel пропускает имена с «_»).
@@ -88,6 +89,13 @@ function isAllowed(identity) {
   return list.length === 0 || list.includes(identity.provider + ':' + identity.id);
 }
 
+// Кому карта доступна без подписки — по нику в игре: FREE_ACCESS_NICKS через запятую.
+// Редакторы порталов входят сюда сами, иначе без подписки они не смогли бы править.
+function hasFreeAccess(mp) {
+  const nicks = (process.env.FREE_ACCESS_NICKS || '').split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
+  return Boolean(mp && mp.nick) && (nicks.includes(mp.nick.toLowerCase()) || canEdit({ mp }));
+}
+
 // Общий финал для всех способов входа: личность уже подтверждена провайдером.
 async function finishLogin(req, res, identity) {
   if (!isAllowed(identity)) {
@@ -110,7 +118,7 @@ async function finishLogin(req, res, identity) {
     failLogin(req, res, `no Multi Punk account for ${identity.provider}:${identity.id}`, null, 'notfound');
     return;
   }
-  if (mp && !mp.subscribed && !trusted) {
+  if (mp && !mp.subscribed && !trusted && !hasFreeAccess(mp)) {
     failLogin(req, res, `no paid subscription for ${identity.provider}:${identity.id}`, null, 'nosub');
     return;
   }
