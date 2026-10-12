@@ -1,6 +1,6 @@
 const crypto = require('crypto');
 const { findAccount } = require('./multipunk');
-const { canEdit } = require('./portals');
+const { canEdit, nicksOf } = require('./portals');
 
 // Сессия целиком лежит в подписанной куке — хранилища на сервере нет.
 // Файлы в api/_lib не становятся маршрутами (Vercel пропускает имена с «_»).
@@ -93,7 +93,7 @@ function isAllowed(identity) {
 // Редакторы порталов входят сюда сами, иначе без подписки они не смогли бы править.
 function hasFreeAccess(mp) {
   const nicks = (process.env.FREE_ACCESS_NICKS || '').split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
-  return Boolean(mp && mp.nick) && (nicks.includes(mp.nick.toLowerCase()) || canEdit({ mp }));
+  return nicksOf(mp).some(n => nicks.includes(n)) || canEdit({ mp });
 }
 
 // Общий финал для всех способов входа: личность уже подтверждена провайдером.

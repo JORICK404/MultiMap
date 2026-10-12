@@ -20,9 +20,15 @@ function editors() {
   return custom.length ? custom : ['jorick404', 'wryfantom2020'];
 }
 
+// Все написания ника игрока (см. multipunk.js) в нижнем регистре.
+function nicksOf(mp) {
+  if (!mp) return [];
+  return (Array.isArray(mp.nicks) ? mp.nicks : []).concat(mp.nick ? String(mp.nick).toLowerCase() : []);
+}
+
 function canEdit(session) {
-  const nick = session && session.mp && session.mp.nick;
-  return Boolean(nick) && editors().includes(String(nick).toLowerCase());
+  const list = editors();
+  return nicksOf(session && session.mp).some(n => list.includes(n));
 }
 
 async function load() {
@@ -68,4 +74,4 @@ function clean(raw) {
   return { id, name, x, z, line: raw.line };
 }
 
-module.exports = { canEdit, load, save, clean, MAX_PORTALS };
+module.exports = { canEdit, nicksOf, load, save, clean, MAX_PORTALS };

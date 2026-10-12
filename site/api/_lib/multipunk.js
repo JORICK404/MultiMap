@@ -29,7 +29,8 @@ async function call(path) {
 
 // provider — 'discord' | 'telegram', id — id пользователя в этой соцсети.
 // Возвращает null, если к этой соцсети аккаунт Multi Punk не привязан, иначе
-// { nick, subscribed }: ник в игре (null без привязки Xbox) и есть ли платная подписка.
+// { nick, nicks, subscribed }: ник в игре (null без привязки Xbox), все его написания
+// в нижнем регистре и есть ли платная подписка.
 async function findAccount(provider, id) {
   const who = `${encodeURIComponent(provider)}/${encodeURIComponent(id)}`;
   // Сама привязка: /api/users/telegram/{id}/telegram или /api/users/discord/{id}/discord.
@@ -44,7 +45,13 @@ async function findAccount(provider, id) {
   const subscribed = (Array.isArray(subscriptions) ? subscriptions : []).some(s =>
     paid.includes(String(s.id).toLowerCase()) && (!s.expiresAt || Date.parse(s.expiresAt) > now));
 
-  return { nick: (xbox && xbox.modernGamerTag) || null, subscribed };
+  // У Xbox два вида имени: gamerTag — «классический», с цифрами на конце (JohnDoe1234),
+  // именно его видно в игре; modernGamerTag — без цифр (JohnDoe), цифры лежат отдельно.
+  // Ником считаем игровой, а для сверки со списками помним все варианты.
+  const x = xbox || {};
+  const names = [x.gamerTag, x.modernGamerTag, x.modernGamerTag && x.modernGamerTagSuffix ? x.modernGamerTag + x.modernGamerTagSuffix : null]
+    .filter(Boolean).map(String);
+  return { nick: names[0] || null, nicks: [...new Set(names.map(n => n.toLowerCase()))], subscribed };
 }
 
 module.exports = { findAccount };
