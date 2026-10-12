@@ -35,11 +35,14 @@
   --icon: #3530C8;
   --logo: none;
 }
-/* Карточка и в светлой теме остаётся тёмно-синей внутри, как карточки на сайте. */
-:root[data-theme="light"] .card, :root[data-theme="light"] .dlg-box {
-  --text: #FFFFFF; --muted: #B9B6F5; --cyan: #65D6FF; --line: rgba(255, 255, 255, .18);
+/* Карточки и окна — как всплывающие окна на multi-punk.net: сплошной синий фон,
+   белый текст, поля с тёмным градиентом, без рамки. На сайте они одинаковые
+   в обеих темах, поэтому и здесь от темы не зависят. */
+.card, .dlg-box {
+  --card: #3530C8; --card-inset: var(--grad);
+  --text: #FFFFFF; --muted: #C9C6FA; --cyan: #9BE6FF; --line: rgba(255, 255, 255, .2);
   --bar: linear-gradient(90deg, #76FFAA 0%, #65D6FF 45%, #FFFFFF 100%);
-  color: #fff; border-color: #3530C8;
+  color: #fff;
 }
 :root[data-theme="light"] .map:not(.nether) { background: #FFFFFF; }
 :root[data-theme="light"] .g-name.top, :root[data-theme="light"] .g-name.bot { color: var(--text); text-shadow: none; }
@@ -155,10 +158,10 @@ svg.geo * { vector-effect: non-scaling-stroke; }
 .g-tint { pointer-events: none; }
 .g-corner { fill: none; stroke-width: 6; stroke-linejoin: miter; stroke-linecap: butt; pointer-events: none; }
 .g-axis { stroke: #DEFFEA; stroke-width: 1.5; stroke-dasharray: 10 6; opacity: .8; pointer-events: none; }
-.l-case { fill: none; stroke: #12060A; stroke-width: 11; stroke-linejoin: round; stroke-linecap: round; pointer-events: none; }
-.l-line { fill: none; stroke-width: 6; stroke-linejoin: round; stroke-linecap: round; pointer-events: none; }
-.l-spur { stroke-width: 3; }
-.l-spur.l-case { stroke-width: 7; }
+.l-case { fill: none; stroke: #12060A; stroke-width: calc(11px * var(--z, 1)); stroke-linejoin: round; stroke-linecap: round; pointer-events: none; }
+.l-line { fill: none; stroke-width: calc(6px * var(--z, 1)); stroke-linejoin: round; stroke-linecap: round; pointer-events: none; }
+.l-spur { stroke-width: calc(3px * var(--z, 1)); }
+.l-spur.l-case { stroke-width: calc(7px * var(--z, 1)); }
 
 .anchors { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
 .a { position: absolute; width: 0; height: 0; }
@@ -181,6 +184,9 @@ svg.geo * { vector-effect: non-scaling-stroke; }
 .station { width: 14px; height: 14px; border-radius: 4px; background: #fff; box-shadow: 0 0 0 3px var(--c), 0 0 0 6px #12060A; }
 .station.hub { width: 24px; height: 24px; border-radius: 6px; background: #12060A; box-shadow: 0 0 0 3px #fff; }
 .station:hover, .station.sel { background: var(--c); }
+.pin.station { transform: translate(-50%, -50%) scale(var(--z, 1)); }
+.map.nether .cap { left: calc(16px * var(--z, 1)); top: calc(-8px * var(--zt, 1)); font-size: calc(12px * var(--zt, 1)); }
+.map.nether.far .cap small { display: none; }
 .cap {
   position: absolute; left: 16px; top: -8px; white-space: nowrap; pointer-events: none;
   font-size: 12px; font-weight: 700; line-height: 1.2; color: #fff;
@@ -216,7 +222,8 @@ canvas.ruler { position: absolute; top: 0; left: 0; pointer-events: none; z-inde
   position: absolute; z-index: 30; top: calc(var(--ruler) + 12px); right: 12px;
   width: 330px; max-height: calc(100% - var(--ruler) - 76px);
   display: flex; flex-direction: column; overflow: hidden;
-  background: var(--grad); border: 3px solid var(--text); border-radius: 12px;
+  background: var(--card); border-radius: 20px;
+  box-shadow: 0 6px 24px rgba(13, 7, 69, .45);
 }
 .card header { position: relative; padding: 14px 16px 12px; }
 .card .tag { display: inline-flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 700; color: var(--muted); }
@@ -226,7 +233,7 @@ canvas.ruler { position: absolute; top: 0; left: 0; pointer-events: none; z-inde
 .card .x { position: absolute; top: 8px; right: 8px; width: 44px; height: 44px; text-align: center; font-size: 18px; color: var(--text); }
 .card .body { overflow-y: auto; min-height: 0; overscroll-behavior: contain; padding: 0 16px calc(14px + var(--safe-b)); }
 .card p { margin: 0 0 12px; }
-.card dl { margin: 0 0 6px; display: grid; grid-template-columns: auto 1fr; gap: 6px 12px; padding: 12px; background: rgba(13,7,69,.45); border-radius: 8px; }
+.card dl { margin: 0 0 6px; display: grid; grid-template-columns: auto 1fr; gap: 6px 12px; padding: 12px; background: var(--card-inset); border-radius: 8px; }
 .card dt, .card dd { margin: 0; }
 .card dt { color: var(--muted); font-size: 12px; }
 .card dd { font: 500 12px/1.5 var(--mono); text-align: right; color: var(--cyan); }
@@ -238,7 +245,7 @@ canvas.ruler { position: absolute; top: 0; left: 0; pointer-events: none; z-inde
 .card .edit { width: 100%; height: 40px; margin: 6px 0; border-radius: 5px; text-align: center; font-size: 13px; font-weight: 700; color: var(--accent); box-shadow: inset 0 0 0 2px var(--line); }
 .card label { display: grid; gap: 4px; margin-bottom: 10px; font-size: 12px; color: var(--muted); }
 .card .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.card input, .card select { width: 100%; height: 42px; padding: 0 10px; border: 2px solid transparent; border-radius: 6px; outline: none; background: rgba(13,7,69,.55); color: #fff; font: 700 14px Montserrat, sans-serif; }
+.card input, .card select { width: 100%; height: 42px; padding: 0 10px; border: 2px solid transparent; border-radius: 6px; outline: none; background: var(--card-inset); color: #fff; font: 700 14px Montserrat, sans-serif; }
 .card input:focus, .card select:focus { border-color: var(--accent); }
 .card select option { background: #1B107C; }
 .card .err { padding: 8px 12px; border-radius: 6px; background: rgba(255, 90, 82, .25); color: #fff; }
@@ -250,8 +257,8 @@ canvas.ruler { position: absolute; top: 0; left: 0; pointer-events: none; z-inde
 /* ---------- вход ---------- */
 .acct img { width: 26px; height: 26px; border-radius: 6px; display: block; }
 .acct.in { box-shadow: inset 0 0 0 2px var(--accent); }
-.dlg { position: fixed; inset: 0; z-index: 40; display: grid; place-items: center; padding: 16px; background: rgba(13, 7, 69, .6); }
-.dlg-box { position: relative; width: min(100%, 360px); padding: 20px; background: var(--grad); border: 3px solid var(--text); border-radius: 12px; }
+.dlg { position: fixed; inset: 0; z-index: 40; display: grid; place-items: center; padding: 16px; background: rgba(13, 7, 69, .45); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); }
+.dlg-box { position: relative; width: min(100%, 360px); padding: 24px; background: var(--card); border-radius: 20px; }
 .dlg-box h2 { margin: 0 40px 0 0; font-size: 22px; font-weight: 800; }
 .dlg-box h2::after { content: ''; display: block; height: 5px; margin: 10px -40px 0 0; border-radius: 3px; background: var(--bar); }
 .dlg-box p { margin: 14px 0; }
@@ -311,7 +318,7 @@ canvas.ruler { position: absolute; top: 0; left: 0; pointer-events: none; z-inde
 
   .card {
     position: fixed; top: auto; left: 0; right: 0; bottom: 0; width: auto; max-height: 58dvh;
-    border-bottom: 0; border-radius: 16px 16px 0 0;
+    border-radius: 20px 20px 0 0;
     animation: up .22s cubic-bezier(.2, .8, .2, 1);
   }
   @keyframes up { from { transform: translateY(40px); opacity: 0; } }

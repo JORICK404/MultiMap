@@ -11,14 +11,15 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;800&display=swap" rel="stylesheet">
 <style>
-/* Единственная страница, которую видно без входа: ни карты, ни данных здесь нет. */
+/* Единственная страница, которую видно без входа: ни карты, ни данных здесь нет.
+   Окно — как окно входа на multi-punk.net: сплошное синее, одинаковое в обеих темах. */
 :root {
-  --bg: #150C61; --text: #DEFFEA; --muted: #A5A0EE; --accent: #76FFAA; --line: rgba(222, 255, 234, .16);
+  --bg: #150C61; --text: #DEFFEA; --muted: #C9C6FA; --accent: #76FFAA; --line: rgba(255, 255, 255, .2);
   --grad: linear-gradient(100deg, #1B107C 1%, #2E22C9 100%);
   --bar: linear-gradient(90deg, #76FFAA 0%, #65D6FF 45%, #DEFFEA 100%);
-  --box-border: #DEFFEA; --logo: brightness(0) invert(1);
+  --logo: brightness(0) invert(1);
 }
-:root[data-theme="light"] { --bg: #FFFFFF; --box-border: #3530C8; --logo: none; }
+:root[data-theme="light"] { --bg: #FFFFFF; --logo: none; }
 * { box-sizing: border-box; }
 html, body { margin: 0; min-height: 100%; }
 body {
@@ -28,7 +29,7 @@ body {
   font: 500 14px/1.45 Montserrat, system-ui, sans-serif;
 }
 .logo { height: 22px; filter: var(--logo); }
-main { width: min(100%, 360px); padding: 22px 20px 20px; background: var(--grad); border: 3px solid var(--box-border); border-radius: 12px; }
+main { width: min(100%, 360px); padding: 26px 24px 24px; background: #3530C8; border-radius: 20px; }
 h1 { margin: 0; font-size: 22px; font-weight: 800; }
 h1::after { content: ''; display: block; height: 5px; margin-top: 10px; border-radius: 3px; background: var(--bar); }
 p { margin: 14px 0; }

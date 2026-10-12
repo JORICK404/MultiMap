@@ -327,6 +327,13 @@ function apply() {
     if (a.far) a.el.style.opacity = far ? 1 : 0;
     if (a.minK) a.el.hidden = view.k < a.minK;
   });
+  // Схема хайперлупа: чем дальше отдалено, тем мельче точки, линии и подписи,
+  // иначе на общем виде они слипаются. --z — для точек и линий, --zt — для текста.
+  const z = world === 'nether' ? Math.max(.45, Math.min(1, view.k / (view.fitK * 2.4))) : 1;
+  const m = $('map');
+  m.style.setProperty('--z', z.toFixed(3));
+  m.style.setProperty('--zt', Math.max(.72, z).toFixed(3));
+  m.classList.toggle('far', z < .8);
   $('cross').style.left = c.x + 'px'; $('cross').style.top = c.y + 'px';
   updateTiles(r);
   if (!mobile()) { drawRulers(r); drawScale(); }
