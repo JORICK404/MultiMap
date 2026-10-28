@@ -166,6 +166,9 @@ function setPortals(list) {
     .concat(list.map(p => ({
       key: 's:' + p.id, id: p.id, type: 'station', name: p.name, x: p.x, z: p.z,
       group: LINES.find(l => l.id === p.line) || LINES[0],
+      // Выход наверху: вписанный вручную, если портал не совпал с адом × 8.
+      manual: Number.isInteger(p.ox) && Number.isInteger(p.oz),
+      ox: Number.isInteger(p.ox) ? p.ox : p.x * 8, oz: Number.isInteger(p.oz) ? p.oz : p.z * 8,
     })));
 }
 
@@ -223,7 +226,7 @@ function rebuild() {
       registry.set(t.key, t);
     });
     if (layers.loop) stations.filter(s => !s.hub).forEach(s => {
-      const o = { ...s, key: 'e' + s.key, type: 'exit', nx: s.x, nz: s.z, x: s.x * 8, z: s.z * 8 };
+      const o = { ...s, key: 'e' + s.key, type: 'exit', nx: s.x, nz: s.z, x: s.ox, z: s.oz };
       anchor(o.x, o.z, `<div class="pin exit" style="--c:${s.group.color}" data-sel="${o.key}"></div>`, { minK: EXIT_MIN_K });
       registry.set(o.key, o);
     });
@@ -539,7 +542,7 @@ function select(o) {
   } else {
     const nx = o.type === 'exit' ? o.nx : o.x, nz = o.type === 'exit' ? o.nz : o.z;
     row('В аду', `${num(nx)} / ${num(nz)}`);
-    row('В верхнем мире', `${num(nx * 8)} / ${num(nz * 8)}`);
+    row('В верхнем мире', o.hub ? '0 / 0' : `${num(o.ox)} / ${num(o.oz)}`);
     if (g) row('Ветка', `${g.name}, ${g.dir}`);
     if (canEditPortals() && !o.hub) extra = '<button class="edit" data-act="edit">Изменить портал</button>';
   }
@@ -557,7 +560,7 @@ function focusOn(o) {
 }
 
 function nearestStation(x, z) {
-  const d = s => Math.hypot(s.x * 8 - x, s.z * 8 - z), s = stations.slice().sort((a, b) => d(a) - d(b))[0];
+  const d = s => Math.hypot((s.hub ? 0 : s.ox) - x, (s.hub ? 0 : s.oz) - z), s = stations.slice().sort((a, b) => d(a) - d(b))[0];
   return s ? `${esc(s.name)}<br>${Math.round(d(s))} бл.` : '—';
 }
 
@@ -597,10 +600,19 @@ function editPortal(portal) {
     `<label>Название<input name="name" maxlength="40" value="${portal ? esc(portal.name) : ''}"></label>` +
     `<div class="pair"><label>X в аду<input name="x" type="number" step="1" inputmode="numeric" value="${at.x}"></label>` +
     `<label>Z в аду<input name="z" type="number" step="1" inputmode="numeric" value="${at.z}"></label></div>` +
+    `<div class="pair"><label>X наверху<input name="ox" type="number" step="1" inputmode="numeric" value="${portal && portal.manual ? portal.ox : ''}"></label>` +
+    `<label>Z наверху<input name="oz" type="number" step="1" inputmode="numeric" value="${portal && portal.manual ? portal.oz : ''}"></label></div>` +
+    '<p class="hint">Оставь пустыми, если выход наверху ровно в координатах ада × 8.</p>' +
     `<label>Ветка<select name="line">${LINES.map(l => `<option value="${l.id}"${l === line ? ' selected' : ''}>${l.name}, ${l.dir}</option>`).join('')}</select></label>` +
     '<p class="err" id="portalErr" hidden></p></form></div>' +
     `<footer><button data-act="save">Сохранить</button>${portal ? '<button data-act="remove">Удалить</button>' : '<button data-act="cancel">Отмена</button>'}</footer>`;
   $('portalForm').addEventListener('submit', e => { e.preventDefault(); savePortal(card.querySelector('[data-act="save"]')); });
+  // В пустых полях «наверху» подсказкой видно, что подставится само.
+  const f = $('portalForm').elements;
+  const hintExit = () => { f.ox.placeholder = String(Math.round(Number(f.x.value) * 8) || 0); f.oz.placeholder = String(Math.round(Number(f.z.value) * 8) || 0); };
+  f.x.addEventListener('input', hintExit);
+  f.z.addEventListener('input', hintExit);
+  hintExit();
   if (!portal) $('portalForm').elements.name.focus();
 }
 
@@ -620,7 +632,7 @@ function sendPortal(body, btn) {
 
 function savePortal(btn) {
   const f = $('portalForm').elements;
-  const portal = { name: f.name.value, x: Number(f.x.value), z: Number(f.z.value), line: f.line.value };
+  const portal = { name: f.name.value, x: Number(f.x.value), z: Number(f.z.value), line: f.line.value, ox: f.ox.value, oz: f.oz.value };
   if (portalForm.id) portal.id = portalForm.id;
   sendPortal({ op: 'upsert', portal }, btn).then(data => {
     if (data) focusOn(stations.find(s => s.id === data.id));

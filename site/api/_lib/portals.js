@@ -71,7 +71,20 @@ function clean(raw) {
   }
   if (!LINES.includes(raw.line)) return 'неизвестная ветка';
   const id = typeof raw.id === 'string' && /^[\w-]{1,40}$/.test(raw.id) ? raw.id : crypto.randomUUID().slice(0, 8);
-  return { id, name, x, z, line: raw.line };
+  const portal = { id, name, x, z, line: raw.line };
+
+  // Выход в верхнем мире. Обычно он ровно в координатах ада × 8, и тогда поля пустые;
+  // если портал там не совпал, координаты наверху вписываются вручную — обе сразу.
+  const blank = v => v === undefined || v === null || v === '';
+  if (!blank(raw.ox) || !blank(raw.oz)) {
+    const ox = Number(raw.ox), oz = Number(raw.oz);
+    if (blank(raw.ox) || blank(raw.oz) || !Number.isInteger(ox) || !Number.isInteger(oz) || Math.abs(ox) > 3200 || Math.abs(oz) > 3200) {
+      return 'координаты наверху — оба числа целые, от −3200 до 3200, или оба поля пустые';
+    }
+    portal.ox = ox;
+    portal.oz = oz;
+  }
+  return portal;
 }
 
 module.exports = { canEdit, nicksOf, load, save, clean, MAX_PORTALS };
