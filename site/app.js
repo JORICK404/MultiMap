@@ -24,6 +24,12 @@ const BOSSES = [
   { name: 'Склеп', x: 45, z: -1265 },
 ];
 
+// Портал в Энд в верхнем мире.
+const END_PORTAL = { name: 'Портал в Энд', x: -2032, z: 829 };
+const EYE = '<img src="assets/ender_eye.png" alt="">';
+// Порталы хайперлупа, ведущие к Энду, на схеме ада рисуются глазом Эндера — по названию.
+const isEndPortal = name => /энд[\s-]*портал|портал\s+в\s+энд/i.test(name);
+
 const ROLES = { owner: 'владелец', sherif: 'шериф', resident: 'житель' };
 const WORLDS = { over: { half: 3000, size: 6001, maxK: 8 }, nether: { half: 375, size: 751, maxK: 24 } };
 const MAP_DIR = 'assets/map/';
@@ -235,6 +241,11 @@ function rebuild() {
       anchor(b.x, b.z, `<div class="pin boss" data-sel="${o.key}">${SKULL}</div><div class="cap below">${esc(b.name)}</div>`);
       registry.set(o.key, o);
     });
+    {
+      const o = { ...END_PORTAL, key: 'end', type: 'end', group: gubOf(END_PORTAL.x, END_PORTAL.z) };
+      anchor(o.x, o.z, `<div class="pin eye" data-sel="end">${EYE}</div><div class="cap below">${esc(o.name)}</div>`);
+      registry.set(o.key, o);
+    }
     anchor(0, 0, '<div class="spawn"></div><div class="cap">Спавн</div>');
   } else {
     // Магистраль идёт по оси от спавна, к каждому порталу — ответвление под прямым углом.
@@ -249,7 +260,8 @@ function rebuild() {
       el('path', { class: 'l-line', d: trunk, stroke: l.color }, g);
     });
     stations.forEach(s => {
-      anchor(s.x, s.z, `<div class="pin station${s.hub ? ' hub' : ''}" style="--c:${s.group ? s.group.color : '#fff'}" data-sel="${s.key}"></div>` +
+      const eye = !s.hub && isEndPortal(s.name);
+      anchor(s.x, s.z, `<div class="pin station${s.hub ? ' hub' : ''}${eye ? ' eye' : ''}" style="--c:${s.group ? s.group.color : '#fff'}" data-sel="${s.key}">${eye ? EYE : ''}</div>` +
         `<div class="cap">${esc(s.name)}<small>${num(s.x)} / ${num(s.z)}</small></div>`);
       registry.set(s.key, s);
     });
@@ -473,7 +485,7 @@ function hover(e) {
   const r = $('map').getBoundingClientRect();
   tip.hidden = false;
   tip.style.left = e.clientX - r.left + 'px'; tip.style.top = e.clientY - r.top + 'px';
-  tip.innerHTML = esc(o.name) + `<small>${o.type === 'terr' ? esc(o.owner) + ' · ' + o.residents.length + ' жит.' : o.type === 'boss' ? 'босс' : 'портал'}</small>`;
+  tip.innerHTML = esc(o.name) + `<small>${o.type === 'terr' ? esc(o.owner) + ' · ' + o.residents.length + ' жит.' : o.type === 'boss' ? 'босс' : o.type === 'end' ? 'портал в Энд' : 'портал'}</small>`;
 }
 
 $('zin').onclick = () => { const c = center(); zoomAt(c.x, c.y, 1.6); };
@@ -527,7 +539,7 @@ function select(o) {
   card.hidden = !o;
   document.body.classList.toggle('has-card', !!o);
   if (!o) { apply(); return; }
-  const g = o.group, tag = { terr: 'Территория', boss: 'Босс', station: 'Портал', exit: 'Портал' }[o.type];
+  const g = o.group, tag = { terr: 'Территория', boss: 'Босс', station: 'Портал', exit: 'Портал', end: 'Энд' }[o.type];
   let rows = '', extra = '';
   const row = (k, val) => rows += `<dt>${k}</dt><dd>${val}</dd>`;
   if (o.type === 'terr') {
@@ -535,6 +547,10 @@ function select(o) {
     row('Размер', `${o.b.x2 - o.b.x1 + 1} × ${o.b.z2 - o.b.z1 + 1}`);
     row('В аду это', `${num(o.cx / 8)} / ${num(o.cz / 8)}`);
     extra = `<h4>Жители · ${o.residents.length}</h4><ul>` + o.residents.map(r => `<li>${esc(r.name)}<span>${ROLES[r.status] || esc(r.status)}</span></li>`).join('') + '</ul>';
+  } else if (o.type === 'end') {
+    row('Координаты', `${num(o.x)} / ${num(o.z)}`);
+    row('В аду это', `${num(o.x / 8)} / ${num(o.z / 8)}`);
+    row('Ближайший портал', nearestStation(o.x, o.z));
   } else if (o.type === 'boss') {
     row('Координаты', `${num(o.x)} / ${num(o.z)}`);
     row('В аду это', `${num(o.x / 8)} / ${num(o.z / 8)}`);
@@ -546,7 +562,7 @@ function select(o) {
     if (g) row('Ветка', `${g.name}, ${g.dir}`);
     if (canEditPortals() && !o.hub) extra = '<button class="edit" data-act="edit">Изменить портал</button>';
   }
-  const where = g ? (o.type === 'terr' || o.type === 'boss' ? ` · ${g.name} губерния` : ` · ${g.name} ветка`) : '';
+  const where = g ? (o.type === 'terr' || o.type === 'boss' || o.type === 'end' ? ` · ${g.name} губерния` : ` · ${g.name} ветка`) : '';
   card.style.setProperty('--c', g ? g.color : '#DEFFEA');
   card.innerHTML = `<header><div class="tag">${tag}${where}</div><h2>${esc(o.name)}</h2><button class="x" data-act="close" aria-label="Закрыть">✕</button></header>` +
     `<div class="body">${o.about ? `<p>${esc(o.about)}</p>` : ''}<dl>${rows}</dl>${extra}</div>`;
