@@ -25,7 +25,7 @@ const BOSSES = [
 ];
 
 // Портал в Энд в верхнем мире.
-const END_PORTAL = { name: 'Портал в Энд', x: -2032, z: 829 };
+const END_PORTAL = { name: 'Портал в Энд', x: -2032, z: 820 };
 const EYE = '<img src="assets/ender_eye.png" alt="">';
 // Порталы хайперлупа, ведущие к Энду, на схеме ада рисуются глазом Эндера — по названию.
 const isEndPortal = name => /энд[\s-]*портал|портал\s+в\s+энд/i.test(name);
@@ -243,7 +243,7 @@ function rebuild() {
     });
     {
       const o = { ...END_PORTAL, key: 'end', type: 'end', group: gubOf(END_PORTAL.x, END_PORTAL.z) };
-      anchor(o.x, o.z, `<div class="pin eye" data-sel="end">${EYE}</div><div class="cap below">${esc(o.name)}</div>`);
+      anchor(o.x + .5, o.z + .5, `<div class="pin eye" data-sel="end">${EYE}</div><div class="cap below">${esc(o.name)}</div>`);
       registry.set(o.key, o);
     }
     anchor(0, 0, '<div class="spawn"></div><div class="cap">Спавн</div>');
