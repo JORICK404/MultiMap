@@ -200,6 +200,9 @@ svg.geo * { vector-effect: non-scaling-stroke; }
 }
 .cap small { display: block; font: 500 10px var(--mono); opacity: .75; }
 .cap.below { left: 0; top: 24px; transform: translateX(-50%); text-align: center; }
+/* Названия боссов и портала в Энд — только при наведении или когда метка выбрана (на телефоне — по тапу). */
+.pin + .cap.below { opacity: 0; transition: opacity .15s; }
+.pin:hover + .cap.below, .pin.sel + .cap.below { opacity: 1; }
 .spawn { position: absolute; width: 10px; height: 10px; border-radius: 2px; background: var(--accent); box-shadow: 0 0 0 3px var(--bg); transform: translate(-50%, -50%) rotate(45deg); }
 .cross { position: absolute; z-index: 3; width: 18px; height: 18px; margin: -9px 0 0 -9px; pointer-events: none; display: none;
   background: linear-gradient(#fff, #fff) center / 2px 100% no-repeat, linear-gradient(#fff, #fff) center / 100% 2px no-repeat; filter: drop-shadow(0 0 2px #000); }
